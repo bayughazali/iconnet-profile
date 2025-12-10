@@ -1,242 +1,60 @@
-        :root {
-            --primary-color: #2B9EB3;
-            --dark-blue: #1A5F7A;
-            --light-bg: #F0F8FF;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
-        }
-        
-        .navbar {
-            padding: 1.5rem 0;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .btn-promo {
-            background: var(--primary-color);
-            color: white;
-            padding: 10px 30px;
-            border-radius: 5px;
-            border: none;
-        }
-        
-        .btn-promo:hover {
-            background: var(--dark-blue);
-            color: white;
-        }
-        
-        .hero-section {
-            background: linear-gradient(135deg, var(--light-bg) 0%, white 100%);
-            padding: 80px 0;
-        }
-        
-        .hero-card {
-            background: var(--primary-color);
-            border-radius: 20px;
-            padding: 40px;
-            min-height: 300px;
-            color: white;
-        }
-        
-        .features-section {
-            padding: 60px 0;
-            background: white;
-        }
-        
-        .feature-box {
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .feature-icon {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-        
-        .pricing-section {
-            background: var(--light-bg);
-            padding: 80px 0;
-        }
-        
-        .location-selector {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-        
-        .location-input {
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            width: 100%;
-            margin-bottom: 15px;
-        }
-        
-        .package-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-        
-        .package-card:hover {
-            transform: translateY(-10px);
-        }
-        
-        .package-price {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-        
-        .btn-pilih {
-            background: var(--primary-color);
-            color: white;
-            padding: 12px 40px;
-            border-radius: 25px;
-            border: none;
-            width: 100%;
-        }
-        
-        .subscription-section {
-            background: white;
-            padding: 80px 0;
-        }
-        
-        .subscription-card {
-            background: var(--light-bg);
-            border-radius: 15px;
-            padding: 40px;
-        }
-        
-        .btn-detail {
-            background: var(--primary-color);
-            color: white;
-            padding: 12px 40px;
-            border-radius: 25px;
-            border: none;
-        }
-        
-        .mascot-section {
-            background: linear-gradient(135deg, white 0%, var(--light-bg) 100%);
-            padding: 80px 0;
-        }
-        
-        .service-badge {
-            background: white;
-            padding: 20px 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            text-align: center;
-            margin: 10px;
-        }
-        
-        .service-icon {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-        
-        .app-section {
-            background: linear-gradient(180deg, var(--primary-color) 0%, var(--dark-blue) 100%);
-            padding: 80px 0;
-            color: white;
-        }
-        
-        .app-badge img {
-            height: 45px;
-            margin: 5px;
-        }
-        
-        .testimonial-section {
-            background: var(--light-bg);
-            padding: 80px 0;
-        }
-        
-        .testimonial-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin: 15px;
-        }
-        
-        .play-button {
-            width: 60px;
-            height: 60px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            margin: 30px auto;
-        }
-        
-        .faq-section {
-            background: white;
-            padding: 80px 0;
-        }
-        
-        .faq-item {
-            border-bottom: 1px solid #e0e0e0;
-            padding: 20px 0;
-            cursor: pointer;
-        }
-        
-        .house-illustration {
-            max-width: 400px;
-            margin: 0 auto;
-        }
+/* ========================================
+   PRODUCT PAGE STYLES - ICONNET
+   CSS ini menggabungkan styling dari profile dan product page
+   ======================================== */
 
-        .news-card img {
-    height: 200px;
-    object-fit: cover;
-    border-radius: 10px 10px 0 0;
+:root {
+    --primary-color: #2B9EB3;
+    --primary-teal: #20b2aa;
+    --dark-blue: #1A5F7A;
+    --dark-teal: #008080;
+    --light-bg: #F0F8FF;
+    --light-teal: #4dd0e1;
+    --text-dark: #2c3e50;
+    --border-color: #e0e0e0;
 }
 
-.news-card {
-    border-radius: 15px;
-    transition: transform 0.3s ease;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.news-card:hover {
-    transform: translateY(-8px);
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+    background-color: #f8f9fa;
 }
-.hero-card {
+
+/* ========================================
+   NAVBAR (Dari Profile)
+   ======================================== */
+.navbar {
+    padding: 0.5rem 0;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: fixed;
     width: 100%;
-    height: 260px;
-    border-radius: 18px;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    overflow: hidden;
+    top: 0;
+    z-index: 1000;
 }
 
-/* Slider Core */
-.slider-container {
-    width: 100%;
-    overflow: hidden;
-    position: relative;
+.navbar-brand img {
+    height: 70px;
+    object-fit: contain;
 }
 
-.slider-wrapper {
-    display: flex;
-    width: 300%;
-    transition: transform 0.7s ease-in-out;
+.nav-link {
+    color: var(--text-dark) !important;
+    margin: 0 15px;
+    font-weight: 600;
+    transition: color 0.3s;
+    font-size: 1rem;
 }
 
-.slide {
-    width: 100%;
-    flex-shrink: 0;
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary-color) !important;
 }
 
 .btn-promo {
@@ -244,502 +62,704 @@
     color: white;
     padding: 10px 30px;
     border-radius: 8px;
-    display: inline-block;
     text-decoration: none;
+    border: none;
+    transition: all 0.3s;
+    font-weight: 600;
 }
 
-.navbar {
-    /* Menambah padding atas dan bawah (misalnya 10px) */
-    padding-top: 3px;
-    padding-bottom: 3px;
+.btn-promo:hover {
+    background: var(--dark-blue);
+    color: white;
+    transform: translateY(-2px);
 }
 
-/* 🎨 Gaya untuk Container Dropdown (Kepala) */
-.location-dropdown-container {
-    position: relative; /* Penting untuk penempatan daftar opsi */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Shadow ringan di bawah tombol */
+/* ========================================
+   HEADER SECTION
+   ======================================== */
+.product-header-section {
+    padding: 120px 0 50px 0;
+    background: linear-gradient(135deg, #f5f5f5 0%, white 100%);
+    text-align: center;
+}
+
+.product-header-section h1 {
+    color: var(--text-dark);
+    font-size: 2rem;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    padding: 10px 25px;
+    background: white;
+    border: 2px solid var(--text-dark);
+    border-radius: 5px;
+    color: var(--text-dark);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+}
+
+.tab-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.tab-btn.active {
+    background: var(--text-dark);
+    color: white;
+    border-color: var(--text-dark);
+}
+
+/* ========================================
+   MAIN CONTENT SECTION
+   ======================================== */
+.product-content-section {
+    padding: 40px 0 60px 0;
+    background-color: #f8f9fa;
+}
+
+/* ========================================
+   SIDEBAR FILTER
+   ======================================== */
+.filter-sidebar {
+    background: white;
+    padding: 30px 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 100px;
+    border: 1px solid #e9ecef;
+}
+
+.filter-title {
+    color: var(--text-dark);
+    font-weight: bold;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--border-color);
+    font-size: 1.1rem;
+}
+
+.filter-group {
+    margin-bottom: 20px;
+}
+
+.filter-label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.btn-counter {
+    background: white;
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+    width: 35px;
+    height: 35px;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-counter:hover {
+    background: var(--light-teal);
+    color: white;
+    border-color: var(--light-teal);
+}
+
+.input-group .form-control {
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    height: 35px;
+    width: 80px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.btn-compare {
+    width: 100%;
+    padding: 12px;
+    background: white;
+    color: var(--text-dark);
+    border: 2px solid var(--text-dark);
+    border-radius: 5px;
+    font-weight: 600;
+    margin-top: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-compare:hover {
+    background: var(--text-dark);
+    color: white;
+}
+
+/* ========================================
+   PRODUCT GRID
+   ======================================== */
+.product-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.product-card-modern {
+    background: white;
     border-radius: 8px;
-    background-color: #fff; /* Latar belakang putih */
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e9ecef;
+    transition: all 0.3s;
 }
 
-/* 🎯 Gaya untuk Tombol/Kepala Dropdown */
+.product-card-modern:hover {
+    box-shadow: 0 4px 20px rgba(32, 178, 170, 0.15);
+    border-color: var(--light-teal);
+}
+
+.product-card-header {
+    margin-bottom: 15px;
+}
+
+.product-title {
+    color: var(--text-dark);
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.product-subtitle {
+    color: #6c757d;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.product-card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.product-price-tag {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.btn-product-detail {
+    padding: 8px 20px;
+    background: white;
+    color: var(--text-dark);
+    border: 1px solid var(--text-dark);
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-product-detail:hover {
+    background: var(--text-dark);
+    color: white;
+}
+
+/* Info Banner */
+.info-banner {
+    grid-column: 1 / -1;
+    background: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px 0;
+    border: 1px solid #e9ecef;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.info-banner i {
+    font-size: 1.2rem;
+    color: var(--text-dark);
+}
+
+/* ========================================
+   ADD-ON SECTION
+   ======================================== */
+.addon-section {
+    padding: 80px 0;
+    background: white;
+}
+
+.addon-section h2 {
+    color: var(--text-dark);
+    margin-bottom: 50px;
+    font-weight: bold;
+}
+
+.addon-category {
+    margin-bottom: 50px;
+}
+
+.addon-category-title {
+    color: var(--text-dark);
+    font-weight: bold;
+    margin-bottom: 30px;
+    font-size: 1.3rem;
+}
+
+.addon-card {
+    background: var(--light-teal);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    transition: all 0.3s;
+    height: 100%;
+}
+
+.addon-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(32, 178, 170, 0.3);
+}
+
+.addon-title {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.addon-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.addon-price {
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.btn-addon-detail {
+    width: 100%;
+    padding: 12px;
+    background: white;
+    color: var(--primary-teal);
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-addon-detail:hover {
+    background: var(--text-dark);
+    color: white;
+}
+
+/* ========================================
+   DETAIL SECTION
+   ======================================== */
+.addon-detail-section {
+    background: #f8f9fa;
+    padding: 40px;
+    border-radius: 12px;
+    margin-top: 40px;
+}
+
+.detail-card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+}
+
+.detail-preview-card {
+    background: linear-gradient(135deg, var(--light-teal), var(--primary-teal));
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    position: sticky;
+    top: 100px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.accordion-item {
+    border: 1px solid var(--border-color);
+    border-radius: 8px !important;
+    margin-bottom: 10px;
+}
+
+.accordion-button {
+    background-color: #f8f9fa;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: var(--light-teal);
+    color: white;
+}
+
+/* ========================================
+   COMPARE MODAL
+   ======================================== */
+.modal-content {
+    border-radius: 10px;
+    border: none;
+}
+
+.modal-header {
+    border-bottom: 2px solid var(--border-color);
+}
+
+.compare-table-placeholder {
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 8px;
+    color: #6c757d;
+}
+
+/* ========================================
+   LOCATION DROPDOWN (Dari Profile)
+   ======================================== */
+.location-dropdown-container {
+    position: relative;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    background-color: #fff;
+}
+
 .custom-dropdown-toggle {
     display: flex;
     align-items: center;
     width: 100%;
     padding: 12px 15px;
-    background-color: #f7f9fb; /* Latar belakang abu-abu sangat muda */
-    border: 1px solid #dee2e6; /* Border tipis */
+    background-color: #f7f9fb;
+    border: 1px solid #dee2e6;
     border-radius: 8px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     cursor: pointer;
 }
 
-/* 📍 Gaya Ikon Peta */
 .custom-dropdown-toggle .fa-map-marker-alt {
-    color: #00bcd4; /* Warna toska cerah untuk ikon peta */
-    font-size: 1.3rem;
+    color: #00bcd4;
+    font-size: 1.2rem;
 }
 
-/* 🔽 Gaya Ikon Panah */
 .custom-dropdown-toggle .dropdown-icon {
     transition: transform 0.3s ease;
 }
 
-/* 🔄 Rotasi Ikon Panah saat Dropdown terbuka */
 .custom-dropdown-toggle[aria-expanded="true"] .dropdown-icon {
     transform: rotate(180deg);
 }
 
-/* 📂 Gaya untuk Daftar Opsi Dropdown */
 .location-options-list {
     border-radius: 0 0 8px 8px;
-    overflow: hidden; /* Memastikan border-radius terlihat di akhir daftar */
+    overflow: hidden;
 }
 
-/* 🗺️ Gaya untuk Setiap Opsi Lokasi */
 .location-item {
     padding: 12px 15px;
-    background-color: #e9e9e9; /* Latar belakang abu-abu */
-    border-top: 1px solid #dcdcdc; /* Pembatas antar item */
+    background-color: #e9e9e9;
+    border-top: 1px solid #dcdcdc;
     cursor: pointer;
     font-size: 1rem;
     color: #333;
     transition: background-color 0.2s, border-color 0.2s;
-    /* Border toska di kiri dan kanan */
-    border-left: 3px solid #00bcd4; 
+    border-left: 3px solid #00bcd4;
     border-right: 3px solid #00bcd4;
-    margin-top: -1px; /* Mengatasi border ganda */
+    margin-top: -1px;
 }
 
-/* 🖱️ Gaya saat Opsi di-hover */
 .location-item:hover {
-    background-color: #dcdcdc; /* Abu-abu sedikit lebih gelap saat di-hover */
+    background-color: #dcdcdc;
 }
 
-/* ⚠️ Hapus margin atas/bawah yang tidak perlu dari Bootstrap */
-.mb-4 { margin-bottom: 1.5rem !important; }
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 1200px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
-/* --- Gaya Umum Card --- */
+@media (max-width: 992px) {
+    .filter-sidebar {
+        margin-bottom: 30px;
+        position: relative;
+        top: 0;
+    }
+
+    .product-header-section h1 {
+        font-size: 1.6rem;
+    }
+
+    .tab-navigation {
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .tab-btn {
+        font-size: 0.85rem;
+        padding: 8px 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .product-header-section {
+        padding: 100px 0 40px 0;
+    }
+
+    .navbar-brand img {
+        height: 60px;
+    }
+
+    .product-card-body {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .btn-product-detail {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .addon-card {
+        margin-bottom: 20px;
+    }
+
+    .detail-preview-card {
+        position: relative;
+        top: 0;
+        margin-top: 20px;
+    }
+
+    .tab-navigation {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .tab-btn {
+        width: 100%;
+    }
+
+    .filter-label {
+        font-size: 0.9rem;
+    }
+
+    .product-title {
+        font-size: 1.3rem;
+    }
+
+    .product-price-tag {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .product-header-section h1 {
+        font-size: 1.4rem;
+    }
+
+    .filter-sidebar {
+        padding: 20px;
+    }
+
+    .product-card-modern {
+        padding: 20px;
+    }
+}
+
+/* ========================================
+   FOOTER (Dari Profile)
+   ======================================== */
+footer {
+    background: #2c3e50 !important;
+    margin-top: 0;
+    padding: 20px 0;
+}
+
+footer p {
+    margin: 0;
+    opacity: 0.9;
+    color: white;
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+.mb-4 { 
+    margin-bottom: 1.5rem !important; 
+}
+
+.fw-bold {
+    font-weight: bold !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.container {
+    max-width: 1200px;
+}
+
+/* ========================================
+   PACKAGE CARDS (Untuk halaman profile/index)
+   ======================================== */
 .package-card {
     background-color: white;
-    padding: 20px;
+    padding: 15px 20px;
     border-radius: 12px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e0f7fa; /* Border tipis warna biru muda */
-    height: 100%; /* Memastikan tinggi kartu sama dalam satu baris */
+    border: 1px solid #e0f7fa;
+    height: 100%;
+    transition: transform 0.3s;
 }
 
-/* --- Gaya Rating --- */
+.package-card:hover {
+    transform: translateY(-10px);
+}
+
 .package-rating {
     margin-bottom: 20px;
 }
+
 .rating-badge {
-    background-color: #ffc107; /* Warna kuning Bootstrap */
+    background-color: #ffc107;
     color: #343a40;
     padding: 3px 8px;
     border-radius: 4px;
     font-size: 0.9rem;
     font-weight: bold;
 }
+
 .package-rating small {
     display: block;
     color: #6c757d;
 }
 
-/* --- Gaya Spesifikasi Paket (Ikon Kustom) --- */
 .package-specs p {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: #495057;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 }
+
 .package-specs i {
-    color: #4dc26a; /* Ganti warna ikon jika perlu */
+    color: #4dc26a;
     width: 20px;
 }
 
-
-/* --- Gaya Harga --- */
 .package-price {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #007bff; /* Warna biru untuk harga */
+    color: #007bff;
     margin-bottom: 5px;
 }
-small {
-    font-size: 0.85rem;
-    color: #6c757d;
-}
 
-/* --- Gaya Tombol Pesan Sekarang --- */
 .btn-pilih {
     width: 100%;
-    padding: 10px;
-    background-color: #007bff; /* Warna biru */
+    padding: 8px 10px;
+    background-color: #007bff;
     border-radius: 8px;
     border: none;
     color: white;
     font-weight: bold;
+    margin-top: 15px !important;
+    transition: all 0.3s;
 }
 
-/* --- GAYA CAROUSEL KHUSUS --- */
+.btn-pilih:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+}
 
-/* Latar Belakang Biru Muda di Belakang Kartu */
+/* CAROUSEL */
 #packageCarousel {
-    background-color: #4dd0e1; /* Warna biru/toska cerah */
+    background-color: #4dd0e1;
     border-radius: 12px;
-    padding: 30px 0; /* Padding vertikal di sekitar kartu */
+    padding: 20px 0;
 }
 
-/* Mengatur Carousel Control */
 .carousel-control-prev, .carousel-control-next {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     background-color: white;
     border-radius: 50%;
-    opacity: 1; /* Menghilangkan efek transparan default Bootstrap */
+    opacity: 1;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     top: 50%;
     transform: translateY(-50%);
     transition: opacity 0.3s;
 }
+
 .carousel-control-prev:hover, .carousel-control-next:hover {
     opacity: 0.8;
 }
 
-/* Mengganti ikon panah default dengan Font Awesome */
 .carousel-control-icon {
-    color: #4dd0e1; /* Warna ikon toska */
-    font-size: 1.5rem;
-}
-.carousel-control-prev .carousel-control-icon {
-    transform: translateX(-2px); /* Penyesuaian agar panah di tengah */
-}
-.carousel-control-next .carousel-control-icon {
-    transform: translateX(2px);
+    color: #4dd0e1;
+    font-size: 1.3rem;
 }
 
-/* Jarak Tombol dari tepi */
 .carousel-control-prev {
-    left: -20px; 
+    left: -15px;
 }
+
 .carousel-control-next {
-    right: -20px; 
+    right: -15px;
 }
 
-/* Padding pada inner agar kartu tidak menyentuh tombol panah */
 .carousel-inner {
-    padding: 0 30px; 
+    padding: 0 25px;
 }
 
-/* Memastikan baris kartu di tengah */
 .card-group-row {
     justify-content: center;
 }
-
-/* --- Penyesuaian Gaya Card Agar Lebih Pendek --- */
-.package-card {
-    /* Mengurangi padding vertikal internal */
-    padding: 15px 20px; 
-    border-radius: 12px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e0f7fa; 
-    height: 100%; 
-}
-
-/* Mengurangi margin di bawah judul (ICONNET 35/50/75/100) */
-.package-card h4 {
-    margin-bottom: 12px !important;
-}
-
-/* Mengurangi ukuran dan margin pada spesifikasi */
-.package-specs p {
-    font-size: 0.9rem; /* Sedikit lebih kecil */
-    margin-bottom: 5px; /* Margin antar baris lebih kecil */
-}
-
-/* Mengurangi margin tombol */
-.btn-pilih {
-    margin-top: 15px !important; /* Mengurangi margin atas tombol */
-    padding: 8px 10px; /* Tombol sedikit lebih pendek */
-}
-
-/* --- Penyesuaian Gaya Carousel --- */
-
-/* Mengurangi padding vertikal pada background biru/toska */
-#packageCarousel {
-    background-color: #4dd0e1; 
-    border-radius: 12px;
-    padding: 20px 0; /* Padding vertikal yang lebih kecil */
-}
-
-/* Jarak Tombol dari tepi (mungkin perlu disesuaikan lagi) */
-.carousel-control-prev {
-    left: -15px; 
-}
-.carousel-control-next {
-    right: -15px; 
-}
-
-/* Padding pada inner agar kartu tidak menyentuh tombol panah */
-.carousel-inner {
-    padding: 0 25px; 
-}
-
-/* Tombol navigasi */
-.carousel-control-prev, .carousel-control-next {
-    width: 45px; /* Sedikit lebih kecil */
-    height: 45px; /* Sedikit lebih kecil */
-}
-
-/* Ikon panah */
-.carousel-control-icon {
-    font-size: 1.3rem; 
-}
-
-/* --- 1. Gaya Card Utama (Menggantikan .service-badge) --- */
-.service-badge {
-    /* Meniru tampilan kotak putih Gambar 1 */
-    background-color: white;
-    border-radius: 12px; /* Sudut melengkung */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Shadow halus */
-    padding: 20px 15px; /* Padding internal */
-    height: 100%; /* Memastikan tinggi kartu sama */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    transition: transform 0.2s;
-}
-
-.service-badge:hover {
-    transform: translateY(-3px); /* Efek kecil saat di-hover */
-}
-
-/* --- 2. Gaya Ikon (Menggantikan .service-icon) --- */
-.service-icon {
-    /* Mengatur ukuran dan warna ikon */
-    background-color: transparent; /* Tidak perlu background kotak di dalam ikon */
-    border-radius: 50%;
-    width: 60px; /* Ukuran yang cukup untuk ikon */
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 8px; /* Jarak antara ikon dan teks */
-}
-
-.service-icon i {
-    /* Warna ikon utama (Toska) */
-    font-size: 2.2rem; 
-    color: #20b2aa; 
-}
-
-/* --- 3. Gaya Teks (Bayar Cepat, Cek Tagihan, Layanan Lengkap) --- */
-.service-badge h6 {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #343a40;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-/* --- 4. Penyesuaian Margin dan Layout --- */
-/* Mengurangi margin atas pada baris ikon agar lebih dekat ke Syarat & Ketentuan */
-.row.mt-5 {
-    margin-top: 3rem !important; /* Dapat disesuaikan lebih kecil jika perlu */
-}
-
-/* --- 1. Container Utama dengan Shadow dan Blur --- */
-.icon-group-container {
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Shadow umum */
-    padding: 20px; /* Padding di dalam container putih */
-    max-width: fit-content; /* Sesuai lebar konten */
-    margin: 50px auto; /* Tengahkan container */
-    position: relative;
-    /* Efek blur bayangan biru */
-    filter: drop-shadow(0 0 15px rgba(32, 178, 170, 0.4)); /* Warna toska dengan blur */
-}
-
-/* --- 2. Wrapper untuk Flexbox Item --- */
-.icon-group-wrapper {
-    display: flex;
-    align-items: center; /* Tengahkan item secara vertikal */
-    justify-content: center; /* Tengahkan item secara horizontal */
-    gap: 20px; /* Jarak antar item */
-}
-
-/* --- 3. Gaya Setiap Item Layanan (ikon + teks) --- */
-.service-item {
-    display: flex;
-    align-items: center; /* Tengahkan ikon dan teks secara vertikal */
-    gap: 15px; /* Jarak antara ikon dan teks */
-    padding: 10px 0; /* Padding internal untuk setiap item */
-}
-
-.service-icon-img {
-    /* Gaya untuk membungkus gambar ikon */
-    width: 80px; /* Ukuran wrapper ikon */
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0; /* Pastikan ikon tidak mengecil */
-}
-
-.service-icon-img img {
-    /* Memastikan gambar ikon mengisi wrapper */
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* Agar ikon tidak terpotong */
-}
-
-/* Jika Anda menggunakan Font Awesome, gunakan ini sebagai ganti .service-icon-img img */
-/*
-.service-icon-img i {
-    font-size: 3.5rem; 
-    color: #20b2aa; 
-}
-*/
-
-.service-text h6 {
-    font-size: 1.1rem; /* Ukuran font teks */
-    font-weight: bold;
-    color: #343a40;
-    margin: 0; /* Hapus margin default h6 */
-}
-
-/* --- 4. Gaya Pemisah Vertikal --- */
-.vertical-divider {
-    width: 1px;
-    height: 60px; /* Tinggi pemisah */
-    background-color: #e0e0e0; /* Warna abu-abu terang */
-    margin: 0 15px; /* Jarak dari item di kiri dan kanan */
-}
-
-/* --- 5. Responsivitas --- */
-@media (max-width: 768px) {
-    .icon-group-wrapper {
-        flex-direction: column; /* Tumpuk item secara vertikal di layar kecil */
-        gap: 15px;
-    }
-    .vertical-divider {
-        width: 80%; /* Pemisah horizontal di layar kecil */
-        height: 1px;
-        margin: 15px 0;
-    }
-    .service-item {
-        padding: 5px 0;
-    }
-    .service-icon-img {
-        width: 60px; /* Ikon lebih kecil di mobile */
-        height: 60px;
-    }
-    .service-icon-img img {
-        width: 100%;
-        height: 100%;
-    }
-    /* Jika menggunakan Font Awesome di mobile */
-    /*
-    .service-icon-img i {
-        font-size: 2.5rem;
-    }
-    */
-    .service-text h6 {
-        font-size: 1rem;
-    }
-    .icon-group-container {
-        padding: 15px;
-    }
-}
-
-/* --- 1. Container Utama dengan Shadow dan Blur --- */
-.icon-group-container {
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Shadow umum */
-    padding: 20px; /* Padding di dalam container putih */
-    max-width: fit-content; /* Sesuai lebar konten */
-    margin: 50px auto; /* Tengahkan container */
-    position: relative;
-    /* Efek blur bayangan biru */
-    filter: drop-shadow(0 0 15px rgba(32, 178, 170, 0.4)); /* Warna toska dengan blur */
-}
-
-/* --- 2. Wrapper untuk Flexbox Item --- */
-.icon-group-wrapper {
-    display: flex;
-    align-items: center; /* Tengahkan item secara vertikal */
-    justify-content: center; /* Tengahkan item secara horizontal */
-    gap: 20px; /* Jarak antar item */
-}
-
-/* --- 3. Gaya Setiap Item Layanan (ikon + teks) --- */
-.service-item {
-    display: flex;
-    align-items: center; /* Tengahkan ikon dan teks secara vertikal */
-    gap: 15px; /* Jarak antara ikon dan teks */
-    padding: 10px 0; /* Padding internal untuk setiap item */
-}
-
-.service-icon-svg {
-    /* Gaya untuk membungkus SVG ikon */
-    width: 80px; /* Ukuran wrapper ikon */
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0; /* Pastikan ikon tidak mengecil */
-}
-
-/* Kustomisasi untuk SVG di dalam .service-icon-svg */
-.service-icon-svg svg {
-    width: 100%;
-    height: 100%;
-    display: block; /* Hapus spasi ekstra di bawah SVG */
-}
-
-.service-text h6 {
-    font-size: 1.1rem; /* Ukuran font teks */
-    font-weight: bold;
-    color: #343a40;
-    margin: 0; /* Hapus margin default h6 */
-}
-
-/* --- 4. Gaya Pemisah Vertikal --- */
-.vertical-divider {
-    width: 1px;
-    height: 60px; /* Tinggi pemisah */
-    background-color: #e0e0e0; /* Warna abu-abu terang */
-    margin: 0 15px; /* Jarak dari item di kiri dan kanan */
-}
-
-/* --- 5. Responsivitas --- */
-@media (max-width: 768px) {
-    .icon-group-wrapper {
-        flex-direction: column; /* Tumpuk item secara vertikal di layar kecil */
-        gap: 15px;
-    }
-    .vertical-divider {
-        width: 80%; /* Pemisah horizontal di layar kecil */
-        height: 1px;
-        margin: 15px 0;
-    }
-    .service-item {
-        padding: 5px 0;
-    }
-    .service-icon-svg {
-        width: 60px; /* Ikon lebih kecil di mobile */
-        height: 60px;
-    }
-    .service-text h6 {
-        font-size: 1rem;
-    }
-    .icon-group-container {
-        padding: 15px;
-    }
-}
-
