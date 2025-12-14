@@ -478,286 +478,98 @@
         </div>
     </section>
     <!-- Footer -->
-    <footer class="bg-dark text-white py-4">
-        <div class="container text-center">
-            <p class="mb-0">&copy; 2024 ICONNET. All rights reserved.</p>
+<footer class="bg-dark text-white py-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <p class="mb-0">&copy; 2024 ICONNET. All rights reserved.</p>
+            </div>
+            <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+                <a href="login.html" class="btn btn-outline-light btn-sm px-4">
+                    <i class="fas fa-user-shield me-2"></i>Admin Login
+                </a>
+            </div>
         </div>
-    </footer>
+    </div>
+</footer>
 
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-  <script>
-let index = 0;
+    
+    <!-- Script Existing (Jangan Dihapus) -->
+    <script>
+    // Fungsi update package prices (TETAP ADA)
+    const packageData = {
+        'sumatera-kalimantan': {
+            'iconnet35': { abonemen: '335.000', instalasi: '345.000' },
+            'iconnet50': { abonemen: '535.000', instalasi: '345.000' },
+            'iconnet75': { abonemen: '750.000', instalasi: '345.000' },
+            'iconnet100': { abonemen: '999.000', instalasi: '345.000' }
+        },
+        'jawa-bali': {
+            'iconnet35': { abonemen: '269.000', instalasi: '150.000' },
+            'iconnet50': { abonemen: '319.000', instalasi: '150.000' },
+            'iconnet75': { abonemen: '400.000', instalasi: '150.000' },
+            'iconnet100': { abonemen: '499.000', instalasi: '150.000' }
+        },
+        'indonesia-timur': {
+            'iconnet35': { abonemen: '289.000', instalasi: '200.000' },
+            'iconnet50': { abonemen: '450.000', instalasi: '200.000' },
+            'iconnet75': { abonemen: '550.000', instalasi: '250.000' },
+            'iconnet100': { abonemen: '700.000', instalasi: '250.000' }
+        }
+    };
 
-function autoSlide() {
-    const slides = document.querySelectorAll(".slide");
-    index++;
-    if (index >= slides.length) index = 0;
+    function updatePackagePrices(locationKey) {
+        const prices = packageData[locationKey];
+        
+        for (const packageId in prices) {
+            if (prices.hasOwnProperty(packageId)) {
+                const data = prices[packageId];
+                
+                const abonemen = `Rp. ${data.abonemen}`;
+                const instalasi = `Rp. ${data.instalasi}`;
 
-    document.querySelector(".slider-wrapper")
-        .style.transform = `translateX(${-index * 100}%)`;
-}
+                const abonemenElement = document.querySelector(`[data-package-id="${packageId}"] .price-abonemen`);
+                if (abonemenElement) {
+                    abonemenElement.textContent = abonemen;
+                }
 
-setInterval(autoSlide, 3000);
-
-document.addEventListener('DOMContentLoaded', function() {
-    const locationToggle = document.querySelector('.custom-dropdown-toggle');
-    const locationOptions = document.getElementById('locationOptions');
-    const locationItems = document.querySelectorAll('.location-item');
-    const locationTextSpan = locationToggle.querySelector('span'); // Ambil span dengan teks "Pilih Lokasi Kamu"
-
-    locationItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const selectedText = this.textContent;
-            
-            // 1. Ubah teks tombol utama
-            locationTextSpan.textContent = selectedText;
-
-            // 2. Tutup dropdown
-            const collapseInstance = bootstrap.Collapse.getInstance(locationOptions);
-            if (collapseInstance) {
-                collapseInstance.hide();
-            } else {
-                new bootstrap.Collapse(locationOptions).hide();
+                const instalasiElement = document.querySelector(`[data-package-id="${packageId}"] .price-instalasi`);
+                if (instalasiElement) {
+                    instalasiElement.textContent = instalasi;
+                }
             }
+        }
+    }
 
-            // Opsional: Lakukan aksi lain (misalnya, memuat data paket harga)
-            const selectedLocation = this.getAttribute('data-location');
-            console.log('Lokasi terpilih:', selectedLocation);
-            // Tambahkan kode AJAX/Fetch untuk memuat data di sini
+    // Event listener untuk location dropdown
+    document.addEventListener('DOMContentLoaded', function() {
+        const locationOptions = document.querySelectorAll('.location-item');
+        const selectedLocationText = document.getElementById('selected-location-text');
+        const collapseElement = document.getElementById('locationOptions');
+
+        updatePackagePrices('sumatera-kalimantan');
+
+        locationOptions.forEach(item => {
+            item.addEventListener('click', function() {
+                const selectedLocationKey = this.getAttribute('data-location');
+                const selectedLocationName = this.textContent.trim();
+                
+                selectedLocationText.textContent = selectedLocationName;
+                updatePackagePrices(selectedLocationKey);
+                
+                if (collapseElement) {
+                    const collapseInstance = bootstrap.Collapse.getInstance(collapseElement) || new bootstrap.Collapse(collapseElement, {toggle: false});
+                    collapseInstance.hide();
+                }
+            });
         });
     });
-});
-
-const packageData = {
-    // Harga untuk Sumatera & Kalimantan
-    'sumatera-kalimantan': {
-        'iconnet35': {
-            abonemen: '335.000',
-            instalasi: '345.000'
-        },
-        'iconnet50': {
-            abonemen: '535.000',
-            instalasi: '345.000'
-        },
-        // Data baru untuk ICONNET 75
-        'iconnet75': { 
-            abonemen: '750.000',
-            instalasi: '345.000'
-        },
-        // Data baru untuk ICONNET 100
-        'iconnet100': {
-            abonemen: '999.000',
-            instalasi: '345.000'
-        }
-    },
+    </script>
     
-    // Harga untuk Jawa & Bali
-    'jawa-bali': {
-        'iconnet35': {
-            abonemen: '269.000',
-            instalasi: '150.000'
-        },
-        'iconnet50': {
-            abonemen: '319.000',
-            instalasi: '150.000'
-        },
-        // Data baru untuk ICONNET 75
-        'iconnet75': {
-            abonemen: '400.000',
-            instalasi: '150.000'
-        },
-        // Data baru untuk ICONNET 100
-        'iconnet100': {
-            abonemen: '499.000',
-            instalasi: '150.000'
-        }
-    },
-    
-    // Harga untuk Indonesia Timur
-    'indonesia-timur': {
-        'iconnet35': {
-            abonemen: '289.000',
-            instalasi: '200.000'
-        },
-        'iconnet50': {
-            abonemen: '450.000',
-            instalasi: '200.000'
-        },
-        // Data baru untuk ICONNET 75
-        'iconnet75': {
-            abonemen: '550.000',
-            instalasi: '250.000'
-        },
-        // Data baru untuk ICONNET 100
-        'iconnet100': {
-            abonemen: '700.000',
-            instalasi: '250.000'
-        }
-    }
-};
+    <!-- Load Data dari Database (FILE BARU!) -->
+    <script src="index.js"></script>
 
-function updatePackagePrices(locationKey) {
-    const prices = packageData[locationKey];
-    
-    // Iterasi melalui setiap paket di lokasi yang dipilih
-    for (const packageId in prices) {
-        if (prices.hasOwnProperty(packageId)) {
-            const data = prices[packageId];
-            
-            // Format harga
-            const abonemen = `Rp. ${data.abonemen}`;
-            const instalasi = `Rp. ${data.instalasi}`;
-
-            // Perbarui harga Abonemen
-            const abonemenElement = document.querySelector(`[data-package-id="${packageId}"] .price-abonemen`);
-            if (abonemenElement) {
-                abonemenElement.textContent = abonemen;
-            }
-
-            // Perbarui harga Instalasi
-            const instalasiElement = document.querySelector(`[data-package-id="${packageId}"] .price-instalasi`);
-            if (instalasiElement) {
-                instalasiElement.textContent = instalasi;
-            }
-        }
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const locationOptions = document.querySelectorAll('.location-item');
-    const selectedLocationText = document.getElementById('selected-location-text');
-    const collapseElement = document.getElementById('locationOptions');
-
-    // 1. Inisialisasi: Muat harga default saat halaman dimuat
-    updatePackagePrices('sumatera-kalimantan');
-
-    // 2. Event Listener untuk setiap opsi lokasi
-    locationOptions.forEach(item => {
-        item.addEventListener('click', function() {
-            const selectedLocationKey = this.getAttribute('data-location');
-            const selectedLocationName = this.textContent.trim();
-            
-            // A. Perbarui Teks Lokasi di Toggle
-            selectedLocationText.textContent = selectedLocationName;
-            
-            // B. Perbarui Harga
-            updatePackagePrices(selectedLocationKey);
-            
-            // C. Tutup Dropdown (jika menggunakan Bootstrap Collapse)
-            if (collapseElement) {
-                const collapseInstance = bootstrap.Collapse.getInstance(collapseElement) || new bootstrap.Collapse(collapseElement, {toggle: false});
-                collapseInstance.hide();
-            }
-        });
-    });
-});
-
-// ... (Kode JavaScript sebelumnya)
-$(document).ready(function() {
-    const sliderWrapper = $('.slider-wrapper');
-    const slides = $('.slide');
-    // ...
-    function showSlide(index) {
-        slides.removeClass('active-slide');
-        $(slides[index]).addClass('active-slide');
-        // Pindahkan wrapper (untuk animasi geser)
-        const offset = -index * 100;
-        sliderWrapper.css('transform', `translateX(${offset}%)`);
-        // ...
-    }
-    // ... (Listener untuk tombol next-btn dan prev-btn)
-});
-
-$(document).ready(function() {
-    const sliderWrapper = $('.slider-wrapper');
-    const slides = $('.slide');
-    const totalSlides = slides.length;
-    let currentIndex = 0;
-
-    // Tambahkan Tombol Navigasi jika belum ada (Opsional, tapi penting untuk fungsionalitas)
-    if ($('.slider-nav').length === 0) {
-        $('#customSlider').append(`
-            <button class="slider-nav prev-btn"><i class="fas fa-chevron-left"></i></button>
-            <button class="slider-nav next-btn"><i class="fas fa-chevron-right"></i></button>
-        `);
-    }
-
-    // Fungsi utama untuk menampilkan slide
-    function showSlide(index) {
-        // Logika untuk Loop Slider (kembali ke 0 setelah slide terakhir)
-        if (index >= totalSlides) {
-            index = 0;
-        } else if (index < 0) {
-            index = totalSlides - 1;
-        }
-
-        // Hapus kelas aktif dari semua slide
-        slides.removeClass('active-slide');
-        
-        // Manipulasi CSS: Pindahkan wrapper berdasarkan indeks (penting untuk animasi)
-        const offset = -index * 100;
-        sliderWrapper.css('transform', `translateX(${offset}%)`);
-        
-        // Tambahkan kelas aktif ke slide yang ditargetkan (penting untuk display: flex)
-        $(slides[index]).addClass('active-slide');
-        
-        currentIndex = index;
-    }
-
-    // Listener untuk tombol Next
-    $('#customSlider').on('click', '.next-btn', function() {
-        showSlide(currentIndex + 1);
-    });
-
-    // Listener untuk tombol Previous
-    $('#customSlider').on('click', '.prev-btn', function() {
-        showSlide(currentIndex - 1);
-    });
-    
-    // Inisialisasi: Pastikan hanya slide pertama yang terlihat saat dimuat
-    showSlide(0);
-    
-    // Opsi Autoplay (Tambahkan jika Anda ingin slider otomatis)
-    // setInterval(() => {
-    //     showSlide(currentIndex + 1);
-    // }, 5000); // Ganti 5000 dengan interval waktu yang diinginkan (dalam ms)
-});
-</script>
-
-<!-- MODAL SYARAT & KETENTUAN -->
-<div class="modal fade" id="modalSyarat" tabindex="-1">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content rounded-4 border-0">
-
-      <div class="modal-header border-0">
-        <h5 class="modal-title fw-bold">Syarat & Ketentuan</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body" style="font-size:14px; color:#666; line-height:1.7">
-
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit cras feugiat 
-          et sed condimentum viverra duis aute irure dolor in reprehenderit 
-          in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-        </p>
-
-        <p>
-          Excepteur sint occaecat cupidatat non proident, sunt in culpa 
-          qui officia deserunt mollit anim id est laborum. Vivamus sed 
-          molestie sapien.
-        </p>
-
-        <p>
-          Aliquam et facilisis arcu. Suspendisse sodales tortor nunc quis 
-          auctor ligula posuere cursus.
-        </p>
-
-      </div>
-
-    </div>
-  </div>
-</div>
 </body>
 </html>
