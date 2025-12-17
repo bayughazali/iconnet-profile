@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'iconnet_db');
+define('DB_NAME', 'icconet');
 
 // Membuat koneksi
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);

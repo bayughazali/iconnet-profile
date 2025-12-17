@@ -493,12 +493,56 @@
     </div>
 </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+
+<!-- Main Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
     
-    <!-- Script Existing (Jangan Dihapus) -->
-    <script>
-    // Fungsi update package prices (TETAP ADA)
+    // ===== AUTO SLIDER =====
+    const slides = document.querySelectorAll('.slide');
+    const indicatorContainer = document.querySelector('.slider-indicators');
+    let currentSlide = 0;
+    let slideInterval;
+    
+    if (slides.length > 0 && indicatorContainer) {
+        // Create indicators
+        slides.forEach((_, index) => {
+            const indicator = document.createElement('span');
+            indicator.classList.add('indicator');
+            if (index === 0) indicator.classList.add('active');
+            indicator.addEventListener('click', () => {
+                clearInterval(slideInterval);
+                goToSlide(index);
+                startAutoSlide();
+            });
+            indicatorContainer.appendChild(indicator);
+        });
+        
+        const indicators = document.querySelectorAll('.indicator');
+        
+        function goToSlide(n) {
+            slides[currentSlide].classList.remove('active-slide');
+            indicators[currentSlide].classList.remove('active');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active-slide');
+            indicators[currentSlide].classList.add('active');
+        }
+        
+        function nextSlide() {
+            goToSlide(currentSlide + 1);
+        }
+        
+        function startAutoSlide() {
+            slideInterval = setInterval(nextSlide, 4000); // Auto slide setiap 4 detik
+        }
+        
+        // Start auto slide
+        startAutoSlide();
+    }
+
+    // ===== PACKAGE PRICE UPDATE =====
     const packageData = {
         'sumatera-kalimantan': {
             'iconnet35': { abonemen: '335.000', instalasi: '345.000' },
@@ -544,32 +588,32 @@
     }
 
     // Event listener untuk location dropdown
-    document.addEventListener('DOMContentLoaded', function() {
-        const locationOptions = document.querySelectorAll('.location-item');
-        const selectedLocationText = document.getElementById('selected-location-text');
-        const collapseElement = document.getElementById('locationOptions');
+    const locationOptions = document.querySelectorAll('.location-item');
+    const selectedLocationText = document.getElementById('selected-location-text');
+    const collapseElement = document.getElementById('locationOptions');
 
-        updatePackagePrices('sumatera-kalimantan');
+    // Set initial prices
+    updatePackagePrices('sumatera-kalimantan');
 
-        locationOptions.forEach(item => {
-            item.addEventListener('click', function() {
-                const selectedLocationKey = this.getAttribute('data-location');
-                const selectedLocationName = this.textContent.trim();
-                
-                selectedLocationText.textContent = selectedLocationName;
-                updatePackagePrices(selectedLocationKey);
-                
-                if (collapseElement) {
-                    const collapseInstance = bootstrap.Collapse.getInstance(collapseElement) || new bootstrap.Collapse(collapseElement, {toggle: false});
-                    collapseInstance.hide();
-                }
-            });
+    locationOptions.forEach(item => {
+        item.addEventListener('click', function() {
+            const selectedLocationKey = this.getAttribute('data-location');
+            const selectedLocationName = this.textContent.trim();
+            
+            selectedLocationText.textContent = selectedLocationName;
+            updatePackagePrices(selectedLocationKey);
+            
+            if (collapseElement) {
+                const collapseInstance = bootstrap.Collapse.getInstance(collapseElement) || new bootstrap.Collapse(collapseElement, {toggle: false});
+                collapseInstance.hide();
+            }
         });
     });
-    </script>
-    
-    <!-- Load Data dari Database (FILE BARU!) -->
-    <script src="index.js"></script>
+});
+</script>
+
+<!-- Load Data dari Database (Jika Ada) -->
+<script src="index.js"></script>
 
 </body>
 </html>
