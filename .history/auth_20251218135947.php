@@ -65,7 +65,7 @@ if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 if ($action === 'logout') {
     session_start();
     session_destroy();
-    json_response(true, 'Logout berhasil', ['redirect' => 'login.php']);
+    json_response(true, 'Logout berhasil', ['redirect' => 'login.html']);
 }
 
 // ==================== CHECK SESSION ====================

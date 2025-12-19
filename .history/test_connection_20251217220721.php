@@ -7,7 +7,7 @@ header('Content-Type: application/json; charset=utf-8');
 $host = 'localhost';
 $user = 'root';
 $pass = '';
-$db = 'db_iconnet';
+$db = 'iconnet_db
 
 // Test koneksi
 $conn = new mysqli($host, $user, $pass, $db);

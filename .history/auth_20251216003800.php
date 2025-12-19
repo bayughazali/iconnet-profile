@@ -51,7 +51,7 @@ if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
             json_response(true, 'Login berhasil', [
                 'username' => $admin['username'],
                 'email' => $admin['email'],
-                'redirect' => 'dashboard.php'
+                'redirect' => 'dashboard.html'
             ]);
         } else {
             json_response(false, 'Password salah');
@@ -65,7 +65,7 @@ if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 if ($action === 'logout') {
     session_start();
     session_destroy();
-    json_response(true, 'Logout berhasil', ['redirect' => 'login.php']);
+    json_response(true, 'Logout berhasil', ['redirect' => 'login.html']);
 }
 
 // ==================== CHECK SESSION ====================
