@@ -1,179 +1,338 @@
 // index.js - Load Data dari Database untuk Homepage
 
-const API_URL = 'api.php';
-
 // ==================== LOAD DATA SAAT HALAMAN DIMUAT ====================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Index.html loaded, fetching data from database...');
-    loadSliders();
-    loadPaketPrices();
-    loadBerita();
-    loadFAQ();
+    console.log('🚀 Index.php loaded, fetching data from database...');
+    loadPaketFromDatabase();
 });
 
-// ==================== LOAD SLIDERS ====================
-function loadSliders() {
-    fetch(`${API_URL}?action=get_slider_public`)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Sliders from DB:', data);
-            if (data.success && data.data.length > 0) {
-                updateSliderHTML(data.data);
+// ==================== GLOBAL VARIABLES ====================
+let paketData = [];
+let currentLocation = 'sumatera-kalimantan';
+
+// ==================== FORMAT RUPIAH ====================
+function formatRupiah(angka) {
+    if (!angka) return 'Rp. 0';
+    return 'Rp. ' + parseInt(angka).toLocaleString('id-ID');
+}
+
+// ==================== LOAD PAKET FROM DATABASE ====================
+function loadPaketFromDatabase() {
+    console.log('📦 Loading paket from database...');
+    
+    // GUNAKAN api_paket.php yang sudah ada di root folder
+    const API_URL = 'api_paket.php';
+    
+    console.log('🔗 Fetching from:', API_URL);
+    
+    fetch(API_URL)
+        .then(response => {
+            console.log('📥 Response status:', response.status);
+            console.log('📥 Response OK:', response.ok);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
+            return response.json();
         })
-        .catch(error => console.error('Error loading sliders:', error));
-}
-
-function updateSliderHTML(sliders) {
-    const sliderWrapper = document.querySelector('.slider-wrapper');
-    if (!sliderWrapper) return;
-    
-    sliderWrapper.innerHTML = '';
-    
-    sliders.forEach((slider, index) => {
-        const slideDiv = document.createElement('div');
-        slideDiv.className = 'row g-4 slide' + (index === 0 ? ' active-slide' : '');
-        slideDiv.innerHTML = `
-            <div class="col-12">
-                <div class="hero-card" style="background-image: url('${slider.image_path}'); background-size: contain; height: 450px;"></div>
-            </div>
-        `;
-        sliderWrapper.appendChild(slideDiv);
-    });
-    
-    // Restart auto slide
-    startAutoSlide();
-}
-
-// ==================== LOAD PAKET PRICES ====================
-function loadPaketPrices() {
-    fetch(`${API_URL}?action=get_paket_public`)
-        .then(response => response.json())
         .then(data => {
-            console.log('Paket from DB:', data);
-            if (data.success && data.data.length > 0) {
-                updatePaketData(data.data);
+            console.log('✅ Raw data received:', data);
+            console.log('✅ Data type:', typeof data);
+            console.log('✅ Is Array:', Array.isArray(data));
+            
+            // Check if data is valid
+            if (!data) {
+                console.error('❌ Data is null or undefined');
+                showNoDataMessage();
+                return;
             }
+            
+            // If data has 'success' property, it might be an error response
+            if (data.success === false) {
+                console.error('❌ API returned error:', data.error || data.message);
+                showErrorMessage(data.error || data.message || 'Unknown error');
+                return;
+            }
+            
+            // Check if data is empty array
+            if (Array.isArray(data) && data.length === 0) {
+                console.warn('⚠️ No paket data found (empty array)');
+                showNoDataMessage();
+                return;
+            }
+            
+            // Store data
+            paketData = data;
+            console.log('✅ Paket data stored:', paketData.length, 'items');
+            
+            // Render cards
+            renderPaketCards();
+            setupLocationSelector();
         })
-        .catch(error => console.error('Error loading paket:', error));
+        .catch(error => {
+            console.error('❌ Error loading paket:', error);
+            console.error('❌ Error details:', error.message);
+            showErrorMessage(error.message);
+        });
 }
 
-function updatePaketData(pakets) {
-    // Update packageData object yang sudah ada di index.html
-    pakets.forEach(paket => {
-        const paketId = paket.id.toLowerCase();
+// ==================== RENDER PAKET CARDS ====================
+function renderPaketCards() {
+    console.log('🎨 Starting to render paket cards...');
+    console.log('🎨 Number of packages:', paketData.length);
+    
+    const carouselInner = document.querySelector('#packageCarousel .carousel-inner');
+    
+    if (!carouselInner) {
+        console.error('❌ Carousel container (#packageCarousel .carousel-inner) not found!');
+        return;
+    }
+    
+    console.log('✅ Carousel container found');
+    
+    // Clear existing content
+    carouselInner.innerHTML = '';
+    
+    // Group packages: 3 per slide
+    const packagesPerSlide = 3;
+    let slideCount = 0;
+    
+    for (let i = 0; i < paketData.length; i += packagesPerSlide) {
+        const slidePackages = paketData.slice(i, i + packagesPerSlide);
+        const isActive = slideCount === 0 ? 'active' : '';
         
-        // Update harga untuk setiap region
-        if (window.packageData) {
-            if (window.packageData['sumatera-kalimantan'] && window.packageData['sumatera-kalimantan'][paketId]) {
-                window.packageData['sumatera-kalimantan'][paketId].abonemen = parseInt(paket.harga_sumatera).toLocaleString('id-ID');
-            }
-            if (window.packageData['jawa-bali'] && window.packageData['jawa-bali'][paketId]) {
-                window.packageData['jawa-bali'][paketId].abonemen = parseInt(paket.harga_jawa).toLocaleString('id-ID');
-            }
-            if (window.packageData['indonesia-timur'] && window.packageData['indonesia-timur'][paketId]) {
-                window.packageData['indonesia-timur'][paketId].abonemen = parseInt(paket.harga_timur).toLocaleString('id-ID');
-            }
+        console.log(`📄 Creating slide ${slideCount + 1} with ${slidePackages.length} packages`);
+        
+        // Create carousel item
+        const carouselItem = document.createElement('div');
+        carouselItem.className = `carousel-item ${isActive}`;
+        
+        // Create row
+        const row = document.createElement('div');
+        row.className = 'row card-group-row';
+        
+        // Add package cards to row
+        slidePackages.forEach((paket, idx) => {
+            console.log(`  📦 Adding package ${idx + 1}:`, paket.name || paket.nama);
+            const col = document.createElement('div');
+            col.className = 'col-md-4 mb-4';
+            col.innerHTML = createPackageCard(paket);
+            row.appendChild(col);
+        });
+        
+        carouselItem.appendChild(row);
+        carouselInner.appendChild(carouselItem);
+        slideCount++;
+    }
+    
+    console.log(`✅ Successfully rendered ${paketData.length} packages in ${slideCount} slides`);
+    
+    // Update prices for current location
+    setTimeout(() => {
+        updatePricesByLocation();
+    }, 100);
+}
+
+// ==================== CREATE PACKAGE CARD HTML ====================
+function createPackageCard(paket) {
+    const packageName = paket.name || paket.nama || 'ICONNET Package';
+    const packageId = packageName.toLowerCase().replace(/\s+/g, '');
+    const kecepatan = paket.kecepatan || 'High Speed Internet';
+    const maxPerangkat = paket.max_perangkat || 4;
+    const maxLaptop = paket.max_laptop || 2;
+    const maxSmartphone = paket.max_smartphone || 2;
+    
+    // Pastikan harga ada dan valid
+    const hargaSumatera = paket.harga_sumatera || 0;
+    const hargaJawa = paket.harga_jawa || 0;
+    const hargaTimur = paket.harga_timur || 0;
+    const instalasiSumatera = paket.instalasi_sumatera || 345000;
+    const instalasiJawa = paket.instalasi_jawa || 150000;
+    const instalasiTimur = paket.instalasi_timur || 200000;
+    
+    return `
+        <div class="package-card" 
+             data-package-id="${packageId}"
+             data-harga-sumatera="${hargaSumatera}"
+             data-harga-jawa="${hargaJawa}"
+             data-harga-timur="${hargaTimur}"
+             data-instalasi-sumatera="${instalasiSumatera}"
+             data-instalasi-jawa="${instalasiJawa}"
+             data-instalasi-timur="${instalasiTimur}">
+            
+            <div class="text-center package-rating">
+                <span class="rating-badge">★★ 4.5</span>
+                <small>(1,500+ reviews)</small>
+            </div>
+            
+            <h4 class="text-center mb-3">${packageName}</h4>
+            
+            <div class="package-specs">
+                <p><i class="fas fa-tachometer-alt me-2"></i>${kecepatan}</p>
+                <p><i class="fas fa-laptop me-2"></i>${maxLaptop} Laptop</p>
+                <p><i class="fas fa-mobile-alt me-2"></i>${maxSmartphone} Smartphone</p>
+                <p><i class="fas fa-wifi me-2"></i>${maxPerangkat} Total Devices</p>
+            </div>
+            
+            <small class="d-block mt-3">Biaya Bulanan</small>
+            <div class="package-price price-abonemen">${formatRupiah(hargaSumatera)}</div>
+
+            <small class="d-block mt-3">Biaya Instalasi</small>
+            <div class="package-price price-instalasi">${formatRupiah(instalasiSumatera)}</div>
+
+            <button class="btn btn-primary btn-pilih mt-3">Pesan Sekarang →</button>
+        </div>
+    `;
+}
+
+// ==================== UPDATE PRICES BY LOCATION ====================
+function updatePricesByLocation() {
+    console.log('📍 Updating prices for location:', currentLocation);
+    
+    const packageCards = document.querySelectorAll('.package-card');
+    
+    if (packageCards.length === 0) {
+        console.warn('⚠️ No package cards found to update');
+        return;
+    }
+    
+    console.log(`📍 Found ${packageCards.length} cards to update`);
+    
+    packageCards.forEach((card, index) => {
+        let hargaBulanan = 0;
+        let hargaInstalasi = 0;
+        
+        // Get prices based on location
+        switch(currentLocation) {
+            case 'sumatera-kalimantan':
+                hargaBulanan = card.dataset.hargaSumatera;
+                hargaInstalasi = card.dataset.instalasiSumatera;
+                break;
+            case 'jawa-bali':
+                hargaBulanan = card.dataset.hargaJawa;
+                hargaInstalasi = card.dataset.instalasiJawa;
+                break;
+            case 'indonesia-timur':
+                hargaBulanan = card.dataset.hargaTimur;
+                hargaInstalasi = card.dataset.instalasiTimur;
+                break;
+        }
+        
+        console.log(`  Card ${index + 1}: Bulanan=${hargaBulanan}, Instalasi=${hargaInstalasi}`);
+        
+        // Update display
+        const abonemenEl = card.querySelector('.price-abonemen');
+        const instalasiEl = card.querySelector('.price-instalasi');
+        
+        if (abonemenEl) {
+            abonemenEl.textContent = formatRupiah(hargaBulanan);
+        }
+        
+        if (instalasiEl) {
+            instalasiEl.textContent = formatRupiah(hargaInstalasi);
         }
     });
     
-    // Refresh tampilan harga dengan lokasi default
-    if (typeof updatePackagePrices === 'function') {
-        updatePackagePrices('sumatera-kalimantan');
+    console.log('✅ Prices updated successfully');
+}
+
+// ==================== SETUP LOCATION SELECTOR ====================
+function setupLocationSelector() {
+    const locationItems = document.querySelectorAll('.location-item');
+    const selectedLocationText = document.getElementById('selected-location-text');
+    
+    if (locationItems.length === 0) {
+        console.warn('⚠️ Location selector items not found');
+        return;
     }
-}
-
-// ==================== LOAD BERITA ====================
-function loadBerita() {
-    fetch(`${API_URL}?action=get_berita_public`)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Berita from DB:', data);
-            if (data.success && data.data.length > 0) {
-                updateBeritaHTML(data.data);
+    
+    console.log(`✅ Found ${locationItems.length} location items`);
+    
+    // Remove existing listeners (prevent duplicates)
+    locationItems.forEach(item => {
+        const newItem = item.cloneNode(true);
+        item.parentNode.replaceChild(newItem, item);
+    });
+    
+    // Re-query after cloning
+    const newLocationItems = document.querySelectorAll('.location-item');
+    
+    newLocationItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const newLocation = this.getAttribute('data-location');
+            const locationName = this.textContent.trim();
+            
+            console.log('📍 Location clicked:', newLocation);
+            
+            // Update current location
+            currentLocation = newLocation;
+            
+            // Update display text
+            if (selectedLocationText) {
+                selectedLocationText.textContent = locationName;
             }
-        })
-        .catch(error => console.error('Error loading berita:', error));
+            
+            // Update all prices
+            updatePricesByLocation();
+            
+            // Close dropdown
+            const collapseElement = document.getElementById('locationOptions');
+            if (collapseElement && typeof bootstrap !== 'undefined') {
+                const bsCollapse = bootstrap.Collapse.getInstance(collapseElement);
+                if (bsCollapse) {
+                    bsCollapse.hide();
+                }
+            }
+        });
+    });
+    
+    console.log('✅ Location selector initialized');
 }
 
-function updateBeritaHTML(beritaList) {
-    const newsSection = document.querySelector('.news-section .row');
-    if (!newsSection) return;
-    
-    newsSection.innerHTML = '';
-    
-    beritaList.forEach(berita => {
-        const newsCard = `
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm news-card h-100">
-                    <img src="${berita.image_url || 'https://via.placeholder.com/500x300'}" class="card-img-top rounded-top" alt="${berita.title}">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold">${berita.title}</h5>
-                        <p class="text-muted small mb-2"><i class="far fa-calendar me-1"></i> ${berita.date}</p>
-                        <p class="card-text">${berita.content ? berita.content.substring(0, 150) + '...' : 'Baca selengkapnya untuk informasi lebih detail.'}</p>
-                        <a href="#" class="text-primary fw-semibold">Baca Selengkapnya →</a>
+// ==================== SHOW ERROR MESSAGE ====================
+function showErrorMessage(errorMsg) {
+    const carouselInner = document.querySelector('#packageCarousel .carousel-inner');
+    if (carouselInner) {
+        carouselInner.innerHTML = `
+            <div class="carousel-item active">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-danger text-center py-5">
+                            <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                            <h4>Tidak dapat memuat data paket</h4>
+                            <p class="mb-3">${errorMsg || 'Terjadi kesalahan saat memuat data'}</p>
+                            <button class="btn btn-primary" onclick="location.reload()">
+                                <i class="fas fa-refresh me-2"></i>Refresh Halaman
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         `;
-        newsSection.innerHTML += newsCard;
-    });
+    }
 }
 
-// ==================== LOAD FAQ ====================
-function loadFAQ() {
-    fetch(`${API_URL}?action=get_faq_public`)
-        .then(response => response.json())
-        .then(data => {
-            console.log('FAQ from DB:', data);
-            if (data.success && data.data.length > 0) {
-                updateFAQHTML(data.data);
-            }
-        })
-        .catch(error => console.error('Error loading FAQ:', error));
-}
-
-function updateFAQHTML(faqList) {
-    const faqContainer = document.querySelector('.faq-section .col-lg-6');
-    if (!faqContainer) return;
-    
-    faqContainer.innerHTML = '';
-    
-    faqList.forEach((faq, index) => {
-        const faqItem = `
-            <div class="faq-item">
-                <h5>${faq.question} <i class="fas fa-${index === 0 ? 'times' : 'plus'} float-end"></i></h5>
-                ${index === 0 ? `<p class="mt-3">${faq.answer}</p>` : ''}
+// ==================== SHOW NO DATA MESSAGE ====================
+function showNoDataMessage() {
+    const carouselInner = document.querySelector('#packageCarousel .carousel-inner');
+    if (carouselInner) {
+        carouselInner.innerHTML = `
+            <div class="carousel-item active">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-info text-center py-5">
+                            <i class="fas fa-info-circle fa-3x mb-3"></i>
+                            <h4>Belum ada paket tersedia</h4>
+                            <p>Silakan tambahkan paket melalui halaman admin</p>
+                            <a href="admin/kelola_paket.php" class="btn btn-primary mt-3">
+                                <i class="fas fa-plus me-2"></i>Tambah Paket
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         `;
-        faqContainer.innerHTML += faqItem;
-    });
-}
-
-// ==================== AUTO SLIDER ====================
-let slideIndex = 0;
-let autoSlideInterval;
-
-function startAutoSlide() {
-    // Clear existing interval
-    if (autoSlideInterval) {
-        clearInterval(autoSlideInterval);
     }
-    
-    const slides = document.querySelectorAll('.slide');
-    if (slides.length === 0) return;
-    
-    autoSlideInterval = setInterval(() => {
-        slides.forEach(slide => slide.classList.remove('active-slide'));
-        
-        slideIndex++;
-        if (slideIndex >= slides.length) slideIndex = 0;
-        
-        slides[slideIndex].classList.add('active-slide');
-        
-        const sliderWrapper = document.querySelector('.slider-wrapper');
-        if (sliderWrapper) {
-            sliderWrapper.style.transform = `translateX(-${slideIndex * 100}%)`;
-        }
-    }, 3000);
 }

@@ -124,117 +124,29 @@
     <div id="packageCarousel" class="carousel slide" data-bs-ride="false" data-bs-interval="false">
         
         <div class="carousel-inner" role="listbox">
-
+            <!-- Paket akan dimuat secara dinamis dari database via index.js -->
             <div class="carousel-item active">
                 <div class="row card-group-row">
-                    
-                    <div class="col-md-4 mb-4">
-                        <div class="package-card" data-package-id="iconnet35">
-                            <div class="text-center package-rating">
-                                <span class="rating-badge">★★ 4.3</span>
-                                <small>(2,238 reviews)</small>
-                            </div>
-                            <h4 class="text-center mb-3">ICONNET 35</h4>
-                            
-                            <div class="package-specs">
-                                <p><i class="fas fa-users me-2"></i>2 Passengers</p>
-                                <p><i class="fas fa-car me-2"></i>Auto</p>
-                                <p><i class="fas fa-fan me-2"></i>Air Conditioning</p>
-                                <p><i class="fas fa-door-open me-2"></i>2 Doors</p>
-                            </div>
-                            
-                            <small class="d-block mt-3">Biaya Bulanan</small>
-                            <div class="package-price price-abonemen" id="price-35-abonemen">Rp. 289.000</div>
-
-                            <small class="d-block mt-3">Biaya Instalasi</small>
-                            <div class="package-price price-instalasi" id="price-35-instalasi">Rp. 200.000</div>
-
-                            <button class="btn btn-primary btn-pilih mt-3">Pesan Sekarang →</button>
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
-                    </div>
-
-                    <div class="col-md-4 mb-4">
-                        <div class="package-card" data-package-id="iconnet50">
-                            <div class="text-center package-rating">
-                                <span class="rating-badge">★★ 4.3</span>
-                                <small>(2,238 reviews)</small>
-                            </div>
-                            <h4 class="text-center mb-3">ICONNET 50</h4>
-                            
-                            <div class="package-specs">
-                                <p><i class="fas fa-users me-2"></i>3 Passengers</p>
-                                <p><i class="fas fa-car me-2"></i>Auto</p>
-                                <p><i class="fas fa-fan me-2"></i>Air Conditioning</p>
-                                <p><i class="fas fa-door-open me-2"></i>2 Doors</p>
-                            </div>
-                            
-                            <small class="d-block mt-3">Biaya Bulanan</small>
-                            <div class="package-price price-abonemen" id="price-50-abonemen">Rp. 450.000</div>
-
-                            <small class="d-block mt-3">Biaya Instalasi</small>
-                            <div class="package-price price-instalasi" id="price-50-instalasi">Rp. 200.000</div>
-
-                            <button class="btn btn-primary btn-pilih mt-3">Pesan Sekarang →</button>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 mb-4">
-                        <div class="package-card" data-package-id="iconnet75">
-                            <div class="text-center package-rating">
-                                <span class="rating-badge">★★ 4.6</span>
-                                <small>(1,100 reviews)</small>
-                            </div>
-                            <h4 class="text-center mb-3">ICONNET 75</h4>
-                            
-                            <div class="package-specs">
-                                <p><i class="fas fa-users me-2"></i>4 Passengers</p>
-                                <p><i class="fas fa-car me-2"></i>Manual</p>
-                                <p><i class="fas fa-fan me-2"></i>Air Conditioning</p>
-                                <p><i class="fas fa-door-open me-2"></i>4 Doors</p>
-                            </div>
-                            
-                            <small class="d-block mt-3">Biaya Bulanan</small>
-                            <div class="package-price price-abonemen" id="price-75-abonemen">Rp. 300.000</div>
-
-                            <small class="d-block mt-3">Biaya Instalasi</small>
-                            <div class="package-price price-instalasi" id="price-75-instalasi">Rp. 345.000</div>
-
-                            <button class="btn btn-primary btn-pilih mt-3">Pesan Sekarang →</button>
-                        </div>
+                        <p class="mt-3 text-muted">Memuat paket...</p>
                     </div>
                 </div>
             </div>
-
-            <div class="carousel-item">
-                <div class="row card-group-row">
-                    <div class="col-md-4 mb-4">
-                        <div class="package-card" data-package-id="iconnet100">
-                            <div class="text-center package-rating">
-                                <span class="rating-badge">★★ 4.7</span>
-                                <small>(950 reviews)</small>
-                            </div>
-                            <h4 class="text-center mb-3">ICONNET 100</h4>
-                            
-                            <div class="package-specs">
-                                <p><i class="fas fa-users me-2"></i>5 Passengers</p>
-                                <p><i class="fas fa-car me-2"></i>Auto</p>
-                                <p><i class="fas fa-fan me-2"></i>Air Conditioning</p>
-                                <p><i class="fas fa-door-open me-2"></i>4 Doors</p>
-                            </div>
-                            
-                            <small class="d-block mt-3">Biaya Bulanan</small>
-                            <div class="package-price price-abonemen" id="price-100-abonemen">Rp. 400.000</div>
-
-                            <small class="d-block mt-3">Biaya Instalasi</small>
-                            <div class="package-price price-instalasi" id="price-100-instalasi">Rp. 345.000</div>
-
-                            <button class="btn btn-primary btn-pilih mt-3">Pesan Sekarang →</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#packageCarousel" data-bs-slide="prev">
+            <span class="fas fa-chevron-left carousel-control-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#packageCarousel" data-bs-slide="next">
+            <span class="fas fa-chevron-right carousel-control-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
 
         <button class="carousel-control-prev" type="button" data-bs-target="#packageCarousel" data-bs-slide="prev">
             <span class="fas fa-chevron-left carousel-control-icon" aria-hidden="true"></span>
@@ -494,12 +406,12 @@
 </footer>
 
   <!-- Bootstrap JS -->
+<!-- Bootstrap JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 
-<!-- Main Script -->
+<!-- Auto Slider Script -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    
     // ===== AUTO SLIDER =====
     const slides = document.querySelectorAll('.slide');
     const indicatorContainer = document.querySelector('.slider-indicators');
@@ -507,7 +419,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let slideInterval;
     
     if (slides.length > 0 && indicatorContainer) {
-        // Create indicators
         slides.forEach((_, index) => {
             const indicator = document.createElement('span');
             indicator.classList.add('indicator');
@@ -535,133 +446,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         function startAutoSlide() {
-            slideInterval = setInterval(nextSlide, 4000); // Auto slide setiap 4 detik
+            slideInterval = setInterval(nextSlide, 4000);
         }
         
-        // Start auto slide
         startAutoSlide();
     }
-
-    // ===== PACKAGE PRICE UPDATE =====
-    const packageData = {
-        'sumatera-kalimantan': {
-            'iconnet35': { abonemen: '335.000', instalasi: '345.000' },
-            'iconnet50': { abonemen: '535.000', instalasi: '345.000' },
-            'iconnet75': { abonemen: '750.000', instalasi: '345.000' },
-            'iconnet100': { abonemen: '999.000', instalasi: '345.000' }
-        },
-        'jawa-bali': {
-            'iconnet35': { abonemen: '269.000', instalasi: '150.000' },
-            'iconnet50': { abonemen: '319.000', instalasi: '150.000' },
-            'iconnet75': { abonemen: '400.000', instalasi: '150.000' },
-            'iconnet100': { abonemen: '499.000', instalasi: '150.000' }
-        },
-        'indonesia-timur': {
-            'iconnet35': { abonemen: '289.000', instalasi: '200.000' },
-            'iconnet50': { abonemen: '450.000', instalasi: '200.000' },
-            'iconnet75': { abonemen: '550.000', instalasi: '250.000' },
-            'iconnet100': { abonemen: '700.000', instalasi: '250.000' }
-        }
-    };
-
-    function updatePackagePrices(locationKey) {
-        const prices = packageData[locationKey];
-        
-        for (const packageId in prices) {
-            if (prices.hasOwnProperty(packageId)) {
-                const data = prices[packageId];
-                
-                const abonemen = `Rp. ${data.abonemen}`;
-                const instalasi = `Rp. ${data.instalasi}`;
-
-                const abonemenElement = document.querySelector(`[data-package-id="${packageId}"] .price-abonemen`);
-                if (abonemenElement) {
-                    abonemenElement.textContent = abonemen;
-                }
-
-                const instalasiElement = document.querySelector(`[data-package-id="${packageId}"] .price-instalasi`);
-                if (instalasiElement) {
-                    instalasiElement.textContent = instalasi;
-                }
-            }
-        }
-    }
-
-    // Event listener untuk location dropdown
-    const locationOptions = document.querySelectorAll('.location-item');
-    const selectedLocationText = document.getElementById('selected-location-text');
-    const collapseElement = document.getElementById('locationOptions');
-
-    // Set initial prices
-    updatePackagePrices('sumatera-kalimantan');
-
-    locationOptions.forEach(item => {
-        item.addEventListener('click', function() {
-            const selectedLocationKey = this.getAttribute('data-location');
-            const selectedLocationName = this.textContent.trim();
-            
-            selectedLocationText.textContent = selectedLocationName;
-            updatePackagePrices(selectedLocationKey);
-            
-            if (collapseElement) {
-                const collapseInstance = bootstrap.Collapse.getInstance(collapseElement) || new bootstrap.Collapse(collapseElement, {toggle: false});
-                collapseInstance.hide();
-            }
-        });
-    });
 });
 </script>
 
-<!-- Load Data dari Database (Jika Ada) -->
+<!-- Main Dynamic Package Script -->
 <script src="index.js"></script>
-
-<script>
-let paketData = [];
-let currentLocation = 'sumatera';
-
-fetch('api/paket.php')
-    .then(res => res.json())
-    .then(data => {
-        paketData = data;
-        updateHarga();
-    });
-
-function updateHarga() {
-    paketData.forEach(p => {
-        document.querySelectorAll('.package-card').forEach(card => {
-            const namaCard = card.dataset.packageName;
-
-            if (namaCard === p.nama) {
-                let harga = 0;
-
-                if (currentLocation === 'sumatera') harga = p.harga_sumatera;
-                if (currentLocation === 'jawa') harga = p.harga_jawa;
-                if (currentLocation === 'timur') harga = p.harga_timur;
-
-                const priceEl = card.querySelector('.price-abonemen');
-                if (priceEl) {
-                    priceEl.innerText = 'Rp. ' + parseInt(harga).toLocaleString('id-ID');
-                }
-            }
-        });
-    });
-}
-</script>
-<script>
-document.querySelectorAll('.location-item').forEach(item => {
-    item.addEventListener('click', function () {
-
-        document.getElementById('selected-location-text').innerText = this.innerText;
-
-        if (this.dataset.location === 'sumatera-kalimantan') currentLocation = 'sumatera';
-        if (this.dataset.location === 'jawa-bali') currentLocation = 'jawa';
-        if (this.dataset.location === 'indonesia-timur') currentLocation = 'timur';
-
-        updateHarga();
-    });
-});
-</script>
-
 
 </body>
 </html>

@@ -1,6 +1,6 @@
 /* ========================================
    COMPLETE LANDING PAGE STYLES - ICONNET
-   Fixed All Layout Issues
+   Clean & Fixed Version - No Duplicates
    ======================================== */
 
 :root {
@@ -27,7 +27,6 @@ body {
     width: 100%;
 }
 
-/* Fix untuk container agar tidak overflow */
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -122,12 +121,8 @@ body {
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .hero-card {
@@ -298,90 +293,119 @@ body {
     padding-left: 25px;
 }
 
-/* Package Carousel */
+/* ========================================
+   PACKAGE CAROUSEL - FINAL FIX
+   ======================================== */
 #packageCarousel {
     background: linear-gradient(135deg, var(--light-teal), var(--primary-teal));
     border-radius: 15px;
     padding: 40px 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     position: relative;
-    overflow: visible;
+    overflow: visible !important;
 }
 
-.carousel-inner {
-    padding: 0 50px;
-    overflow: visible;
+#packageCarousel .carousel-inner {
+    padding: 0 50px !important;
+    overflow: visible !important;
+    position: relative !important;
+    min-height: 520px !important;
 }
 
-.carousel-item {
-    display: none;
+/* CRITICAL: Force carousel item display */
+#packageCarousel .carousel-item {
+    display: none !important;
+    opacity: 0 !important;
+    transition: opacity 0.6s ease-in-out !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
 }
 
-.carousel-item.active {
-    display: block;
+#packageCarousel .carousel-item.active {
+    display: block !important;
+    opacity: 1 !important;
+    position: relative !important;
 }
 
+/* Hide Bootstrap carousel transitions */
+.carousel-item-next,
+.carousel-item-prev,
+.carousel-item-next.carousel-item-start,
+.carousel-item-prev.carousel-item-end,
+.carousel-item-start,
+.carousel-item-end {
+    display: none !important;
+}
+
+/* Carousel Controls */
 .carousel-control-prev, 
 .carousel-control-next {
-    width: 50px;
-    height: 50px;
-    background-color: white;
-    border-radius: 50%;
-    opacity: 1;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    top: 50%;
-    transform: translateY(-50%);
-    transition: all 0.3s;
-    position: absolute;
-    z-index: 10;
+    width: 50px !important;
+    height: 50px !important;
+    background-color: white !important;
+    border-radius: 50% !important;
+    opacity: 1 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    transition: all 0.3s !important;
+    position: absolute !important;
+    z-index: 10 !important;
 }
 
 .carousel-control-prev {
-    left: -20px;
+    left: -20px !important;
 }
 
 .carousel-control-next {
-    right: -20px;
+    right: -20px !important;
 }
 
 .carousel-control-prev:hover, 
 .carousel-control-next:hover {
-    background-color: var(--text-dark);
+    background-color: var(--text-dark) !important;
 }
 
 .carousel-control-prev:hover .carousel-control-icon,
 .carousel-control-next:hover .carousel-control-icon {
-    color: white;
+    color: white !important;
 }
 
 .carousel-control-icon {
-    color: var(--light-teal);
-    font-size: 1.5rem;
-    font-weight: bold;
+    color: var(--light-teal) !important;
+    font-size: 1.5rem !important;
+    font-weight: bold !important;
+}
+
+/* Package Cards Container */
+.card-group-row {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 20px !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+    min-height: 480px !important;
 }
 
 /* Package Cards */
-.card-group-row {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: nowrap;
-    width: 100%;
-}
-
 .package-card {
-    background-color: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-    border: 2px solid transparent;
-    width: 100%;
-    flex: 0 0 calc(33.333% - 14px);
-    max-width: 320px;
-    min-height: 480px;
-    transition: all 0.3s;
-    display: flex;
-    flex-direction: column;
+    background-color: white !important;
+    padding: 25px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08) !important;
+    border: 2px solid transparent !important;
+    width: 100% !important;
+    flex: 0 0 calc(33.333% - 14px) !important;
+    max-width: 320px !important;
+    min-height: 480px !important;
+    transition: all 0.3s !important;
+    display: flex !important;
+    flex-direction: column !important;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 .package-card:hover {
@@ -445,6 +469,14 @@ body {
     font-weight: bold;
     color: var(--primary-teal);
     margin: 10px 0 5px 0;
+    text-align: center;
+}
+
+.price-abonemen,
+.price-instalasi {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-teal);
     text-align: center;
 }
 
@@ -558,7 +590,7 @@ body {
     margin-bottom: 20px;
 }
 
-/* Service Icons Section */
+/* Service Icons */
 .service-icons-section {
     margin-top: 60px;
     padding: 40px 0;
@@ -626,11 +658,6 @@ body {
     width: 100%;
 }
 
-.app-section img {
-    max-width: 100%;
-    height: auto;
-}
-
 .app-section h2 {
     color: var(--text-dark);
     font-weight: bold;
@@ -680,11 +707,6 @@ body {
     color: var(--text-dark);
     font-weight: bold;
     font-size: 2rem;
-}
-
-.news-section .text-muted {
-    color: #6c757d;
-    font-size: 1rem;
 }
 
 .news-card {
@@ -772,11 +794,6 @@ body {
     color: var(--primary-teal);
 }
 
-.house-illustration img {
-    max-width: 100%;
-    height: auto;
-}
-
 /* ========================================
    FOOTER
    ======================================== */
@@ -804,6 +821,14 @@ footer .btn-outline-light:hover {
 }
 
 /* ========================================
+   UTILITY CLASSES
+   ======================================== */
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ========================================
    RESPONSIVE DESIGN
    ======================================== */
 @media (max-width: 992px) {
@@ -811,32 +836,21 @@ footer .btn-outline-light:hover {
         height: 350px;
     }
 
-    .carousel-inner {
-        padding: 0 30px;
+    #packageCarousel .carousel-inner {
+        padding: 0 30px !important;
     }
 
     .card-group-row {
-        flex-wrap: wrap;
+        flex-wrap: wrap !important;
     }
 
     .package-card {
-        flex: 0 0 calc(50% - 10px);
-        max-width: 100%;
-    }
-
-    .icon-group-wrapper {
-        gap: 20px;
+        flex: 0 0 calc(50% - 10px) !important;
+        max-width: 100% !important;
     }
 
     .vertical-divider {
         display: none;
-    }
-
-    .subscription-card h2,
-    .mascot-section h2,
-    .news-section h2,
-    .faq-section h2 {
-        font-size: 1.8rem;
     }
 }
 
@@ -853,48 +867,28 @@ footer .btn-outline-light:hover {
         height: 300px;
     }
 
-    .card-group-row {
-        flex-wrap: wrap;
-    }
-
     .package-card {
-        flex: 0 0 100%;
-        max-width: 100%;
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
         margin-bottom: 20px;
     }
 
     .carousel-control-prev,
     .carousel-control-next {
-        width: 40px;
-        height: 40px;
+        width: 40px !important;
+        height: 40px !important;
     }
 
     .carousel-control-prev {
-        left: -10px;
+        left: -10px !important;
     }
 
     .carousel-control-next {
-        right: -10px;
+        right: -10px !important;
     }
 
-    .service-icon-svg {
-        width: 60px;
-        height: 60px;
-    }
-
-    .service-icon-svg svg {
-        width: 60px;
-        height: 60px;
-    }
-
-    .subscription-card,
-    .mascot-section {
-        text-align: center;
-    }
-
-    .subscription-card h2,
-    .mascot-section h2 {
-        font-size: 1.6rem;
+    #packageCarousel .carousel-inner {
+        min-height: 500px !important;
     }
 }
 
@@ -903,108 +897,15 @@ footer .btn-outline-light:hover {
         height: 250px;
     }
 
-    .carousel-inner {
-        padding: 0 20px;
+    #packageCarousel .carousel-inner {
+        padding: 0 20px !important;
     }
 
     .package-card {
-        padding: 20px;
+        padding: 20px !important;
     }
 
     .package-price {
         font-size: 1.3rem;
     }
-
-    .feature-box {
-        padding: 20px 10px;
-    }
-
-    .icon-group-wrapper {
-        padding: 20px;
-        gap: 30px;
-    }
-
-    .subscription-card h2,
-    .mascot-section h2,
-    .news-section h2,
-    .faq-section h2 {
-        font-size: 1.4rem;
-    }
-}
-
-/* ========================================
-   UTILITY CLASSES
-   ======================================== */
-.text-center {
-    text-align: center !important;
-}
-
-.mb-4 {
-    margin-bottom: 1.5rem !important;
-}
-
-.mt-4 {
-    margin-top: 1.5rem !important;
-}
-
-.mt-3 {
-    margin-top: 1rem !important;
-}
-
-.mb-3 {
-    margin-bottom: 1rem !important;
-}
-
-.fw-bold {
-    font-weight: bold !important;
-}
-
-.img-fluid {
-    max-width: 100%;
-    height: auto;
-}
-
-.d-block {
-    display: block !important;
-}
-
-.d-flex {
-    display: flex !important;
-}
-
-.align-items-center {
-    align-items: center !important;
-}
-
-.justify-content-center {
-    justify-content: center !important;
-}
-
-.gap-3 {
-    gap: 1rem !important;
-}
-
-.flex-wrap {
-    flex-wrap: wrap !important;
-}
-
-/* Force Carousel Display */
-.carousel-item {
-    transition: transform 0.6s ease-in-out;
-}
-
-.carousel-item-next,
-.carousel-item-prev,
-.carousel-item.active {
-    display: block;
-}
-
-.carousel-item-next:not(.carousel-item-start),
-.active.carousel-item-end {
-    transform: translateX(100%);
-}
-
-.carousel-item-prev:not(.carousel-item-end),
-.active.carousel-item-start {
-    transform: translateX(-100%);
 }

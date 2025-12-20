@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Path - Debugging Tool</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            margin: 10px 0;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        .error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        pre {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>🔍 Path Checker - Debugging Tool</h2>
+    <p>Tool ini akan membantu Anda menemukan path yang benar untuk API.</p>
+</div>
+
+<div class="card">
+    <h2>📍 Informasi Path Saat Ini</h2>
+    <div id="currentPathInfo"></div>
+</div>
+
+<div class="card">
+    <h2>🧪 Test Koneksi API</h2>
+    <p>Klik tombol di bawah untuk mencoba berbagai kemungkinan path API:</p>
+    <div id="testButtons"></div>
+    <div id="testResults"></div>
+</div>
+
+<div class="card">
+    <h2>📝 Instruksi</h2>
+    <div class="info">
+        <p><strong>Langkah 1:</strong> Simpan file <code>check_path.html</code> ini di folder yang SAMA dengan <code>index.php</code></p>
+        <p><strong>Langkah 2:</strong> Buka file ini di browser</p>
+        <p><strong>Langkah 3:</strong> Klik tombol "Test All Paths" untuk mencari path yang benar</p>
+        <p><strong>Langkah 4:</strong> Gunakan path yang berhasil (hijau ✓) di <code>index.js</code> Anda</p>
+    </div>
+</div>
+
+<script>
+// Tampilkan informasi path saat ini
+function showCurrentPath() {
+    const info = document.getElementById('currentPathInfo');
+    const currentURL = window.location.href;
+    const baseURL = window.location.origin;
+    const pathname = window.location.pathname;
+    const directory = pathname.substring(0, pathname.lastIndexOf('/'));
+    
+    info.innerHTML = `
+        <div class="info">
+            <p><strong>Current URL:</strong> ${currentURL}</p>
+            <p><strong>Base URL:</strong> ${baseURL}</p>
+            <p><strong>Directory:</strong> ${directory}</p>
+            <p><strong>Full Path:</strong> ${window.location.origin}${directory}</p>
+        </div>
+    `;
+}
+
+// Generate kemungkinan path API
+function generatePossiblePaths() {
+    const directory = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+    
+    return [
+        'api/paket.php',
+        './api/paket.php',
+        '../api/paket.php',
+        'paket.php',
+        './paket.php',
+        directory + '/api/paket.php',
+        directory + '/paket.php',
+        '/api/paket.php',
+        window.location.origin + directory + '/api/paket.php'
+    ];
+}
+
+// Test single path
+async function testPath(path) {
+    try {
+        const response = await fetch(path);
+        const contentType = response.headers.get('content-type');
+        
+        if (response.ok) {
+            const text = await response.text();
+            let data;
+            
+            try {
+                data = JSON.parse(text);
+            } catch (e) {
+                return {
+                    success: false,
+                    path: path,
+                    status: response.status,
+                    error: 'Response is not valid JSON',
+                    preview: text.substring(0, 100)
+                };
+            }
+            
+            return {
+                success: true,
+                path: path,
+                status: response.status,
+                contentType: contentType,
+                data: data,
+                dataCount: Array.isArray(data) ? data.length : (data.data ? data.data.length : 0)
+            };
+        } else {
+            return {
+                success: false,
+                path: path,
+                status: response.status,
+                error: response.statusText
+            };
+        }
+    } catch (error) {
+        return {
+            success: false,
+            path: path,
+            error: error.message
+        };
+    }
+}
+
+// Test all paths
+async function testAllPaths() {
+    const resultsDiv = document.getElementById('testResults');
+    const paths = generatePossiblePaths();
+    
+    resultsDiv.innerHTML = '<div class="info"><div class="loading"></div> Testing paths...</div>';
+    
+    let results = [];
+    
+    for (const path of paths) {
+        const result = await testPath(path);
+        results.push(result);
+    }
+    
+    displayResults(results);
+}
+
+// Display test results
+function displayResults(results) {
+    const resultsDiv = document.getElementById('testResults');
+    let html = '<h3>Test Results:</h3>';
+    
+    const successResults = results.filter(r => r.success);
+    const failedResults = results.filter(r => !r.success);
+    
+    if (successResults.length > 0) {
+        html += '<div class="success"><h4>✓ Berhasil:</h4>';
+        successResults.forEach(result => {
+            html += `
+                <div style="margin: 10px 0; padding: 10px; background: white; border-radius: 5px;">
+                    <p><strong>Path:</strong> <code>${result.path}</code></p>
+                    <p><strong>Status:</strong> ${result.status}</p>
+                    <p><strong>Data Count:</strong> ${result.dataCount} paket</p>
+                    <button onclick="showFullResponse('${result.path}')">Lihat Response</button>
+                    <button onclick="copyToClipboard('${result.path}')">Copy Path</button>
+                </div>
+            `;
+        });
+        html += '</div>';
+        
+        html += `
+            <div class="info" style="margin-top: 20px;">
+                <h4>🎯 Gunakan Path Ini di index.js:</h4>
+                <pre>const API_URL = '${successResults[0].path}';</pre>
+            </div>
+        `;
+    }
+    
+    if (failedResults.length > 0) {
+        html += '<div class="error" style="margin-top: 20px;"><h4>✗ Gagal:</h4>';
+        failedResults.forEach(result => {
+            html += `
+                <p><code>${result.path}</code> - ${result.error || 'Status: ' + result.status}</p>
+            `;
+        });
+        html += '</div>';
+    }
+    
+    resultsDiv.innerHTML = html;
+}
+
+// Show full response
+async function showFullResponse(path) {
+    try {
+        const response = await fetch(path);
+        const text = await response.text();
+        const data = JSON.parse(text);
+        
+        alert('Full Response:\n\n' + JSON.stringify(data, null, 2));
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+// Copy to clipboard
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert('Path copied to clipboard!\n\n' + text);
+    });
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    showCurrentPath();
+    
+    const buttonDiv = document.getElementById('testButtons');
+    buttonDiv.innerHTML = `
+        <button onclick="testAllPaths()">🧪 Test All Paths</button>
+        <button onclick="location.reload()">🔄 Refresh</button>
+    `;
+});
+</script>
+
+</body>
+</html>
