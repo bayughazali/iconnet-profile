@@ -3,7 +3,7 @@
 require_once 'config.php';
 
 // Hanya izinkan request dari admin yang sudah login (kecuali get public data)
-$public_actions = ['get_paket_public', 'get_berita_public', 'get_faq_public', 'get_slider_public'];
+$public_actions = ['get_paket_public', 'get_berita_public', 'get_faq_public', 'get_slider_public', 'get_promo_public', 'get_promo_by_id', 'get_promo_by_region'];
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 if (!in_array($action, $public_actions)) {
@@ -19,6 +19,7 @@ if ($action === 'get_stats') {
     $stats['paket'] = $conn->query("SELECT COUNT(*) as total FROM paket")->fetch_assoc()['total'];
     $stats['berita'] = $conn->query("SELECT COUNT(*) as total FROM berita")->fetch_assoc()['total'];
     $stats['faq'] = $conn->query("SELECT COUNT(*) as total FROM faq")->fetch_assoc()['total'];
+    $stats['promo'] = $conn->query("SELECT COUNT(*) as total FROM promo")->fetch_assoc()['total'];
     
     json_response(true, 'Stats loaded', $stats);
 }
@@ -26,7 +27,7 @@ if ($action === 'get_stats') {
 // ==================== GET ALL DATA ====================
 if ($action === 'get_all') {
     $table = clean_input($_GET['table']);
-    $allowed_tables = ['slider', 'paket', 'berita', 'faq'];
+    $allowed_tables = ['slider', 'paket', 'berita', 'faq', 'promo'];
     
     if (!in_array($table, $allowed_tables)) {
         json_response(false, 'Tabel tidak valid');
@@ -51,7 +52,7 @@ if ($action === 'get_all') {
 if ($action === 'get_by_id') {
     $table = clean_input($_GET['table']);
     $id = clean_input($_GET['id']);
-    $allowed_tables = ['slider', 'paket', 'berita', 'faq'];
+    $allowed_tables = ['slider', 'paket', 'berita', 'faq', 'promo'];
     
     if (!in_array($table, $allowed_tables)) {
         json_response(false, 'Tabel tidak valid');
@@ -77,7 +78,7 @@ if ($action === 'get_by_id') {
 // ==================== INSERT DATA (TAMBAH DATA BARU) ====================
 if ($action === 'insert' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $table = clean_input($_GET['table']);
-    $allowed_tables = ['slider', 'paket', 'berita', 'faq'];
+    $allowed_tables = ['slider', 'paket', 'berita', 'faq', 'promo'];
     
     if (!in_array($table, $allowed_tables)) {
         json_response(false, 'Tabel tidak valid');
@@ -141,6 +142,20 @@ if ($action === 'insert' && $_SERVER['REQUEST_METHOD'] === 'POST') {
             $sql = "INSERT INTO faq (question, answer, is_active, created_at, updated_at) 
                     VALUES ('$question', '$answer', $is_active, NOW(), NOW())";
             break;
+            
+        case 'promo':
+            $title = clean_input($_POST['title']);
+            $description = clean_input($_POST['description']);
+            $image_path = isset($_POST['image_path']) ? clean_input($_POST['image_path']) : '';
+            $region = clean_input($_POST['region']);
+            $discount_percentage = isset($_POST['discount_percentage']) ? clean_input($_POST['discount_percentage']) : 0;
+            $start_date = clean_input($_POST['start_date']);
+            $end_date = clean_input($_POST['end_date']);
+            $is_active = isset($_POST['is_active']) ? (int)$_POST['is_active'] : 1;
+            
+            $sql = "INSERT INTO promo (title, description, image_path, region, discount_percentage, start_date, end_date, is_active, created_at, updated_at) 
+                    VALUES ('$title', '$description', '$image_path', '$region', '$discount_percentage', '$start_date', '$end_date', $is_active, NOW(), NOW())";
+            break;
     }
     
     if ($conn->query($sql)) {
@@ -153,7 +168,7 @@ if ($action === 'insert' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 // ==================== UPDATE DATA ====================
 if ($action === 'update' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $table = clean_input($_GET['table']);
-    $allowed_tables = ['slider', 'paket', 'berita', 'faq'];
+    $allowed_tables = ['slider', 'paket', 'berita', 'faq', 'promo'];
     
     if (!in_array($table, $allowed_tables)) {
         json_response(false, 'Tabel tidak valid');
@@ -222,6 +237,29 @@ if ($action === 'update' && $_SERVER['REQUEST_METHOD'] === 'POST') {
                     updated_at = NOW()
                     WHERE id = '$id'";
             break;
+            
+        case 'promo':
+            $title = clean_input($_POST['title']);
+            $description = clean_input($_POST['description']);
+            $image_path = isset($_POST['image_path']) ? clean_input($_POST['image_path']) : '';
+            $region = clean_input($_POST['region']);
+            $discount_percentage = isset($_POST['discount_percentage']) ? clean_input($_POST['discount_percentage']) : 0;
+            $start_date = clean_input($_POST['start_date']);
+            $end_date = clean_input($_POST['end_date']);
+            $is_active = isset($_POST['is_active']) ? (int)$_POST['is_active'] : 0;
+            
+            $sql = "UPDATE promo SET 
+                    title = '$title',
+                    description = '$description',
+                    image_path = '$image_path',
+                    region = '$region',
+                    discount_percentage = '$discount_percentage',
+                    start_date = '$start_date',
+                    end_date = '$end_date',
+                    is_active = $is_active,
+                    updated_at = NOW()
+                    WHERE id = '$id'";
+            break;
     }
     
     if ($conn->query($sql)) {
@@ -235,7 +273,7 @@ if ($action === 'update' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 if ($action === 'delete') {
     $table = clean_input($_GET['table']);
     $id = clean_input($_GET['id']);
-    $allowed_tables = ['slider', 'paket', 'berita', 'faq'];
+    $allowed_tables = ['slider', 'paket', 'berita', 'faq', 'promo'];
     
     if (!in_array($table, $allowed_tables)) {
         json_response(false, 'Tabel tidak valid');
@@ -304,5 +342,46 @@ if ($action === 'get_faq_public') {
     json_response(true, 'FAQ loaded', $data);
 }
 
+// Get Active Promo untuk Homepage
+if ($action === 'get_promo_public') {
+    $sql = "SELECT * FROM promo WHERE is_active = 1 ORDER BY start_date DESC";
+    $result = $conn->query($sql);
+    
+    $data = [];
+    while ($row = $result->fetch_assoc()) {
+        $data[] = $row;
+    }
+    
+    json_response(true, 'Promo loaded', $data);
+}
+
+// Get Promo By ID untuk detail
+if ($action === 'get_promo_by_id') {
+    $id = clean_input($_GET['id']);
+    
+    $sql = "SELECT * FROM promo WHERE id = '$id' AND is_active = 1";
+    $result = $conn->query($sql);
+    
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_assoc();
+        json_response(true, 'Promo found', $data);
+    } else {
+        json_response(false, 'Promo tidak ditemukan');
+    }
+}
+// Get Promo by Region
+if ($action === 'get_promo_by_region') {
+    $region = clean_input($_GET['region']);
+    
+    $sql = "SELECT * FROM promo WHERE region = '$region' AND is_active = 1 ORDER BY start_date DESC";
+    $result = $conn->query($sql);
+    
+    $data = [];
+    while ($row = $result->fetch_assoc()) {
+        $data[] = $row;
+    }
+    
+    json_response(true, 'Promo loaded', $data);
+}
 $conn->close();
 ?>

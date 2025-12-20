@@ -48,6 +48,9 @@ function logout() {
 
 // ==================== PAGE NAVIGATION (SIDEBAR) ====================
 
+// ==================== PAGE NAVIGATION (SIDEBAR) ====================
+// GANTI fungsi showPage() yang lama dengan yang ini
+
 function showPage(pageName) {
     console.log('Showing page:', pageName);
     
@@ -94,6 +97,7 @@ function showPage(pageName) {
     if (pageName === 'paket') loadPaketTable();
     if (pageName === 'berita') loadBeritaTable();
     if (pageName === 'faq') loadFaqTable();
+    if (pageName === 'promo') loadPromoTable(); // TAMBAHKAN BARIS INI
 }
 
 // ==================== DASHBOARD STATS ====================
@@ -671,4 +675,273 @@ function showToast(message) {
     setTimeout(() => {
         toastContainer.remove();
     }, 3000);
+}
+// ==================== PROMO MANAGEMENT ====================
+// Tambahkan kode ini di akhir file dashboard.js
+
+function loadPromoTable() {
+    fetch(`${API_URL}?action=get_all&table=promo`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Promo:', data);
+            if (data.success) {
+                const tbody = document.getElementById('promo-table-body');
+                if (!tbody) {
+                    console.error('Element promo-table-body not found');
+                    return;
+                }
+                
+                tbody.innerHTML = '';
+                
+                if (data.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center">Tidak ada data promo</td></tr>';
+                    return;
+                }
+                
+                data.data.forEach(promo => {
+                    const regionLabel = {
+                        'jawa': 'Jawa & Bali',
+                        'sumatera': 'Sumatera & Kalimantan',
+                        'timur': 'Indonesia Timur'
+                    };
+                    
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${promo.title}</td>
+                            <td><span class="badge bg-info">${regionLabel[promo.region] || promo.region}</span></td>
+                            <td>${promo.discount_percentage ? promo.discount_percentage + '%' : '-'}</td>
+                            <td>
+                                <small class="text-muted">
+                                    ${formatDate(promo.start_date)} s/d ${formatDate(promo.end_date)}
+                                </small>
+                            </td>
+                            <td>
+                                <span class="badge-status ${promo.is_active ? 'badge-active' : 'badge-inactive'}">
+                                    ${promo.is_active ? 'Aktif' : 'Nonaktif'}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-warning btn-action" onclick="editPromo(${promo.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger btn-action" onclick="deletePromo(${promo.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+        })
+        .catch(error => console.error('Error loading promo:', error));
+}
+
+function openPromoModal() {
+    // Reset form dengan pengecekan
+    const form = document.getElementById('addPromoForm');
+    if (form) {
+        form.reset();
+    }
+    
+    // Set default dates
+    const today = new Date();
+    const endDate = new Date();
+    endDate.setMonth(endDate.getMonth() + 1);
+    
+    const startInput = document.getElementById('add-promo-start');
+    const endInput = document.getElementById('add-promo-end');
+    
+    if (startInput) startInput.valueAsDate = today;
+    if (endInput) endInput.valueAsDate = endDate;
+    
+    // Buka modal
+    const modalElement = document.getElementById('addPromoModal');
+    if (modalElement) {
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+    } else {
+        console.error('Modal addPromoModal not found');
+    }
+}
+
+function addPromo() {
+    // Helper function untuk get value dengan aman
+    const getValue = (id) => {
+        const element = document.getElementById(id);
+        return element ? element.value.trim() : '';
+    };
+    
+    // Validasi form
+    const title = getValue('add-promo-title');
+    const description = getValue('add-promo-description');
+    const region = getValue('add-promo-region');
+    const startDate = getValue('add-promo-start');
+    const endDate = getValue('add-promo-end');
+    
+    console.log('Form values:', { title, description, region, startDate, endDate });
+    
+    if (!title || !description || !region || !startDate || !endDate) {
+        alert('Mohon lengkapi semua field yang wajib diisi!');
+        return;
+    }
+    
+    // Validasi tanggal
+    if (new Date(startDate) > new Date(endDate)) {
+        alert('Tanggal mulai tidak boleh lebih besar dari tanggal berakhir!');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('image_path', getValue('add-promo-image'));
+    formData.append('region', region);
+    formData.append('discount_percentage', getValue('add-promo-discount') || 0);
+    formData.append('start_date', startDate);
+    formData.append('end_date', endDate);
+    
+    const statusElement = document.getElementById('add-promo-status');
+    const isActive = statusElement && statusElement.value === 'true' ? 1 : 0;
+    formData.append('is_active', isActive);
+    
+    console.log('Sending promo data...');
+    
+    fetch(`${API_URL}?action=insert&table=promo`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response:', data);
+        showToast(data.message);
+        if (data.success) {
+            const modalElement = document.getElementById('addPromoModal');
+            if (modalElement) {
+                bootstrap.Modal.getInstance(modalElement).hide();
+            }
+            loadPromoTable();
+            loadDashboardStats();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Gagal menambahkan promo', 'error');
+    });
+}
+
+function editPromo(id) {
+    fetch(`${API_URL}?action=get_by_id&table=promo&id=${id}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const promo = data.data;
+                
+                // Helper function untuk set value dengan aman
+                const setValue = (id, value) => {
+                    const element = document.getElementById(id);
+                    if (element) element.value = value || '';
+                };
+                
+                setValue('edit-promo-id', promo.id);
+                setValue('edit-promo-title', promo.title);
+                setValue('edit-promo-description', promo.description);
+                setValue('edit-promo-image', promo.image_path);
+                setValue('edit-promo-region', promo.region);
+                setValue('edit-promo-discount', promo.discount_percentage);
+                setValue('edit-promo-start', promo.start_date);
+                setValue('edit-promo-end', promo.end_date);
+                
+                const statusElement = document.getElementById('edit-promo-status');
+                if (statusElement) {
+                    statusElement.value = promo.is_active ? 'true' : 'false';
+                }
+                
+                const modalElement = document.getElementById('editPromoModal');
+                if (modalElement) {
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                }
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function savePromo() {
+    // Helper function untuk get value dengan aman
+    const getValue = (id) => {
+        const element = document.getElementById(id);
+        return element ? element.value.trim() : '';
+    };
+    
+    // Validasi form
+    const title = getValue('edit-promo-title');
+    const description = getValue('edit-promo-description');
+    const region = getValue('edit-promo-region');
+    const startDate = getValue('edit-promo-start');
+    const endDate = getValue('edit-promo-end');
+    
+    if (!title || !description || !region || !startDate || !endDate) {
+        alert('Mohon lengkapi semua field yang wajib diisi!');
+        return;
+    }
+    
+    // Validasi tanggal
+    if (new Date(startDate) > new Date(endDate)) {
+        alert('Tanggal mulai tidak boleh lebih besar dari tanggal berakhir!');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('id', getValue('edit-promo-id'));
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('image_path', getValue('edit-promo-image'));
+    formData.append('region', region);
+    formData.append('discount_percentage', getValue('edit-promo-discount') || 0);
+    formData.append('start_date', startDate);
+    formData.append('end_date', endDate);
+    
+    const statusElement = document.getElementById('edit-promo-status');
+    const isActive = statusElement && statusElement.value === 'true' ? 1 : 0;
+    formData.append('is_active', isActive);
+    
+    fetch(`${API_URL}?action=update&table=promo`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        showToast(data.message);
+        if (data.success) {
+            const modalElement = document.getElementById('editPromoModal');
+            if (modalElement) {
+                bootstrap.Modal.getInstance(modalElement).hide();
+            }
+            loadPromoTable();
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function deletePromo(id) {
+    if (confirm('Apakah Anda yakin ingin menghapus promo ini?')) {
+        fetch(`${API_URL}?action=delete&table=promo&id=${id}`)
+            .then(response => response.json())
+            .then(data => {
+                showToast(data.message);
+                if (data.success) {
+                    loadPromoTable();
+                    loadDashboardStats();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+}
+
+// Helper function untuk format tanggal
+function formatDate(dateString) {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    const options = { day: 'numeric', month: 'short', year: 'numeric' };
+    return date.toLocaleDateString('id-ID', options);
 }

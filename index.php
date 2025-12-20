@@ -454,6 +454,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+<!-- Load News and FAQ Script -->
+<script src="load_news_faq.js"></script>
+
 <!-- Main Dynamic Package Script -->
 <script src="index.js"></script>
 
