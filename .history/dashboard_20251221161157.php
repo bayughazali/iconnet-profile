@@ -746,18 +746,17 @@
         <input type="text" class="form-control" id="add-slider-name" required>
     </div>
 
-    <div class="mb-3">
-    <label class="form-label">Gambar Slider</label>
-
-    <input type="file"
-       name="image"
-       class="form-control"
-       accept="image/png, image/jpeg, image/jpg"
-       required>
-    <img id="preview-slider-image"
-         style="display:none;max-width:100%;margin-top:10px;border-radius:8px;">
-</div>
-
+   <div class="mb-3">
+                                                            <label>Evidence (Opsional)</label><br>
+                                                            @if($report->evidence)
+                                                                <div class="mb-2">
+                                                                    <small class="text-muted">Gambar saat ini:</small><br>
+                                                                    <img src="{{ asset('storage/'.$report->evidence) }}" width="100" class="rounded">
+                                                                </div>
+                                                            @endif
+                                                            <input type="file" name="evidence" class="form-control" accept="image/*">
+                                                            <small class="text-muted">Kosongkan jika tidak ingin mengubah gambar</small>
+                                                        </div>
 
     <div class="mb-3">
         <label class="form-label">Status</label>

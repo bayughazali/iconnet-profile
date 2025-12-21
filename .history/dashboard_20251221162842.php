@@ -741,23 +741,23 @@
 
             <div class="modal-body">
             <form id="addSliderForm" enctype="multipart/form-data">
-    <div class="mb-3">
+    <div class="mb-3">\
         <label class="form-label">Nama Slider</label>
         <input type="text" class="form-control" id="add-slider-name" required>
     </div>
 
     <div class="mb-3">
-    <label class="form-label">Gambar Slider</label>
+        <label class="form-label">Gambar Slider</label>
+        <input type="file"
+               class="form-control"
+               id="add-slider-image"
+               accept="image/png, image/jpeg, image/jpg"
+               onchange="previewSliderImage(this)"
+               required>
 
-    <input type="file"
-       name="image"
-       class="form-control"
-       accept="image/png, image/jpeg, image/jpg"
-       required>
-    <img id="preview-slider-image"
-         style="display:none;max-width:100%;margin-top:10px;border-radius:8px;">
-</div>
-
+        <img id="preview-slider-image"
+             style="display:none;max-width:100%;margin-top:10px;border-radius:8px;">
+    </div>
 
     <div class="mb-3">
         <label class="form-label">Status</label>

@@ -1,0 +1,163 @@
+:root {
+    --primary: #20b2aa;
+    --dark: #1A5F7A;
+    --bg: #f8f9fa;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
+    margin: 0;
+}
+
+.navbar {
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,.1);
+}
+
+.navbar-brand img {
+    height: 80px;
+}
+
+.btn-promo {
+    background: var(--primary);
+    color: white;
+    padding: 10px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.hero-section {
+    padding: 120px 0 60px;
+}
+
+.hero-card {
+    height: 400px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 15px;
+}
+
+/* LOCATION */
+.location-selector {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0,0,0,.08);
+}
+
+.custom-dropdown-toggle {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background: #f7f9fb;
+    display: flex;
+    align-items: center;
+}
+
+.location-item {
+    padding: 12px 15px;
+    border-top: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.location-item:hover {
+    background: #eef;
+}
+
+/* CAROUSEL */
+#packageCarousel {
+    background: linear-gradient(135deg, #4dd0e1, #20b2aa);
+    padding: 40px 20px;
+    border-radius: 15px;
+}
+
+.carousel-item {
+    opacity: 0;
+    transition: opacity .4s ease;
+}
+
+.carousel-item.active {
+    opacity: 1;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 45px;
+    height: 45px;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.carousel-control-prev {
+    left: -20px;
+}
+
+.carousel-control-next {
+    right: -20px;
+}
+
+.carousel-control-icon {
+    color: var(--primary);
+    font-size: 18px;
+}
+
+/* PACKAGE CARD */
+.card-group-row {
+    display: flex;
+    justify-content: center;
+}
+
+.package-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 320px;
+    text-align: center;
+}
+
+.package-rating {
+    margin-bottom: 15px;
+}
+
+.rating-badge {
+    background: #ffc107;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.package-specs p {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.price-abonemen,
+.price-instalasi {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.btn-pilih {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    background: var(--primary);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+}

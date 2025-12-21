@@ -1,0 +1,197 @@
+/* ========================================
+   COMPLETE LANDING PAGE STYLES - ICONNET
+   FIXED & STABLE VERSION
+   ======================================== */
+
+:root {
+    --primary-color: #2B9EB3;
+    --primary-teal: #20b2aa;
+    --dark-blue: #1A5F7A;
+    --light-bg: #F0F8FF;
+    --light-teal: #4dd0e1;
+    --text-dark: #2c3e50;
+    --border-color: #e0e0e0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+    background-color: #f8f9fa;
+}
+
+/* ========================================
+   NAVBAR
+   ======================================== */
+.navbar {
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-brand img {
+    height: 70px;
+}
+
+/* ========================================
+   HERO SECTION
+   ======================================== */
+.hero-section {
+    padding: 100px 0 60px;
+    background: linear-gradient(135deg, var(--light-bg), white);
+}
+
+.hero-card {
+    height: 450px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 15px;
+}
+
+/* ========================================
+   PRICING SECTION
+   ======================================== */
+.pricing-section {
+    padding: 80px 0;
+    background: #f8f9fa;
+}
+
+/* ========================================
+   LOCATION SELECTOR
+   ======================================== */
+.location-selector {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+}
+
+.custom-dropdown-toggle {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background: #f7f9fb;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* ========================================
+   PACKAGE CAROUSEL (FIXED)
+   ======================================== */
+#packageCarousel {
+    background: linear-gradient(135deg, var(--light-teal), var(--primary-teal));
+    border-radius: 15px;
+    padding: 40px 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* ❗ PENTING: JANGAN display:none */
+#packageCarousel .carousel-item {
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+}
+
+/* ❗ Bootstrap aktifkan ini */
+#packageCarousel .carousel-item.active {
+    opacity: 1;
+}
+
+/* Jaga tinggi agar tidak collapse */
+#packageCarousel .carousel-inner {
+    min-height: 520px;
+}
+
+/* ========================================
+   PACKAGE CARD
+   ======================================== */
+.card-group-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: nowrap;
+}
+
+.package-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 320px;
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    transition: 0.3s;
+}
+
+.package-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(77,208,225,0.3);
+}
+
+.package-card h4 {
+    text-align: center;
+    font-weight: bold;
+}
+
+.package-price {
+    font-size: 1.5rem;
+    color: var(--primary-teal);
+    text-align: center;
+    font-weight: bold;
+}
+
+/* ========================================
+   CAROUSEL CONTROLS
+   ======================================== */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 50%;
+    opacity: 1;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.carousel-control-prev {
+    left: -20px;
+}
+
+.carousel-control-next {
+    right: -20px;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 992px) {
+    .card-group-row {
+        flex-wrap: wrap;
+    }
+
+    .package-card {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-card {
+        height: 300px;
+    }
+
+    .package-card {
+        margin-bottom: 20px;
+    }
+}

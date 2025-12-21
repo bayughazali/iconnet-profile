@@ -754,6 +754,8 @@
        class="form-control"
        accept="image/png, image/jpeg, image/jpg"
        required>
+
+
     <img id="preview-slider-image"
          style="display:none;max-width:100%;margin-top:10px;border-radius:8px;">
 </div>
