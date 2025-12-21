@@ -309,7 +309,7 @@ body {
     padding: 0 50px !important;
     overflow: visible !important;
     position: relative !important;
-    min-height: 520px !important;
+    min-height: 600px !important;
 }
 
 /* CRITICAL: Force carousel item display */
@@ -387,7 +387,7 @@ body {
     gap: 20px !important;
     flex-wrap: nowrap !important;
     width: 100% !important;
-    min-height: 480px !important;
+    min-height: 560px !important;
 }
 
 /* Package Cards */
@@ -400,7 +400,7 @@ body {
     width: 100% !important;
     flex: 0 0 calc(33.333% - 14px) !important;
     max-width: 320px !important;
-    min-height: 480px !important;
+    min-height: 560px !important;
     transition: all 0.3s !important;
     display: flex !important;
     flex-direction: column !important;
@@ -464,20 +464,94 @@ body {
     margin-right: 8px;
 }
 
-.package-price {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--primary-teal);
-    margin: 10px 0 5px 0;
+/* ========================================
+   PRICE SECTION WITH DISCOUNT (NEW)
+   ======================================== */
+
+/* Container untuk harga - Background Pink seperti gambar */
+.price-container {
     text-align: center;
+    margin: 15px 0;
+    padding: 20px 15px;
+    background: linear-gradient(135deg, #ff1493, #ff69b4);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(255, 20, 147, 0.3);
 }
 
+/* Label harga - Hidden karena di gambar tidak ada */
+.price-label {
+    display: none;
+}
+
+/* Harga lama (dicoret) - Style seperti gambar */
+.price-old {
+    font-size: 1rem;
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 5px;
+    position: relative;
+    display: inline-block;
+    opacity: 0.8;
+}
+
+.price-old::before {
+    content: '';
+    position: absolute;
+    left: -5%;
+    right: -5%;
+    top: 50%;
+    height: 3px;
+    background-color: #fff;
+    transform: translateY(-50%) rotate(-8deg);
+    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+}
+
+/* Harga baru (diskon) - Putih Besar seperti gambar */
+.price-new {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #ffffff;
+    margin-bottom: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    letter-spacing: -1px;
+}
+
+/* Badge diskon - Disesuaikan atau bisa dihapus */
+.price-discount-badge {
+    display: none; /* Hide badge karena di gambar tidak ada */
+}
+
+/* Animasi untuk harga baru */
+@keyframes pricePopIn {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Hover effect untuk price container - Disesuaikan dengan pink */
+.package-card:hover .price-new {
+    color: #ffffff;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
+/* OLD PRICE CLASSES - KEPT FOR BACKWARD COMPATIBILITY */
+.package-price,
 .price-abonemen,
 .price-instalasi {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--primary-teal);
     text-align: center;
+    margin: 10px 0;
 }
 
 .package-card small {
@@ -838,19 +912,30 @@ footer .btn-outline-light:hover {
 
     #packageCarousel .carousel-inner {
         padding: 0 30px !important;
+        min-height: 580px !important;
     }
 
     .card-group-row {
         flex-wrap: wrap !important;
+        min-height: 580px !important;
     }
 
     .package-card {
         flex: 0 0 calc(50% - 10px) !important;
         max-width: 100% !important;
+        min-height: 560px !important;
     }
 
     .vertical-divider {
         display: none;
+    }
+    
+    .price-old {
+        font-size: 0.9rem;
+    }
+    
+    .price-new {
+        font-size: 2rem;
     }
 }
 
@@ -871,6 +956,7 @@ footer .btn-outline-light:hover {
         flex: 0 0 100% !important;
         max-width: 100% !important;
         margin-bottom: 20px;
+        min-height: 540px !important;
     }
 
     .carousel-control-prev,
@@ -888,7 +974,23 @@ footer .btn-outline-light:hover {
     }
 
     #packageCarousel .carousel-inner {
-        min-height: 500px !important;
+        min-height: 560px !important;
+    }
+    
+    .card-group-row {
+        min-height: 560px !important;
+    }
+    
+    .price-old {
+        font-size: 0.85rem;
+    }
+    
+    .price-new {
+        font-size: 1.8rem;
+    }
+    
+    .price-container {
+        padding: 15px 10px;
     }
 }
 
@@ -899,13 +1001,23 @@ footer .btn-outline-light:hover {
 
     #packageCarousel .carousel-inner {
         padding: 0 20px !important;
+        min-height: 560px !important;
     }
 
     .package-card {
         padding: 20px !important;
+        min-height: 540px !important;
     }
 
-    .package-price {
-        font-size: 1.3rem;
+    .price-old {
+        font-size: 0.8rem;
+    }
+    
+    .price-new {
+        font-size: 1.6rem;
+    }
+    
+    .price-container {
+        padding: 12px 8px;
     }
 }

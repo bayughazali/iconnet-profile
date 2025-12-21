@@ -120,21 +120,131 @@
                         </div>
                     </div>
                 </div>
+
               <div class="col-lg-8">
     <div id="packageCarousel" class="carousel slide" data-bs-ride="false" data-bs-interval="false">
         
         <div class="carousel-inner" role="listbox">
             <!-- Paket akan dimuat secara dinamis dari database via index.js -->
+            <!-- CONTOH STATIC UNTUK PREVIEW (Hapus jika sudah pakai dynamic dari database) -->
+            
             <div class="carousel-item active">
                 <div class="row card-group-row">
-                    <div class="col-12 text-center py-5">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                    
+                    <!-- PACKAGE CARD 1 -->
+                    <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
+                        <div class="package-card">
+                            <h4>ICONNET 100</h4>
+                            
+                            <div class="package-rating">
+                                <span class="rating-badge">★★ 4.5</span>
+                                <small>(1,500+ reviews)</small>
+                            </div>
+                            
+                            <div class="package-specs">
+                                <p><i class="fas fa-wifi"></i> 100 Mbps</p>
+                                <p><i class="fas fa-laptop"></i> 40 Laptop</p>
+                                <p><i class="fas fa-mobile-alt"></i> 60 Smartphone</p>
+                                <p><i class="fas fa-network-wired"></i> 100 Total Devices</p>
+                            </div>
+                            
+                            <!-- HARGA BULANAN DENGAN DISKON -->
+                            <div class="price-container">
+                                <div class="price-label">Biaya Bulanan</div>
+                                <div class="price-old">Rp. 1.199.000</div>
+                                <div class="price-new">Rp. 999.000</div>
+                                <div class="price-discount-badge">Hemat 200rb!</div>
+                            </div>
+                            
+                            <!-- HARGA INSTALASI DENGAN DISKON -->
+                            <div class="price-container">
+                                <div class="price-label">Biaya Instalasi</div>
+                                <div class="price-old">Rp. 445.000</div>
+                                <div class="price-new">Rp. 345.000</div>
+                            </div>
+                            
+                            <button class="btn-pilih">Pesan Sekarang →</button>
+                            <small>*Harga sudah termasuk PPN</small>
                         </div>
-                        <p class="mt-3 text-muted">Memuat paket...</p>
                     </div>
+                    
+                    <!-- PACKAGE CARD 2 -->
+                    <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
+                        <div class="package-card">
+                            <h4>ICONNET 35</h4>
+                            
+                            <div class="package-rating">
+                                <span class="rating-badge">★★ 4.5</span>
+                                <small>(1,500+ reviews)</small>
+                            </div>
+                            
+                            <div class="package-specs">
+                                <p><i class="fas fa-wifi"></i> 35 Mbps</p>
+                                <p><i class="fas fa-laptop"></i> 15 Laptop</p>
+                                <p><i class="fas fa-mobile-alt"></i> 25 Smartphone</p>
+                                <p><i class="fas fa-network-wired"></i> 40 Total Devices</p>
+                            </div>
+                            
+                            <!-- HARGA BULANAN DENGAN DISKON -->
+                            <div class="price-container">
+                                <div class="price-label">Biaya Bulanan</div>
+                                <div class="price-old">Rp. 435.000</div>
+                                <div class="price-new">Rp. 335.000</div>
+                                <div class="price-discount-badge">Diskon 23%</div>
+                            </div>
+                            
+                            <!-- HARGA INSTALASI DENGAN DISKON -->
+                            <div class="price-container">
+                                <div class="price-label">Biaya Instalasi</div>
+                                <div class="price-old">Rp. 445.000</div>
+                                <div class="price-new">Rp. 345.000</div>
+                            </div>
+                            
+                            <button class="btn-pilih">Pesan Sekarang →</button>
+                            <small>*Harga sudah termasuk PPN</small>
+                        </div>
+                    </div>
+                    
+                    <!-- PACKAGE CARD 3 -->
+                    <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
+                        <div class="package-card">
+                            <h4>ICONNET 50</h4>
+                            
+                            <div class="package-rating">
+                                <span class="rating-badge">★★ 4.5</span>
+                                <small>(1,500+ reviews)</small>
+                            </div>
+                            
+                            <div class="package-specs">
+                                <p><i class="fas fa-wifi"></i> 50 Mbps</p>
+                                <p><i class="fas fa-laptop"></i> 20 Laptop</p>
+                                <p><i class="fas fa-mobile-alt"></i> 30 Smartphone</p>
+                                <p><i class="fas fa-network-wired"></i> 50 Total Devices</p>
+                            </div>
+                            
+                            <!-- HARGA BULANAN DENGAN DISKON -->
+                            <div class="price-container">
+                                <div class="price-label">Biaya Bulanan</div>
+                                <div class="price-old">Rp. 735.000</div>
+                                <div class="price-new">Rp. 535.000</div>
+                                <div class="price-discount-badge">Promo Spesial!</div>
+                            </div>
+                            
+                            <!-- HARGA INSTALASI DENGAN DISKON -->
+                            <div class="price-container">
+                                <div class="price-label">Biaya Instalasi</div>
+                                <div class="price-old">Rp. 445.000</div>
+                                <div class="price-new">Rp. 345.000</div>
+                            </div>
+                            
+                            <button class="btn-pilih">Pesan Sekarang →</button>
+                            <small>*Harga sudah termasuk PPN</small>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
+            
         </div>
 
         <button class="carousel-control-prev" type="button" data-bs-target="#packageCarousel" data-bs-slide="prev">
@@ -148,16 +258,6 @@
     </div>
 </div>
 
-        <button class="carousel-control-prev" type="button" data-bs-target="#packageCarousel" data-bs-slide="prev">
-            <span class="fas fa-chevron-left carousel-control-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#packageCarousel" data-bs-slide="next">
-            <span class="fas fa-chevron-right carousel-control-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-</div>
             </div>
         </div>
     </section>
@@ -287,6 +387,7 @@
             </div>
         </div>
     </section>
+
       <!-- Latest News Section -->
 <section class="news-section py-5" style="background:#ffffff;">
     <div class="container">
@@ -344,6 +445,7 @@
         </div>
     </div>
 </section>
+
     <!-- FAQ Section -->
     <section class="faq-section">
         <div class="container">
@@ -389,6 +491,7 @@
 
         </div>
     </section>
+
     <!-- Footer -->
 <footer class="bg-dark text-white py-4">
     <div class="container">
@@ -406,7 +509,6 @@
 </footer>
 
   <!-- Bootstrap JS -->
-<!-- Bootstrap JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 
 <!-- Auto Slider Script -->
