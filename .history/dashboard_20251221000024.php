@@ -740,34 +740,35 @@
             </div>
 
             <div class="modal-body">
-            <form id="addSliderForm" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label class="form-label">Nama Slider</label>
-        <input type="text" class="form-control" id="add-slider-name" required>
-    </div>
+                <form id="addSliderForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Nama Slider</label>
+                        <input type="text" class="form-control" id="add-slider-name" required>
+                    </div>
 
-    <div class="mb-3">
-        <label class="form-label">Gambar Slider</label>
-        <input type="file"
-               class="form-control"
-               id="add-slider-image"
-               accept="image/*"
-               onchange="previewSliderImage(this)"
-               required>
+                    <div class="mb-3">
+                        <label class="form-label">Gambar Slider</label>
+                        <input type="file"
+                               class="form-control"
+                               id="add-slider-image"
+                               accept="image/*"
+                               onchange="previewSliderImage(this)"
+                               required>
 
-        <img id="preview-slider-image"
-             style="display:none;max-width:100%;margin-top:10px;border-radius:8px;">
-    </div>
+                        <img id="preview-slider-image"
+                             style="display:none;max-width:100%;margin-top:10px;border-radius:8px;">
+                    </div>
 
-    <div class="mb-3">
-        <label class="form-label">Status</label>
-        <select class="form-select" id="add-slider-status">
-            <option value="1">Aktif</option>
-            <option value="0">Nonaktif</option>
-        </select>
-    </div>
-</form>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" id="add-slider-status">
+                            <option value="1">Aktif</option>
+                            <option value="0">Nonaktif</option>
+                        </select>
+                    </div>
+                </form>
             </div>
+
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <button class="btn btn-primary" onclick="addSlider()">Simpan</button>
@@ -775,67 +776,6 @@
         </div>
     </div>
 </div>
-
-<script>
-function addSlider() {
-    const form = document.getElementById('addSliderForm');
-    const formData = new FormData();
-    
-    // Ambil nilai dari form
-    const name = document.getElementById('add-slider-name').value;
-    const status = document.getElementById('add-slider-status').value;
-    const imageFile = document.getElementById('add-slider-image').files[0];
-    
-    // Validasi
-    if (!name || !imageFile) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Nama dan gambar harus diisi!'
-        });
-        return;
-    }
-    
-    // Tambahkan data ke FormData
-    formData.append('name', name);
-    formData.append('status', status);
-    formData.append('image', imageFile);
-    
-    // Kirim via AJAX
-    fetch('slider_action.php?action=add', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: 'Slider berhasil ditambahkan',
-                timer: 1500
-            }).then(() => {
-                location.reload();
-            });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: data.message || 'Terjadi kesalahan'
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: 'Terjadi kesalahan saat mengirim data'
-        });
-    });
-}
-</script>
-
 
 
     <!-- Modal Edit Slider -->

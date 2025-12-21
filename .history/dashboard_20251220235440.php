@@ -729,114 +729,60 @@
 
     <!-- MODALS TETAP SAMA SEPERTI SEBELUMNYA -->
     <!-- Modal Tambah Slider -->
-   <div class="modal fade" id="addSliderModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-gradient-primary text-white">
-                <h5 class="modal-title">
-                    <i class="fas fa-plus-circle me-2"></i>Tambah Slider Baru
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
+    <div class="modal fade" id="addSliderModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient-primary text-white">
+                    <h5 class="modal-title"><i class="fas fa-plus-circle me-2"></i>Tambah Slider Baru</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addSliderForm">
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-tag me-2 text-primary"></i>Nama Slider</label>
+                            <input type="text" class="form-control" id="add-slider-name" placeholder="Contoh: Slider Promo Akhir Tahun" required>
+                        </div>
+                       <div class="mb-3">
+    <label class="form-label">
+        <i class="fas fa-image me-2 text-primary"></i>Gambar Slider
+    </label>
 
-            <div class="modal-body">
-            <form id="addSliderForm" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label class="form-label">Nama Slider</label>
-        <input type="text" class="form-control" id="add-slider-name" required>
-    </div>
+    <input type="file"
+           class="form-control"
+           id="add-slider-image"
+           accept="image/*"
+           onchange="previewSliderImage(this)"
+           required>
 
-    <div class="mb-3">
-        <label class="form-label">Gambar Slider</label>
-        <input type="file"
-               class="form-control"
-               id="add-slider-image"
-               accept="image/*"
-               onchange="previewSliderImage(this)"
-               required>
+    <small class="text-muted">
+        Format: JPG, PNG, WEBP
+    </small>
 
+    <!-- Preview -->
+    <div class="mt-2">
         <img id="preview-slider-image"
-             style="display:none;max-width:100%;margin-top:10px;border-radius:8px;">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Status</label>
-        <select class="form-select" id="add-slider-status">
-            <option value="1">Aktif</option>
-            <option value="0">Nonaktif</option>
-        </select>
-    </div>
-</form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button class="btn btn-primary" onclick="addSlider()">Simpan</button>
-            </div>
-        </div>
+             src=""
+             alt="Preview"
+             style="display:none; max-width:100%; border-radius:8px;">
     </div>
 </div>
 
-<script>
-function addSlider() {
-    const form = document.getElementById('addSliderForm');
-    const formData = new FormData();
-    
-    // Ambil nilai dari form
-    const name = document.getElementById('add-slider-name').value;
-    const status = document.getElementById('add-slider-status').value;
-    const imageFile = document.getElementById('add-slider-image').files[0];
-    
-    // Validasi
-    if (!name || !imageFile) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Nama dan gambar harus diisi!'
-        });
-        return;
-    }
-    
-    // Tambahkan data ke FormData
-    formData.append('name', name);
-    formData.append('status', status);
-    formData.append('image', imageFile);
-    
-    // Kirim via AJAX
-    fetch('slider_action.php?action=add', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: 'Slider berhasil ditambahkan',
-                timer: 1500
-            }).then(() => {
-                location.reload();
-            });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: data.message || 'Terjadi kesalahan'
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: 'Terjadi kesalahan saat mengirim data'
-        });
-    });
-}
-</script>
-
-
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-toggle-on me-2 text-primary"></i>Status</label>
+                            <select class="form-select" id="add-slider-status">
+                                <option value="true">✓ Aktif</option>
+                                <option value="false">✗ Nonaktif</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="addSlider()">Simpan Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal Edit Slider -->
     <div class="modal fade" id="editSliderModal" tabindex="-1">

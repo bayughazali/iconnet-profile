@@ -493,7 +493,7 @@
             <li><a onclick="showPage('berita')"><i class="fas fa-newspaper"></i><span>Kelola Berita</span></a></li>
             <li><a onclick="showPage('faq')"><i class="fas fa-question-circle"></i><span>Kelola FAQ</span></a></li>
             <li><a onclick="showPage('promo')"><i class="fas fa-tags"></i><span>Kelola Promo</span></a></li>
-            <li><a onclick="showPage('transaksi')"><i class="fas fa-file-invoice"></i><span>Transaksi</span></a></li>
+            <!-- <li><a onclick="showPage('transaksi')"><i class="fas fa-file-invoice"></i><span>Transaksi</span></a></li> -->
         </ul>
     </div>
 
@@ -688,14 +688,267 @@
         </div>
 
         <!-- PROMO PAGE -->
-        <div id="page-promo" class="page-section">
-            <div class="content-card">
-                <h4><i class="fas fa-tags"></i>Kelola Promo</h4>
-                <p class="text-muted">Fitur ini akan segera tersedia.</p>
+        <!-- TAMBAHKAN MODAL INI KE dashboard.php SEBELUM TAG </body> -->
+
+<!-- Ganti section PROMO PAGE yang ada dengan yang ini -->
+<div id="page-promo" class="page-section">
+    <div class="content-card">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="mb-0"><i class="fas fa-tags"></i>Kelola Promo</h4>
+            <button class="btn btn-primary" onclick="openPromoModal()">
+                <i class="fas fa-plus me-2"></i>Tambah Promo
+            </button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Judul</th>
+                        <th>Region</th>
+                        <th>Diskon</th>
+                        <th>Periode</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="promo-table-body">
+                    <tr>
+                        <td colspan="6" class="text-center">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Tambah Promo -->
+<div class="modal fade" id="addSliderModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-plus-circle me-2"></i>Tambah Slider Baru
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="addSliderForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Nama Slider</label>
+                        <input type="text" class="form-control" id="add-slider-name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Gambar Slider</label>
+                        <input type="file"
+                               class="form-control"
+                               id="add-slider-image"
+                               accept="image/*"
+                               onchange="previewSliderImage(this)"
+                               required>
+
+                        <img id="preview-slider-image"
+                             style="display:none;max-width:100%;margin-top:10px;border-radius:8px;">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" id="add-slider-status">
+                            <option value="1">Aktif</option>
+                            <option value="0">Nonaktif</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button class="btn btn-primary" onclick="addSlider()">Simpan</button>
             </div>
         </div>
+    </div>
+</div>
 
-        <!-- TRANSAKSI PAGE -->
+
+<!-- Modal Edit Promo -->
+<div class="modal fade" id="editPromoModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-warning text-dark">
+                <h5 class="modal-title"><i class="fas fa-edit me-2"></i>Edit Promo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editPromoForm">
+                    <input type="hidden" id="edit-promo-id">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Judul Promo</label>
+                        <input type="text" class="form-control" id="edit-promo-title" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Deskripsi</label>
+                        <textarea class="form-control" id="edit-promo-description" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Region</label>
+                            <select class="form-select" id="edit-promo-region" required>
+                                <option value="jawa">Jawa & Bali</option>
+                                <option value="sumatera">Sumatera & Kalimantan</option>
+                                <option value="timur">Indonesia Timur</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Diskon (%)</label>
+                            <input type="number" class="form-control" id="edit-promo-discount" min="0" max="100" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tanggal Mulai</label>
+                            <input type="date" class="form-control" id="edit-promo-start" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tanggal Berakhir</label>
+                            <input type="date" class="form-control" id="edit-promo-end" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Upload Gambar Promo Baru (Opsional)</label>
+                        <div class="current-image mb-3" id="edit-promo-current-image" style="display: none;">
+                            <p class="text-muted small mb-2"><i class="fas fa-info-circle me-1"></i>Gambar saat ini:</p>
+                            <img id="edit-promo-current-image-preview" src="" alt="Current" class="img-thumbnail" style="max-height: 200px;">
+                        </div>
+                        <div class="upload-area" id="edit-promo-upload-area">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text">
+                                <p class="mb-1"><strong>Klik untuk upload gambar baru</strong></p>
+                                <p class="text-muted small">PNG, JPG, WEBP (Max. 5MB)</p>
+                            </div>
+                            <input type="file" id="edit-promo-image-file" accept="image/*" style="display: none;">
+                        </div>
+                        <div id="edit-promo-image-preview" class="mt-3" style="display: none;">
+                            <div class="preview-container">
+                                <img id="edit-promo-preview-img" src="" alt="Preview" class="img-thumbnail">
+                                <button type="button" class="btn btn-sm btn-danger remove-image" onclick="removeEditPromoImage()">
+                                    <i class="fas fa-times"></i> Hapus
+                                </button>
+                            </div>
+                            <p class="text-muted small mt-2" id="edit-promo-file-name"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" id="edit-promo-status">
+                            <option value="true">✓ Aktif</option>
+                            <option value="false">✗ Nonaktif</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-warning" onclick="Promo()">Simpan Perubahan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Upload Area Click Handler - Add Promo Modal
+document.getElementById('add-promo-upload-area')?.addEventListener('click', function() {
+    document.getElementById('add-promo-image-file').click();
+});
+
+// Upload Area Click Handler - Edit Promo Modal
+document.getElementById('edit-promo-upload-area')?.addEventListener('click', function() {
+    document.getElementById('edit-promo-image-file').click();
+});
+
+// Image Upload Handler - Add Promo Modal
+document.getElementById('add-promo-image-file')?.addEventListener('change', function(e) {
+    handlePromoImageUpload(e, 'add');
+});
+
+// Image Upload Handler - Edit Promo Modal
+document.getElementById('edit-promo-image-file')?.addEventListener('change', function(e) {
+    handlePromoImageUpload(e, 'edit');
+});
+
+// Handle Promo Image Upload
+function handlePromoImageUpload(e, type) {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    if (file.size > 5 * 1024 * 1024) {
+        alert('Ukuran file terlalu besar! Maksimal 5MB');
+        e.target.value = '';
+        return;
+    }
+    
+    if (!file.type.match('image.*')) {
+        alert('File harus berupa gambar!');
+        e.target.value = '';
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const prefix = type === 'add' ? '' : 'edit-';
+        const previewImg = document.getElementById(prefix + 'promo-preview-img');
+        const imagePreview = document.getElementById(prefix.replace('-', '') + 'promo-image-preview');
+        const fileName = document.getElementById(prefix + 'promo-file-name');
+        const uploadArea = document.getElementById(prefix.replace('-', '') + 'promo-upload-area');
+        
+        if (previewImg) previewImg.src = event.target.result;
+        if (imagePreview) imagePreview.style.display = 'block';
+        if (fileName) fileName.textContent = file.name + ' (' + (file.size / 1024).toFixed(2) + ' KB)';
+        if (uploadArea) uploadArea.style.display = 'none';
+        
+        if (type === 'edit') {
+            const currentImage = document.getElementById('edit-promo-current-image');
+            if (currentImage) currentImage.style.display = 'none';
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+// Remove Promo Image Functions
+function removePromoImage() {
+    const fileInput = document.getElementById('add-promo-image-file');
+    const imagePreview = document.getElementById('promo-image-preview');
+    const uploadArea = document.getElementById('add-promo-upload-area');
+    
+    if (fileInput) fileInput.value = '';
+    if (imagePreview) imagePreview.style.display = 'none';
+    if (uploadArea) uploadArea.style.display = 'block';
+}
+
+function removeEditPromoImage() {
+    const fileInput = document.getElementById('edit-promo-image-file');
+    const imagePreview = document.getElementById('edit-promo-image-preview');
+    const uploadArea = document.getElementById('edit-promo-upload-area');
+    const currentImage = document.getElementById('edit-promo-current-image');
+    
+    if (fileInput) fileInput.value = '';
+    if (imagePreview) imagePreview.style.display = 'none';
+    if (uploadArea) uploadArea.style.display = 'block';
+    if (currentImage) currentImage.style.display = 'block';
+}
+</script>
+
+        <!-- TRANSAKSI PAGE
         <div id="page-transaksi" class="page-section">
             <div class="content-card">
                 <h4><i class="fas fa-file-invoice"></i>Daftar Transaksi</h4>
@@ -725,118 +978,64 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- MODALS TETAP SAMA SEPERTI SEBELUMNYA -->
     <!-- Modal Tambah Slider -->
-   <div class="modal fade" id="addSliderModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-gradient-primary text-white">
-                <h5 class="modal-title">
-                    <i class="fas fa-plus-circle me-2"></i>Tambah Slider Baru
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
+    <div class="modal fade" id="addSliderModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient-primary text-white">
+                    <h5 class="modal-title"><i class="fas fa-plus-circle me-2"></i>Tambah Slider Baru</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addSliderForm">
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-tag me-2 text-primary"></i>Nama Slider</label>
+                            <input type="text" class="form-control" id="add-slider-name" placeholder="Contoh: Slider Promo Akhir Tahun" required>
+                        </div>
+                       <div class="mb-3">
+    <label class="form-label">
+        <i class="fas fa-image me-2 text-primary"></i>Gambar Slider
+    </label>
 
-            <div class="modal-body">
-            <form id="addSliderForm" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label class="form-label">Nama Slider</label>
-        <input type="text" class="form-control" id="add-slider-name" required>
-    </div>
+    <input type="file"
+           class="form-control"
+           id="add-slider-image"
+           accept="image/*"
+           onchange="previewSliderImage(this)"
+           required>
 
-    <div class="mb-3">
-        <label class="form-label">Gambar Slider</label>
-        <input type="file"
-               class="form-control"
-               id="add-slider-image"
-               accept="image/*"
-               onchange="previewSliderImage(this)"
-               required>
+    <small class="text-muted">
+        Format: JPG, PNG, WEBP
+    </small>
 
+    <!-- Preview -->
+    <div class="mt-2">
         <img id="preview-slider-image"
-             style="display:none;max-width:100%;margin-top:10px;border-radius:8px;">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Status</label>
-        <select class="form-select" id="add-slider-status">
-            <option value="1">Aktif</option>
-            <option value="0">Nonaktif</option>
-        </select>
-    </div>
-</form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button class="btn btn-primary" onclick="addSlider()">Simpan</button>
-            </div>
-        </div>
+             src=""
+             alt="Preview"
+             style="display:none; max-width:100%; border-radius:8px;">
     </div>
 </div>
 
-<script>
-function addSlider() {
-    const form = document.getElementById('addSliderForm');
-    const formData = new FormData();
-    
-    // Ambil nilai dari form
-    const name = document.getElementById('add-slider-name').value;
-    const status = document.getElementById('add-slider-status').value;
-    const imageFile = document.getElementById('add-slider-image').files[0];
-    
-    // Validasi
-    if (!name || !imageFile) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Nama dan gambar harus diisi!'
-        });
-        return;
-    }
-    
-    // Tambahkan data ke FormData
-    formData.append('name', name);
-    formData.append('status', status);
-    formData.append('image', imageFile);
-    
-    // Kirim via AJAX
-    fetch('slider_action.php?action=add', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: 'Slider berhasil ditambahkan',
-                timer: 1500
-            }).then(() => {
-                location.reload();
-            });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: data.message || 'Terjadi kesalahan'
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: 'Terjadi kesalahan saat mengirim data'
-        });
-    });
-}
-</script>
-
-
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-toggle-on me-2 text-primary"></i>Status</label>
+                            <select class="form-select" id="add-slider-status">
+                                <option value="true">✓ Aktif</option>
+                                <option value="false">✗ Nonaktif</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="addSlider()">Simpan Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal Edit Slider -->
     <div class="modal fade" id="editSliderModal" tabindex="-1">
