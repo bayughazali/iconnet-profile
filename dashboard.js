@@ -357,7 +357,7 @@ function openPaketModal() {
     
     // Buka modal
     // KODE BARU YANG BENAR
-const modalElement = document.getElementById('modalTambahPromo');
+const modalElement = document.getElementById('modalTambahPaket'); // ✅ BENAR
     if (modalElement) {
         const modal = new bootstrap.Modal(modalElement);
         modal.show();
