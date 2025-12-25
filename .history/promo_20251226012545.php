@@ -24,14 +24,8 @@
 }
 
 .logo-iconnet {
-  height: 64px;
+  height: 38px;
   object-fit: contain;
-}
-
-@media (max-width: 768px) {
-  .logo-iconnet {
-    height: 50px;
-  }
 }
 
 .navbar-nav .nav-link {
@@ -65,50 +59,45 @@
 
 
     /* Slider */
-.slider-container {
-  position: relative;
-  overflow: hidden;
-  margin-top: 15px;
-}
-
-.slider {
-  display: flex;
-  transition: transform .5s ease;
-}
-
-.slide {
-  min-width: 100%;
-  height: 220px;
-  border-radius: 12px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
-}
-
-/* Overlay gelap */
-.slide::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  border-radius: 12px;
-}
-
-/* Text di tengah */
-.slide-content {
-  position: relative;
-  z-index: 2;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 26px;
-  font-weight: 700;
-  text-align: center;
-  padding: 20px;
-}
+    .slider-container {
+      position: relative;
+      overflow: hidden;
+      margin-top: 15px;
+    }
+    .slider {
+      display: flex;
+      transition: transform .5s ease;
+    }
+    .slide {
+      min-width: 100%;
+      height: 220px;
+      background: #29a4b8;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #1b3b45;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .slider-btn:hover {
+      background: #0a5665;
+    }
+    .prev { left: 10px; }
+    .next { right: 10px; }
 
     /* Filter */
     .filter-btns button {
@@ -194,7 +183,7 @@
     
     <!-- LOGO -->
     <a class="navbar-brand" href="index.php">
-      <img src="image/iconnet.png" alt="ICONNET Logo" class="logo-iconnet">
+      <img src="icon" alt="ICONNET Logo" class="logo-iconnet">
     </a>
 
     <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navMenu">
@@ -207,7 +196,7 @@
           <a class="nav-link active" href="index.php">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="product.php">Product & Add On</a>
+          <a class="nav-link" href="#">Product & Add On</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Blog</a>
@@ -227,32 +216,19 @@
   <a href="index.php" class="text-decoration-none text-secondary mb-2 d-inline-block">
     <i class="bi bi-arrow-left"></i> Kembali ke halaman sebelumnya
   </a>
+
+  <div class="promo-title">PROMO</div>
+
   <!-- SLIDER -->
-  <!-- SLIDER -->
-<div class="slider-container">
-  <div class="slider" id="slider">
-
-    <div class="slide" style="background-image: url('image/slide1.png');">
-      <div class="slide-content">
-      </div>
+  <div class="slider-container">
+    <div class="slider" id="slider">
+      <div class="slide">Promo Spesial Bulan Ini</div>
+      <div class="slide">Dapatkan Diskon Hingga 50%</div>
+      <div class="slide">Gratis Instalasi & Modem</div>
     </div>
-
-    <div class="slide" style="background-image: url('image/slide2.png');">
-      <div class="slide-content">
-      </div>
-    </div>
-
-    <div class="slide" style="background-image: url('image/slide3.png');">
-      <div class="slide-content">
-      </div>
-    </div>
-
+    <button class="slider-btn prev" onclick="prevSlide()">‹</button>
+    <button class="slider-btn next" onclick="nextSlide()">›</button>
   </div>
-
-  <!-- <button class="slider-btn prev" onclick="prevSlide()">‹</button>
-  <button class="slider-btn next" onclick="nextSlide()">›</button> -->
-</div>
-
 
   <!-- FILTER -->
   <div class="filter-btns text-center mt-4">

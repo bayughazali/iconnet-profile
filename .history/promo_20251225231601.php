@@ -15,100 +15,63 @@
       background: #edf6fa;
       font-family: 'Segoe UI', sans-serif;
     }
-    .main-header {
-  background: #ffffff;
-  border-bottom: 1px solid #e5e5e5;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
+    header {
+      background: white;
+      border-bottom: 1px solid #ddd;
+    }
+    .navbar-brand {
+      font-weight: bold;
+      color: #0a91a8 !important;
+    }
 
-.logo-iconnet {
-  height: 64px;
-  object-fit: contain;
-}
-
-@media (max-width: 768px) {
-  .logo-iconnet {
-    height: 50px;
-  }
-}
-
-.navbar-nav .nav-link {
-  font-weight: 600; /* TEBAL */
-  color: #333 !important;
-  padding: 8px 14px;
-  position: relative;
-  transition: color 0.3s ease;
-}
-
-.navbar-nav .nav-link:hover {
-  color: #0a91a8 !important;
-}
-
-/* Garis bawah saat hover */
-.navbar-nav .nav-link::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 2px;
-  background: #0a91a8;
-  left: 0;
-  bottom: 0;
-  transition: width 0.3s ease;
-}
-
-.navbar-nav .nav-link:hover::after,
-.navbar-nav .nav-link.active::after {
-  width: 100%;
-}
-
+    .promo-title {
+      text-align: center;
+      font-weight: bold;
+      font-size: 28px;
+      margin-top: 15px;
+      color: #0a91a8;
+    }
 
     /* Slider */
-.slider-container {
-  position: relative;
-  overflow: hidden;
-  margin-top: 15px;
-}
-
-.slider {
-  display: flex;
-  transition: transform .5s ease;
-}
-
-.slide {
-  min-width: 100%;
-  height: 220px;
-  border-radius: 12px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
-}
-
-/* Overlay gelap */
-.slide::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  border-radius: 12px;
-}
-
-/* Text di tengah */
-.slide-content {
-  position: relative;
-  z-index: 2;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 26px;
-  font-weight: 700;
-  text-align: center;
-  padding: 20px;
-}
+    .slider-container {
+      position: relative;
+      overflow: hidden;
+      margin-top: 15px;
+    }
+    .slider {
+      display: flex;
+      transition: transform .5s ease;
+    }
+    .slide {
+      min-width: 100%;
+      height: 220px;
+      background: #29a4b8;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #1b3b45;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .slider-btn:hover {
+      background: #0a5665;
+    }
+    .prev { left: 10px; }
+    .next { right: 10px; }
 
     /* Filter */
     .filter-btns button {
@@ -160,99 +123,45 @@
       margin-bottom: 20px;
       opacity: 0.5;
     }
-
-    .promo-detail-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-}
-
-.promo-detail-card {
-    background: #fff;
-    max-width: 600px;
-    width: 90%;
-    border-radius: 12px;
-    padding: 20px;
-    position: relative;
-    animation: zoomIn 0.3s ease;
-}
-
-@keyframes zoomIn {
-    from { transform: scale(0.9); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
   </style>
 </head>
 <body>
 
-<header class="main-header">
+<header>
   <nav class="navbar navbar-expand-lg container">
-    
-    <!-- LOGO -->
-    <a class="navbar-brand" href="index.php">
-      <img src="image/iconnet.png" alt="ICONNET Logo" class="logo-iconnet">
-    </a>
-
+    <a class="navbar-brand" href="#">ICONNET</a>
     <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navMenu">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div id="navMenu" class="collapse navbar-collapse">
-      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
-        <li class="nav-item">
-          <a class="nav-link active" href="index.php">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="product.php">Product & Add On</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Blog</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">About Us</a>
-        </li>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Product & Add on</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
       </ul>
     </div>
-
   </nav>
 </header>
-
 
 <div class="container mt-3">
 
   <a href="index.php" class="text-decoration-none text-secondary mb-2 d-inline-block">
     <i class="bi bi-arrow-left"></i> Kembali ke halaman sebelumnya
   </a>
+
+  <div class="promo-title">PROMO</div>
+
   <!-- SLIDER -->
-  <!-- SLIDER -->
-<div class="slider-container">
-  <div class="slider" id="slider">
-
-    <div class="slide" style="background-image: url('image/slide1.png');">
-      <div class="slide-content">
-      </div>
+  <div class="slider-container">
+    <div class="slider" id="slider">
+      <div class="slide">Promo Spesial Bulan Ini</div>
+      <div class="slide">Dapatkan Diskon Hingga 50%</div>
+      <div class="slide">Gratis Instalasi & Modem</div>
     </div>
-
-    <div class="slide" style="background-image: url('image/slide2.png');">
-      <div class="slide-content">
-      </div>
-    </div>
-
-    <div class="slide" style="background-image: url('image/slide3.png');">
-      <div class="slide-content">
-      </div>
-    </div>
-
+    <button class="slider-btn prev" onclick="prevSlide()">‹</button>
+    <button class="slider-btn next" onclick="nextSlide()">›</button>
   </div>
-
-  <!-- <button class="slider-btn prev" onclick="prevSlide()">‹</button>
-  <button class="slider-btn next" onclick="nextSlide()">›</button> -->
-</div>
-
 
   <!-- FILTER -->
   <div class="filter-btns text-center mt-4">
@@ -394,7 +303,19 @@ function createPromoCard(promo) {
                         <button class="btn btn-outline-secondary btn-sm" onclick="showPromoDetail(${promo.id})">
                             Lihat Detail →
                         </button>
-                        <button class="btn btn-order btn-sm" onclick="orderPromo(${promo.id})">
+                        <button class="btn btn-order btn-sm" onclick="setPromoDetail(${promo.id})">
+                            data-bs-toggle="modal"
+                            data-bs-target="#detailPaketModal"
+                            onclick="setPromoDetail({
+                                nama: 'hebat 6',
+                                kecepatan: 30,
+                                totalPerangkat: 4,
+                                laptop: 2,
+                                smartphone: 2,
+                                harga: 'Rp 1',
+                                instalasi: 'Rp 150.000',
+                                fitur: ['dadwa']
+                            })">
                             Pesan Sekarang →
                         </button>
                     </div>
@@ -402,6 +323,33 @@ function createPromoCard(promo) {
             </div>
         </div>
     `;
+}
+
+function setPromoDetail(data) {
+    // Judul
+    document.getElementById('modalNamaPaket').innerText = data.nama;
+
+    // Info atas
+    document.getElementById('modalKecepatan').innerText = data.kecepatan;
+    document.getElementById('modalTotalPerangkat').innerText = data.totalPerangkat;
+    document.getElementById('modalLaptop').innerText = data.laptop;
+    document.getElementById('modalSmartphone').innerText = data.smartphone;
+
+    // Harga
+    document.getElementById('modalHarga').innerText = data.harga;
+    document.getElementById('modalInstalasi').innerText = data.instalasi;
+
+    // Fitur tambahan
+    const fiturContainer = document.getElementById('modalFitur');
+    fiturContainer.innerHTML = '';
+
+    data.fitur.forEach(item => {
+        fiturContainer.innerHTML += `
+            <span class="badge bg-primary me-1">
+                ✓ ${item}
+            </span>
+        `;
+    });
 }
 
 // Fungsi untuk format periode promo
@@ -430,82 +378,43 @@ async function showPromoDetail(promoId) {
     try {
         const response = await fetch(`api.php?action=get_promo_by_id&id=${promoId}`);
         const result = await response.json();
-
+        
         if (result.success) {
             const promo = result.data;
+            
+            // Buat modal atau alert untuk menampilkan detail
+            alert(`
+Promo: ${promo.title}
 
-            // 🔹 ISI KONTEN DETAIL
-            document.getElementById("promo-detail-content").innerHTML = `
-                <h4 class="fw-bold mb-2">${promo.title}</h4>
-                <p class="text-muted mb-3">${formatDate(promo.start_date)} - ${formatDate(promo.end_date)}</p>
+Deskripsi: ${promo.description}
 
-                <p>${promo.description}</p>
+Region: ${promo.region.toUpperCase()}
+Diskon: ${promo.discount_percentage}%
+Periode: ${formatDate(promo.start_date)} - ${formatDate(promo.end_date)}
 
-                <div class="mt-3">
-                    <span class="badge bg-primary me-2">${promo.region.toUpperCase()}</span>
-                    <span class="badge bg-danger">${promo.discount_percentage}% OFF</span>
-                </div>
-
-                <div class="text-center mt-4">
-                    <button class="btn btn-order" onclick="orderPromo(${promo.id})">
-                        Pesan Sekarang →
-                    </button>
-                </div>
-            `;
-
-            // 🔹 TAMPILKAN MODAL
-            document.getElementById("promo-detail-wrapper").classList.remove("d-none");
+Hubungi kami untuk info lebih lanjut!
+            `.trim());
         }
     } catch (error) {
-        console.error("Error loading promo detail:", error);
-        alert("Gagal memuat detail promo.");
+        console.error('Error loading promo detail:', error);
+        alert('Gagal memuat detail promo. Silakan coba lagi.');
     }
-}
-
-function closePromoDetail() {
-    document.getElementById("promo-detail-wrapper").classList.add("d-none");
 }
 
 // Fungsi untuk order promo
-async function orderPromo(promoId) {
-    try {
-        // 🔹 Ambil data promo
-        const response = await fetch(`api.php?action=get_promo_by_id&id=${promoId}`);
-        const result = await response.json();
-
-        if (!result.success) {
-            alert('Promo tidak ditemukan.');
-            return;
-        }
-
-        const promo = result.data;
-
-        // 🔹 Format pesan WhatsApp
-        const message = `
-Halo Admin,
-Saya tertarik dengan promo berikut:
-
-Nama Promo: ${promo.title}
-Diskon: ${promo.discount_percentage ? promo.discount_percentage + '%' : '-'}
-Periode: ${formatDate(promo.start_date)} - ${formatDate(promo.end_date)}
-Region: ${promo.region.toUpperCase()}
-
-Mohon info lebih lanjut. Terima kasih.
-        `.trim();
-
-        // 🔹 Nomor WhatsApp tujuan (GANTI INI)
-        const phoneNumber = '6281252519535';
-
-        // 🔹 Redirect ke WhatsApp
-        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
-
-    } catch (error) {
-        console.error('Order promo error:', error);
-        alert('Terjadi kesalahan saat memproses pesanan.');
+function orderPromo(promoId) {
+    // Bisa redirect ke halaman pemesanan atau buka modal form
+    const confirmation = confirm('Anda akan dihubungi oleh tim kami untuk proses pemesanan promo ini. Lanjutkan?');
+    
+    if (confirmation) {
+        alert('Terima kasih! Anda akan dihubungi oleh tim kami segera.');
+        
+        // Optional: redirect ke WhatsApp
+        // const waNumber = '6281234567890';
+        // const message = `Halo, saya tertarik dengan promo ID: ${promoId}`;
+        // window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
     }
 }
-
 
 // Fungsi untuk menampilkan empty state
 function showEmptyState() {
@@ -538,11 +447,6 @@ function showErrorState() {
     `;
 }
 </script>
-<div id="promo-detail-wrapper" class="promo-detail-overlay d-none">
-    <div class="promo-detail-card">
-        <button class="btn-close" onclick="closePromoDetail()"></button>
-        <div id="promo-detail-content"></div>
-    </div>
-</div>
+
 </body>
 </html>

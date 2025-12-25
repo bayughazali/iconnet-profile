@@ -227,6 +227,9 @@
   <a href="index.php" class="text-decoration-none text-secondary mb-2 d-inline-block">
     <i class="bi bi-arrow-left"></i> Kembali ke halaman sebelumnya
   </a>
+
+  <div class="promo-title">PROMO</div>
+
   <!-- SLIDER -->
   <!-- SLIDER -->
 <div class="slider-container">
@@ -239,11 +242,13 @@
 
     <div class="slide" style="background-image: url('image/slide2.png');">
       <div class="slide-content">
+        Dapatkan Diskon Hingga 50%
       </div>
     </div>
 
     <div class="slide" style="background-image: url('image/slide3.png');">
       <div class="slide-content">
+        Gratis Instalasi & Modem
       </div>
     </div>
 

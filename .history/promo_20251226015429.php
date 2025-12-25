@@ -110,6 +110,7 @@
   padding: 20px;
 }
 
+
     /* Filter */
     .filter-btns button {
       margin: 5px;
@@ -227,32 +228,19 @@
   <a href="index.php" class="text-decoration-none text-secondary mb-2 d-inline-block">
     <i class="bi bi-arrow-left"></i> Kembali ke halaman sebelumnya
   </a>
+
+  <div class="promo-title">PROMO</div>
+
   <!-- SLIDER -->
-  <!-- SLIDER -->
-<div class="slider-container">
-  <div class="slider" id="slider">
-
-    <div class="slide" style="background-image: url('image/slide1.png');">
-      <div class="slide-content">
-      </div>
+  <div class="slider-container">
+    <div class="slider" id="slider">
+      <div class="slide">Promo Spesial Bulan Ini</div>
+      <div class="slide">Dapatkan Diskon Hingga 50%</div>
+      <div class="slide">Gratis Instalasi & Modem</div>
     </div>
-
-    <div class="slide" style="background-image: url('image/slide2.png');">
-      <div class="slide-content">
-      </div>
-    </div>
-
-    <div class="slide" style="background-image: url('image/slide3.png');">
-      <div class="slide-content">
-      </div>
-    </div>
-
+    <button class="slider-btn prev" onclick="prevSlide()">‹</button>
+    <button class="slider-btn next" onclick="nextSlide()">›</button>
   </div>
-
-  <!-- <button class="slider-btn prev" onclick="prevSlide()">‹</button>
-  <button class="slider-btn next" onclick="nextSlide()">›</button> -->
-</div>
-
 
   <!-- FILTER -->
   <div class="filter-btns text-center mt-4">
