@@ -493,7 +493,7 @@
             <li><a onclick="showPage('berita')"><i class="fas fa-newspaper"></i><span>Kelola Berita</span></a></li>
             <li><a onclick="showPage('faq')"><i class="fas fa-question-circle"></i><span>Kelola FAQ</span></a></li>
             <li><a onclick="showPage('promo')"><i class="fas fa-tags"></i><span>Kelola Promo</span></a></li>
-            <li><a onclick="showPage('transaksi')"><i class="fas fa-file-invoice"></i><span>Transaksi</span></a></li>
+            <!-- <li><a onclick="showPage('transaksi')"><i class="fas fa-file-invoice"></i><span>Transaksi</span></a></li> -->
         </ul>
     </div>
 
@@ -687,15 +687,91 @@
             </div>
         </div>
 
-        <!-- PROMO PAGE -->
-        <div id="page-promo" class="page-section">
-            <div class="content-card">
-                <h4><i class="fas fa-tags"></i>Kelola Promo</h4>
-                <p class="text-muted">Fitur ini akan segera tersedia.</p>
-            </div>
-        </div>
+       <!-- PROMO PAGE -->
+            <div id="page-promo" class="page-section">
+                <div class="content-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="mb-0"><i class="fas fa-tags"></i> Kelola Promo</h4>
+                       <button class="btn btn-primary" onclick="handleOpenPromoModal()">
+    <i class="fas fa-plus me-2"></i>Tambah Promo
+</button>
 
-        <!-- TRANSAKSI PAGE -->
+<script>
+// Fix untuk openPromoModal - Paste setelah button Tambah Promo
+function handleOpenPromoModal() {
+    console.log('🎯 handleOpenPromoModal called');
+    
+    // Reset form
+    const form = document.getElementById('form-promo');
+    if (form) {
+        form.reset();
+        console.log('✅ Form reset');
+    } else {
+        console.error('❌ form-promo not found');
+    }
+    
+    // Set default dates
+    const today = new Date().toISOString().split('T')[0];
+    const nextMonth = new Date();
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+    const endDateStr = nextMonth.toISOString().split('T')[0];
+    
+    const startInput = document.getElementById('promo_start_date');
+    const endInput = document.getElementById('promo_end_date');
+    
+    if (startInput) {
+        startInput.value = today;
+        console.log('✅ Start date set');
+    } else {
+        console.error('❌ promo_start_date not found');
+    }
+    
+    if (endInput) {
+        endInput.value = endDateStr;
+        console.log('✅ End date set');
+    } else {
+        console.error('❌ promo_end_date not found');
+    }
+    
+    // Buka modal
+    const modalElement = document.getElementById('modalTambahPromo');
+    if (modalElement) {
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+        console.log('✅ Modal opened');
+    } else {
+        console.error('❌ Modal modalTambahPromo not found!');
+        alert('Error: Modal tidak ditemukan! Periksa ID modal di HTML.');
+    }
+}
+
+// Alias untuk kompatibilitas
+window.openPromoModal = handleOpenPromoModal;
+</script>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="min-width: 200px;">Judul Promo</th>
+                                    <th style="min-width: 120px;">Region</th>
+                                    <th>Diskon</th>
+                                    <th style="min-width: 180px;">Periode</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="promo-table-body">
+                                <tr>
+                                    <td colspan="6" class="text-center">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        <!-- TRANSAKSI PAGE
         <div id="page-transaksi" class="page-section">
             <div class="content-card">
                 <h4><i class="fas fa-file-invoice"></i>Daftar Transaksi</h4>
@@ -725,7 +801,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- MODALS TETAP SAMA SEPERTI SEBELUMNYA -->
     <!-- Modal Tambah Slider -->
@@ -874,119 +950,354 @@ function addSlider() {
         </div>
     </div>
 
-    <!-- Modal Tambah Paket -->
-    <div class="modal fade" id="addPaketModal" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+  <!-- Modal Tambah Paket -->
+    <div class="modal fade" id="modalTambahPaket" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header bg-gradient-primary text-white">
                     <h5 class="modal-title"><i class="fas fa-plus-circle me-2"></i>Tambah Paket Internet Baru</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addPaketForm">
-                        <div class="mb-3">
-                            <label class="form-label"><i class="fas fa-wifi me-2 text-primary"></i>ID Paket</label>
-                            <input type="text" class="form-control" id="add-paket-id" placeholder="iconnet150" required>
-                            <small class="text-muted">Gunakan huruf kecil tanpa spasi, contoh: iconnet150</small>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label"><i class="fas fa-tag me-2 text-primary"></i>Nama Paket</label>
-                            <input type="text" class="form-control" id="add-paket-name" placeholder="ICONNET 150" required>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">Harga Sumatera</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">Rp</span>
-                                    <input type="number" class="form-control" id="add-paket-sumatera" placeholder="999000" required>
-                                </div>
+                    <form id="form-paket">
+                        <!-- Informasi Dasar -->
+                        <div class="card mb-3">
+                            <div class="card-header bg-light">
+                                <strong><i class="fas fa-info-circle me-2"></i>Informasi Dasar</strong>
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">Harga Jawa</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">Rp</span>
-                                    <input type="number" class="form-control" id="add-paket-jawa" placeholder="799000" required>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="fas fa-tag me-2 text-primary"></i>Nama Paket *</label>
+                                    <input type="text" class="form-control" id="nama" placeholder="ICONNET 150" required>
                                 </div>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">Harga Timur</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">Rp</span>
-                                    <input type="number" class="form-control" id="add-paket-timur" placeholder="899000" required>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="fas fa-tachometer-alt me-2 text-primary"></i>Kecepatan Internet</label>
+                                    <input type="text" class="form-control" id="kecepatan" placeholder="50 MBPS">
+                                    <small class="text-muted">Contoh: 50 MBPS, 100 MBPS</small>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="fas fa-toggle-on me-2 text-primary"></i>Status</label>
+                                    <select class="form-select" id="status">
+                                        <option value="1">✓ Aktif</option>
+                                        <option value="0">✗ Nonaktif</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Status</label>
-                            <select class="form-select" id="add-paket-status">
-                                <option value="true">✓ Aktif</option>
-                                <option value="false">✗ Nonaktif</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary" onclick="addPaket()">Simpan Data</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Modal Edit Paket -->
-    <div class="modal fade" id="editPaketModal" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-gradient-warning text-dark">
-                    <h5 class="modal-title"><i class="fas fa-edit me-2"></i>Edit Paket Internet</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editPaketForm">
-                        <input type="hidden" id="edit-paket-id">
+                        <!-- Tambahkan di Modal Tambah Paket, setelah field "Kecepatan" -->
                         <div class="mb-3">
-                            <label class="form-label">Nama Paket</label>
-                            <input type="text" class="form-control" id="edit-paket-name" required>
+                            <label class="form-label">
+                                <i class="fas fa-image me-2 text-primary"></i>Upload Gambar Paket
+                            </label>
+                            <input type="file" 
+                                class="form-control" 
+                                id="paket_image" 
+                                accept="image/png, image/jpeg, image/jpg, image/webp">
+                            <small class="text-muted">Format: PNG, JPG, WEBP (Max. 2MB)</small>
+                            
+                            <!-- Preview Image -->
+                            <div id="image-preview-paket" class="mt-3" style="display: none;">
+                                <img id="preview-img-paket" src="" alt="Preview" class="img-thumbnail" style="max-width: 200px;">
+                                <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removeImagePaket()">
+                                    <i class="fas fa-times"></i> Hapus Gambar
+                                </button>
+                            </div>
                         </div>
+
+                        <!-- Harga Regional -->
+                        <div class="card mb-3">
+                            <div class="card-header bg-light">
+                                <strong><i class="fas fa-money-bill-wave me-2"></i>Harga Berlangganan per Bulan</strong>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Harga Sumatera *</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp</span>
+                                            <input type="number" class="form-control" id="sumatera" placeholder="999000" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Harga Jawa *</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp</span>
+                                            <input type="number" class="form-control" id="jawa" placeholder="799000" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Harga Timur *</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp</span>
+                                            <input type="number" class="form-control" id="timur" placeholder="899000" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Biaya Instalasi - TANPA DEFAULT VALUE -->
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label class="form-label">Harga Sumatera</label>
+                                <label class="form-label">Instalasi Sumatera</label>
                                 <div class="input-group">
                                     <span class="input-group-text">Rp</span>
-                                    <input type="number" class="form-control" id="edit-paket-sumatera" required>
+                                    <input type="number" class="form-control" id="instalasi_sumatera" placeholder="0">
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label class="form-label">Harga Jawa</label>
+                                <label class="form-label">Instalasi Jawa</label>
                                 <div class="input-group">
                                     <span class="input-group-text">Rp</span>
-                                    <input type="number" class="form-control" id="edit-paket-jawa" required>
+                                    <input type="number" class="form-control" id="instalasi_jawa" placeholder="0">
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label class="form-label">Harga Timur</label>
+                                <label class="form-label">Instalasi Timur</label>
                                 <div class="input-group">
                                     <span class="input-group-text">Rp</span>
-                                    <input type="number" class="form-control" id="edit-paket-timur" required>
+                                    <input type="number" class="form-control" id="instalasi_timur" placeholder="0">
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Status</label>
-                            <select class="form-select" id="edit-paket-status">
-                                <option value="true">✓ Aktif</option>
-                                <option value="false">✗ Nonaktif</option>
-                            </select>
+
+                        <!-- Perangkat Ideal - TANPA DEFAULT VALUE -->
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Total Perangkat</label>
+                                <input type="number" class="form-control" id="max_perangkat" placeholder="0" min="0">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Jumlah Laptop</label>
+                                <input type="number" class="form-control" id="max_laptop" placeholder="0" min="0">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Jumlah Handphone</label>
+                                <input type="number" class="form-control" id="max_smartphone" placeholder="0" min="0">
+                            </div>
+                        </div>
+                        <!-- Fitur Tambahan -->
+                        <div class="card mb-3">
+                            <div class="card-header bg-light">
+                                <strong><i class="fas fa-star me-2"></i>Fitur & Keunggulan</strong>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">TV 4K</label>
+                                    <input type="text" class="form-control" id="tv_4k" placeholder="Contoh: Streaming 4K Lancar">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Streaming</label>
+                                    <input type="text" class="form-control" id="streaming" placeholder="Contoh: Netflix, Disney+, YouTube">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Gaming</label>
+                                    <input type="text" class="form-control" id="gaming" placeholder="Contoh: Mobile Legends, PUBG">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Fitur Lainnya</label>
+                                    <textarea class="form-control" id="features" rows="3" placeholder="Fitur tambahan lainnya (pisahkan dengan enter)"></textarea>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-warning" onclick="savePaket()">Simpan Perubahan</button>
+                    <button type="button" class="btn btn-primary" onclick="addPaket()">
+                        <i class="fas fa-save me-2"></i>Simpan Data
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+   <!-- Modal Edit Paket -->
+<div class="modal fade" id="modalEditPaket" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-warning text-dark">
+                <h5 class="modal-title"><i class="fas fa-edit me-2"></i>Edit Paket Internet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-edit-paket">
+                    <input type="hidden" id="edit_id">
+                    
+                    <!-- Informasi Dasar -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-info-circle me-2"></i>Informasi Dasar</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Nama Paket *</label>
+                                <input type="text" class="form-control" id="edit_nama" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Kecepatan Internet</label>
+                                <input type="text" class="form-control" id="edit_kecepatan" placeholder="50 MBPS">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" id="edit_status">
+                                    <option value="1">✓ Aktif</option>
+                                    <option value="0">✗ Nonaktif</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Di Modal Edit Paket, setelah field "Kecepatan" -->
+                    <div class="mb-3">
+                        <label class="form-label">Upload Gambar Paket (Opsional)</label>
+                        
+                        <!-- Current Image -->
+                        <div id="current-image-paket" style="display: none;" class="mb-2">
+                            <p class="text-muted small">Gambar saat ini:</p>
+                            <img id="current-img-paket" src="" alt="Current" class="img-thumbnail" style="max-width: 150px;">
+                        </div>
+                        
+                        <!-- Upload New -->
+                        <input type="file" 
+                            class="form-control" 
+                            id="edit_paket_image" 
+                            accept="image/png, image/jpeg, image/jpg, image/webp">
+                        <small class="text-muted">Kosongkan jika tidak ingin mengubah gambar</small>
+                        
+                        <!-- Preview New Image -->
+                        <div id="edit-image-preview-paket" class="mt-3" style="display: none;">
+                            <img id="edit-preview-img-paket" src="" alt="Preview" class="img-thumbnail" style="max-width: 200px;">
+                            <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removeEditImagePaket()">
+                                <i class="fas fa-times"></i> Hapus
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Harga Regional -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-money-bill-wave me-2"></i>Harga Berlangganan</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Harga Sumatera *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_sumatera" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Harga Jawa *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_jawa" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Harga Timur *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_timur" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Biaya Instalasi -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-tools me-2"></i>Biaya Instalasi</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Instalasi Sumatera</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_instalasi_sumatera">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Instalasi Jawa</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_instalasi_jawa">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Instalasi Timur</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_instalasi_timur">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Perangkat Ideal -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-laptop me-2"></i>Perangkat Ideal</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Total Perangkat</label>
+                                    <input type="number" class="form-control" id="edit_max_perangkat" min="0">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Jumlah Laptop</label>
+                                    <input type="number" class="form-control" id="edit_max_laptop" min="0">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Jumlah Handphone</label>
+                                    <input type="number" class="form-control" id="edit_max_smartphone" min="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fitur Tambahan -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-star me-2"></i>Fitur & Keunggulan</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">TV 4K</label>
+                                <input type="text" class="form-control" id="edit_tv_4k">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Streaming</label>
+                                <input type="text" class="form-control" id="edit_streaming">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Gaming</label>
+                                <input type="text" class="form-control" id="edit_gaming">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Fitur Lainnya</label>
+                                <textarea class="form-control" id="edit_features" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-warning" onclick="updatePaket()">
+                    <i class="fas fa-save me-2"></i>Simpan Perubahan
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
     <!-- Modal Tambah Berita -->
     <div class="modal fade" id="addBeritaModal" tabindex="-1">
@@ -1329,5 +1640,267 @@ function addSlider() {
             reader.readAsDataURL(file);
         }
     </script>
+
+    <!-- Modal Tambah Promo -->
+<!-- Modal Tambah Promo -->
+<div class="modal fade" id="modalTambahPromo" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-plus-circle me-2"></i>Tambah Promo Baru
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-promo">
+                    <!-- Informasi Dasar -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-info-circle me-2"></i>Informasi Promo</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-heading me-2 text-primary"></i>Judul Promo *
+                                </label>
+                                <!-- PASTIKAN ID INI: promo_title -->
+                                <input type="text" class="form-control" id="promo_title" 
+                                       placeholder="Contoh: Diskon 50% Paket Internet Fiber" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-align-left me-2 text-primary"></i>Deskripsi *
+                                </label>
+                                <!-- PASTIKAN ID INI: promo_description -->
+                                <textarea class="form-control" id="promo_description" rows="3" 
+                                          placeholder="Jelaskan detail promo..." required></textarea>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-map-marker-alt me-2 text-primary"></i>Region *
+                                    </label>
+                                    <!-- PASTIKAN ID INI: promo_region -->
+                                    <select class="form-select" id="promo_region" required>
+                                        <option value="">-- Pilih Region --</option>
+                                        <option value="all">Semua Wilayah</option>
+                                        <option value="jawa">Jawa & Bali</option>
+                                        <option value="sumatera">Sumatera & Kalimantan</option>
+                                        <option value="timur">Indonesia Timur</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-percent me-2 text-primary"></i>Diskon (%)
+                                    </label>
+                                    <!-- PASTIKAN ID INI: promo_discount -->
+                                    <input type="number" class="form-control" id="promo_discount" 
+                                           placeholder="0" min="0" max="100">
+                                    <small class="text-muted">Kosongkan jika tidak ada diskon persentase</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upload Gambar -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-image me-2"></i>Gambar Promo</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Upload Gambar Promo</label>
+                                <!-- PASTIKAN ID INI: promo_image -->
+                                <input type="file" class="form-control" id="promo_image" 
+                                       accept="image/png, image/jpeg, image/jpg, image/webp">
+                                <small class="text-muted">Format: PNG, JPG, WEBP (Max. 2MB)</small>
+                                
+                                <!-- Preview Image -->
+                                <div id="image-preview-promo" class="mt-3" style="display: none;">
+                                    <img id="preview-img-promo" src="" alt="Preview" 
+                                         class="img-thumbnail" style="max-width: 200px;">
+                                    <button type="button" class="btn btn-sm btn-danger mt-2" 
+                                            onclick="removeImagePromo()">
+                                        <i class="fas fa-times"></i> Hapus Gambar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Periode Promo -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-calendar-alt me-2"></i>Periode Promo</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Tanggal Mulai *</label>
+                                    <!-- PASTIKAN ID INI: promo_start_date -->
+                                    <input type="date" class="form-control" id="promo_start_date" required>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Tanggal Berakhir *</label>
+                                    <!-- PASTIKAN ID INI: promo_end_date -->
+                                    <input type="date" class="form-control" id="promo_end_date" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-toggle-on me-2"></i>Status Publikasi</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <!-- PASTIKAN ID INI: promo_status -->
+                                <select class="form-select" id="promo_status">
+                                    <option value="1">✓ Aktif (Tampil di Website)</option>
+                                    <option value="0">✗ Nonaktif (Tersembunyi)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" onclick="addPromo()">
+                    <i class="fas fa-save me-2"></i>Simpan Promo
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit Promo -->
+<div class="modal fade" id="modalEditPromo" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-warning text-dark">
+                <h5 class="modal-title">
+                    <i class="fas fa-edit me-2"></i>Edit Promo
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-edit-promo">
+                    <input type="hidden" id="edit_promo_id">
+                    
+                    <!-- Informasi Dasar -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-info-circle me-2"></i>Informasi Promo</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Judul Promo *</label>
+                                <input type="text" class="form-control" id="edit_promo_title" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Deskripsi *</label>
+                                <textarea class="form-control" id="edit_promo_description" 
+                                          rows="3" required></textarea>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Region *</label>
+                                    <select class="form-select" id="edit_promo_region" required>
+                                        <option value="all">Semua Wilayah</option>
+                                        <option value="jawa">Jawa & Bali</option>
+                                        <option value="sumatera">Sumatera & Kalimantan</option>
+                                        <option value="timur">Indonesia Timur</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Diskon (%)</label>
+                                    <input type="number" class="form-control" id="edit_promo_discount" 
+                                           min="0" max="100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gambar -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-image me-2"></i>Gambar Promo</strong>
+                        </div>
+                        <div class="card-body">
+                            <!-- Current Image -->
+                            <div id="edit-current-image-promo" style="display: none;" class="mb-2">
+                                <p class="text-muted small">Gambar saat ini:</p>
+                                <img id="edit-current-img-promo" src="" alt="Current" 
+                                     class="img-thumbnail" style="max-width: 150px;">
+                            </div>
+                            
+                            <!-- Upload New -->
+                            <div class="mb-3">
+                                <label class="form-label">Upload Gambar Baru (Opsional)</label>
+                                <input type="file" class="form-control" id="edit_promo_image" 
+                                       accept="image/png, image/jpeg, image/jpg, image/webp">
+                                <small class="text-muted">Kosongkan jika tidak ingin mengubah gambar</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Periode Promo -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-calendar-alt me-2"></i>Periode Promo</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Tanggal Mulai *</label>
+                                    <input type="date" class="form-control" id="edit_promo_start_date" required>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Tanggal Berakhir *</label>
+                                    <input type="date" class="form-control" id="edit_promo_end_date" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-toggle-on me-2"></i>Status Publikasi</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" id="edit_promo_status">
+                                    <option value="1">✓ Aktif</option>
+                                    <option value="0">✗ Nonaktif</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-warning" onclick="updatePromo()">
+                    <i class="fas fa-save me-2"></i>Simpan Perubahan
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

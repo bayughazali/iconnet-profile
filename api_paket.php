@@ -1,245 +1,299 @@
 <?php
 /**
- * api_paket.php - API untuk mengelola data paket ICONNET
- * Path: ROOT/api_paket.php (di folder yang sama dengan index.php)
+ * api_paket.php - VERSI LENGKAP FINAL
  */
 
-// Set headers
-header("Content-Type: application/json; charset=utf-8");
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-header('Access-Control-Allow-Headers: Content-Type');
+@ini_set('display_errors', '0');
+@error_reporting(0);
 
-// Include config
-require_once __DIR__ . "/config.php";
+function sendJSON($data, $code = 200) {
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
+    
+    http_response_code($code);
+    header("Content-Type: application/json; charset=utf-8");
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+    header('Access-Control-Allow-Headers: Content-Type');
+    
+    echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit;
+}
 
-$method = $_SERVER['REQUEST_METHOD'];
+function toInt($value, $default = 0) {
+    if (is_numeric($value)) {
+        return (int)$value;
+    }
+    return $default;
+}
 
-// ========================================
-// GET - Ambil semua paket aktif
-// ========================================
-if ($method === 'GET') {
-    try {
-        // PERBAIKAN: Gunakan is_active bukan status
-        $sql = "SELECT 
-            id,
-            name,
-            kecepatan,
-            max_perangkat,
-            max_laptop,
-            max_smartphone,
-            harga_sumatera,
-            harga_jawa,
-            harga_timur,
-            instalasi_sumatera,
-            instalasi_jawa,
-            instalasi_timur,
-            tv_4k,
-            streaming,
-            gaming,
-            features,
-            is_active
-        FROM paket 
-        WHERE is_active = 1 
-        ORDER BY id ASC";
+function cleanString($value) {
+    return trim(strval($value));
+}
+
+try {
+    if (!file_exists(__DIR__ . "/config.php")) {
+        sendJSON(['success' => false, 'message' => 'config.php not found'], 500);
+    }
+    
+    require_once __DIR__ . "/config.php";
+    
+    if (!isset($conn) || $conn->connect_error) {
+        sendJSON(['success' => false, 'message' => 'Database connection failed'], 500);
+    }
+    
+    $method = $_SERVER['REQUEST_METHOD'];
+    
+    // ==================== GET ====================
+    if ($method === 'GET') {
+        $sql = "SELECT id, name, image_path, kecepatan, max_perangkat, max_laptop, max_smartphone,
+                harga_sumatera, harga_jawa, harga_timur,
+                instalasi_sumatera, instalasi_jawa, instalasi_timur,
+                tv_4k, streaming, gaming, features, is_active
+                FROM paket ORDER BY id ASC";
         
         $result = $conn->query($sql);
         
         if (!$result) {
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'error' => 'Query failed: ' . $conn->error,
-                'sql' => $sql
-            ]);
-            exit;
+            sendJSON(['success' => false, 'message' => 'Query failed: ' . $conn->error], 500);
         }
         
-        // Ambil semua data
         $paket = [];
         while ($row = $result->fetch_assoc()) {
-            // Konversi tipe data yang diperlukan
             $paket[] = [
-                'id' => (int)$row['id'],
-                'name' => $row['name'],
-                'kecepatan' => $row['kecepatan'] ?: 'High Speed',
-                'max_perangkat' => (int)($row['max_perangkat'] ?: 4),
-                'max_laptop' => (int)($row['max_laptop'] ?: 2),
-                'max_smartphone' => (int)($row['max_smartphone'] ?: 2),
-                'harga_sumatera' => (int)$row['harga_sumatera'],
-                'harga_jawa' => (int)$row['harga_jawa'],
-                'harga_timur' => (int)$row['harga_timur'],
-                'instalasi_sumatera' => (int)($row['instalasi_sumatera'] ?: 345000),
-                'instalasi_jawa' => (int)($row['instalasi_jawa'] ?: 150000),
-                'instalasi_timur' => (int)($row['instalasi_timur'] ?: 200000),
-                'tv_4k' => $row['tv_4k'] ?: '',
-                'streaming' => $row['streaming'] ?: '',
-                'gaming' => $row['gaming'] ?: '',
-                'features' => $row['features'] ?: '',
-                'status' => (int)$row['is_active'] // Map is_active ke status
+                'id' => toInt($row['id']),
+                'name' => cleanString($row['name']) ?: 'Unnamed',
+                'image_path' => cleanString($row['image_path']),
+                'kecepatan' => cleanString($row['kecepatan']) ?: 'High Speed',
+                'max_perangkat' => toInt($row['max_perangkat']),
+                'max_laptop' => toInt($row['max_laptop']),
+                'max_smartphone' => toInt($row['max_smartphone']),
+                'harga_sumatera' => toInt($row['harga_sumatera']),
+                'harga_jawa' => toInt($row['harga_jawa']),
+                'harga_timur' => toInt($row['harga_timur']),
+                'instalasi_sumatera' => toInt($row['instalasi_sumatera']),
+                'instalasi_jawa' => toInt($row['instalasi_jawa']),
+                'instalasi_timur' => toInt($row['instalasi_timur']),
+                'tv_4k' => cleanString($row['tv_4k']),
+                'streaming' => cleanString($row['streaming']),
+                'gaming' => cleanString($row['gaming']),
+                'features' => cleanString($row['features']),
+                'status' => toInt($row['is_active'])
             ];
         }
         
-        // Return data sebagai JSON array
-        http_response_code(200);
-        echo json_encode($paket, JSON_UNESCAPED_UNICODE);
-        
-    } catch (Exception $e) {
-        http_response_code(500);
-        echo json_encode([
-            'success' => false,
-            'error' => $e->getMessage()
-        ]);
+        sendJSON($paket, 200);
     }
-}
-
-// ========================================
-// POST - Tambah paket baru
-// ========================================
+    
+    // ==================== POST (INSERT) ====================
 if ($method === 'POST') {
-    try {
-        $data = json_decode(file_get_contents("php://input"), true);
-        
-        if (!$data) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Invalid JSON data'
-            ]);
-            exit;
+    $imagePath = '';
+    
+    // Handle upload gambar
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = __DIR__ . '/uploads/paket/';
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
         }
         
-        $stmt = $conn->prepare(
-            "INSERT INTO paket (name, kecepatan, max_perangkat, max_laptop, max_smartphone, 
-            harga_sumatera, harga_jawa, harga_timur, 
-            instalasi_sumatera, instalasi_jawa, instalasi_timur, 
-            tv_4k, streaming, gaming, features, is_active)
-             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-        );
+        $fileExtension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+        
+        if (!in_array($fileExtension, $allowedExtensions)) {
+            sendJSON(['success' => false, 'message' => 'Format file harus JPG, PNG, atau WEBP'], 400);
+        }
+        
+        if ($_FILES['image']['size'] > 2 * 1024 * 1024) {
+            sendJSON(['success' => false, 'message' => 'Ukuran file maksimal 2MB'], 400);
+        }
+        
+        $newFileName = 'paket_' . time() . '_' . uniqid() . '.' . $fileExtension;
+        $uploadPath = $uploadDir . $newFileName;
+        
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
+            $imagePath = 'uploads/paket/' . $newFileName;
+        } else {
+            sendJSON(['success' => false, 'message' => 'Gagal mengupload gambar'], 500);
+        }
+    }
+    
+    // Ambil data dari POST
+    $nama = cleanString($_POST['nama'] ?? '');
+    $kecepatan = cleanString($_POST['kecepatan'] ?? 'High Speed');
+    $max_perangkat = toInt($_POST['max_perangkat'] ?? 0);
+    $max_laptop = toInt($_POST['max_laptop'] ?? 0);
+    $max_smartphone = toInt($_POST['max_smartphone'] ?? 0);
+    $sumatera = toInt($_POST['sumatera'] ?? 0);
+    $jawa = toInt($_POST['jawa'] ?? 0);
+    $timur = toInt($_POST['timur'] ?? 0);
+    $instalasi_sumatera = toInt($_POST['instalasi_sumatera'] ?? 0);
+    $instalasi_jawa = toInt($_POST['instalasi_jawa'] ?? 0);
+    $instalasi_timur = toInt($_POST['instalasi_timur'] ?? 0);
+    $tv_4k = cleanString($_POST['tv_4k'] ?? '');
+    $streaming = cleanString($_POST['streaming'] ?? '');
+    $gaming = cleanString($_POST['gaming'] ?? '');
+    $features = cleanString($_POST['features'] ?? '');
+    $status = toInt($_POST['status'] ?? 1);
+    
+    // Validasi
+    if (empty($nama)) {
+        sendJSON(['success' => false, 'message' => 'Nama paket wajib diisi'], 400);
+    }
+    
+    // ✅ GENERATE ID MANUAL: Ambil ID terbesar + 1
+    $result = $conn->query("SELECT MAX(id) as max_id FROM paket");
+    $row = $result->fetch_assoc();
+    $newId = ($row['max_id'] ?? 0) + 1;
+    
+    // Query INSERT dengan ID manual
+    $sql = "INSERT INTO paket (
+                id, name, image_path, kecepatan, 
+                max_perangkat, max_laptop, max_smartphone,
+                harga_sumatera, harga_jawa, harga_timur,
+                instalasi_sumatera, instalasi_jawa, instalasi_timur,
+                tv_4k, streaming, gaming, features, is_active
+            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    
+    $stmt = $conn->prepare($sql);
+    
+    if (!$stmt) {
+        sendJSON(['success' => false, 'message' => 'Prepare failed: ' . $conn->error], 500);
+    }
+    
+    // Bind 18 parameter (tambah 1 untuk id)
+    $stmt->bind_param(
+        "isssiiiiiiiiiisssi",
+        $newId,           // 1 - id (int)
+        $nama,            // 2 - string
+        $imagePath,       // 3 - string
+        $kecepatan,       // 4 - string
+        $max_perangkat,   // 5 - int
+        $max_laptop,      // 6 - int
+        $max_smartphone,  // 7 - int
+        $sumatera,        // 8 - int
+        $jawa,            // 9 - int
+        $timur,           // 10 - int
+        $instalasi_sumatera, // 11 - int
+        $instalasi_jawa,     // 12 - int
+        $instalasi_timur,    // 13 - int
+        $tv_4k,           // 14 - string
+        $streaming,       // 15 - string
+        $gaming,          // 16 - string
+        $features,        // 17 - string
+        $status           // 18 - int
+    );
+    
+    if ($stmt->execute()) {
+        $stmt->close();
+        $conn->close();
+        sendJSON(['success' => true, 'message' => 'Paket berhasil ditambahkan', 'id' => $newId], 201);
+    } else {
+        $error = $stmt->error;
+        $stmt->close();
+        sendJSON(['success' => false, 'message' => 'Insert failed: ' . $error], 500);
+    }
+}
+    
+    // ==================== PUT (UPDATE) ====================
+    if ($method === 'PUT') {
+        $rawInput = file_get_contents("php://input");
+        $data = json_decode($rawInput, true);
+        
+        if (!$data || !isset($data['id'])) {
+            sendJSON(['success' => false, 'message' => 'ID tidak valid'], 400);
+        }
+        
+        $id = toInt($data['id']);
+        $nama = cleanString($data['nama'] ?? '');
+        $kecepatan = cleanString($data['kecepatan'] ?? 'High Speed');
+        $max_perangkat = toInt($data['max_perangkat'] ?? 0);
+        $max_laptop = toInt($data['max_laptop'] ?? 0);
+        $max_smartphone = toInt($data['max_smartphone'] ?? 0);
+        $sumatera = toInt($data['sumatera'] ?? 0);
+        $jawa = toInt($data['jawa'] ?? 0);
+        $timur = toInt($data['timur'] ?? 0);
+        $instalasi_sumatera = toInt($data['instalasi_sumatera'] ?? 0);
+        $instalasi_jawa = toInt($data['instalasi_jawa'] ?? 0);
+        $instalasi_timur = toInt($data['instalasi_timur'] ?? 0);
+        $tv_4k = cleanString($data['tv_4k'] ?? '');
+        $streaming = cleanString($data['streaming'] ?? '');
+        $gaming = cleanString($data['gaming'] ?? '');
+        $features = cleanString($data['features'] ?? '');
+        $status = toInt($data['status'] ?? 1);
+        
+        if (empty($nama)) {
+            sendJSON(['success' => false, 'message' => 'Nama paket wajib diisi'], 400);
+        }
+        
+        $sql = "UPDATE paket SET 
+                name=?, kecepatan=?, 
+                max_perangkat=?, max_laptop=?, max_smartphone=?,
+                harga_sumatera=?, harga_jawa=?, harga_timur=?,
+                instalasi_sumatera=?, instalasi_jawa=?, instalasi_timur=?,
+                tv_4k=?, streaming=?, gaming=?, features=?, is_active=?
+                WHERE id=?";
+        
+        $stmt = $conn->prepare($sql);
         
         if (!$stmt) {
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Prepare failed: ' . $conn->error
-            ]);
-            exit;
+            sendJSON(['success' => false, 'message' => 'Prepare failed: ' . $conn->error], 500);
         }
         
         $stmt->bind_param(
-            "ssiiiiiiiiiisssi",
-            $data['nama'],
-            $data['kecepatan'],
-            $data['max_perangkat'],
-            $data['max_laptop'],
-            $data['max_smartphone'],
-            $data['sumatera'],
-            $data['jawa'],
-            $data['timur'],
-            $data['instalasi_sumatera'],
-            $data['instalasi_jawa'],
-            $data['instalasi_timur'],
-            $data['tv_4k'],
-            $data['streaming'],
-            $data['gaming'],
-            $data['features'],
-            $data['status']
+            "ssiiiiiiiiiisssii",
+            $nama, $kecepatan,
+            $max_perangkat, $max_laptop, $max_smartphone,
+            $sumatera, $jawa, $timur,
+            $instalasi_sumatera, $instalasi_jawa, $instalasi_timur,
+            $tv_4k, $streaming, $gaming, $features, $status,
+            $id
         );
         
         if ($stmt->execute()) {
-            http_response_code(201);
-            echo json_encode([
-                'success' => true, 
-                'message' => 'Paket berhasil ditambahkan',
-                'id' => $conn->insert_id
-            ]);
+            $stmt->close();
+            $conn->close();
+            sendJSON(['success' => true, 'message' => 'Paket berhasil diupdate'], 200);
         } else {
-            http_response_code(500);
-            echo json_encode([
-                'success' => false, 
-                'message' => 'Execute failed: ' . $stmt->error
-            ]);
+            $error = $stmt->error;
+            $stmt->close();
+            sendJSON(['success' => false, 'message' => 'Update failed: ' . $error], 500);
         }
-        $stmt->close();
-        
-    } catch (Exception $e) {
-        http_response_code(500);
-        echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
-        ]);
     }
-}
-
-// ========================================
-// PUT - Update paket
-// ========================================
-if ($method === 'PUT') {
-    try {
-        $data = json_decode(file_get_contents("php://input"), true);
+    
+    // ==================== DELETE ====================
+    if ($method === 'DELETE') {
+        $rawInput = file_get_contents("php://input");
+        $data = json_decode($rawInput, true);
         
-        $stmt = $conn->prepare(
-            "UPDATE paket SET name=?, kecepatan=?, 
-            harga_sumatera=?, harga_jawa=?, harga_timur=?, is_active=?
-            WHERE id=?"
-        );
-        
-        $stmt->bind_param(
-            "ssiiii",
-            $data['nama'],
-            $data['kecepatan'],
-            $data['sumatera'],
-            $data['jawa'],
-            $data['timur'],
-            $data['status'],
-            $data['id']
-        );
-        
-        if ($stmt->execute()) {
-            http_response_code(200);
-            echo json_encode(['success' => true, 'message' => 'Paket berhasil diupdate']);
-        } else {
-            http_response_code(500);
-            echo json_encode(['success' => false, 'message' => 'Gagal mengupdate paket: ' . $stmt->error]);
+        if (!$data || !isset($data['id'])) {
+            sendJSON(['success' => false, 'message' => 'ID tidak valid'], 400);
         }
-        $stmt->close();
         
-    } catch (Exception $e) {
-        http_response_code(500);
-        echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
-        ]);
-    }
-}
-
-// ========================================
-// DELETE - Hapus paket
-// ========================================
-if ($method === 'DELETE') {
-    try {
-        $data = json_decode(file_get_contents("php://input"), true);
+        $id = toInt($data['id']);
         
         $stmt = $conn->prepare("DELETE FROM paket WHERE id=?");
-        $stmt->bind_param("i", $data['id']);
+        
+        if (!$stmt) {
+            sendJSON(['success' => false, 'message' => 'Prepare failed: ' . $conn->error], 500);
+        }
+        
+        $stmt->bind_param("i", $id);
         
         if ($stmt->execute()) {
-            http_response_code(200);
-            echo json_encode(['success' => true, 'message' => 'Paket berhasil dihapus']);
+            $stmt->close();
+            $conn->close();
+            sendJSON(['success' => true, 'message' => 'Paket berhasil dihapus'], 200);
         } else {
-            http_response_code(500);
-            echo json_encode(['success' => false, 'message' => 'Gagal menghapus paket: ' . $stmt->error]);
+            $error = $stmt->error;
+            $stmt->close();
+            sendJSON(['success' => false, 'message' => 'Delete failed: ' . $error], 500);
         }
-        $stmt->close();
-        
-    } catch (Exception $e) {
-        http_response_code(500);
-        echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
-        ]);
     }
+    
+    sendJSON(['success' => false, 'message' => 'Invalid request method'], 400);
+    
+} catch (Exception $e) {
+    sendJSON(['success' => false, 'message' => $e->getMessage()], 500);
 }
-
-$conn->close();
 ?>

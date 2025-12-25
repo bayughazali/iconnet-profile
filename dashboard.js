@@ -336,42 +336,407 @@ function deletePaket(id) {
     }
 }
 
+// ==================== PAKET MANAGEMENT - FULLY FIXED ====================
+
+// ==================== PAKET MANAGEMENT - FULLY FIXED ====================
+
 function openPaketModal() {
-    // Reset form
-    document.getElementById('addPaketForm').reset();
+    console.log('Opening paket modal...');
+    
+    // Reset form - TANPA DEFAULT VALUE untuk instalasi & perangkat
+    const form = document.getElementById('form-paket');
+    if (form) {
+        form.reset();
+    }
+    
+    // Set default HANYA untuk status
+    const statusElement = document.getElementById('status');
+    if (statusElement) {
+        statusElement.value = '1';
+    }
     
     // Buka modal
-    const modal = new bootstrap.Modal(document.getElementById('addPaketModal'));
-    modal.show();
+    // KODE BARU YANG BENAR
+const modalElement = document.getElementById('modalTambahPromo');
+    if (modalElement) {
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+        console.log('✅ Modal opened');
+    } else {
+        console.error('❌ Modal modalTambahPaket not found!');
+        alert('Error: Modal tidak ditemukan!');
+    }
 }
 
 function addPaket() {
-    const formData = new FormData();
-    formData.append('id', document.getElementById('add-paket-id').value);
-    formData.append('name', document.getElementById('add-paket-name').value);
-    formData.append('harga_sumatera', document.getElementById('add-paket-sumatera').value);
-    formData.append('harga_jawa', document.getElementById('add-paket-jawa').value);
-    formData.append('harga_timur', document.getElementById('add-paket-timur').value);
-    formData.append('is_active', document.getElementById('add-paket-status').value === 'true' ? 1 : 0);
+    console.log('🚀 addPaket() dipanggil');
     
-    fetch(`${API_URL}?action=insert&table=paket`, {
+    const getValue = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : '';
+    };
+    
+    const nama = getValue('nama');
+    const kecepatan = getValue('kecepatan');
+    const max_perangkat = getValue('max_perangkat');
+    const max_laptop = getValue('max_laptop');
+    const max_smartphone = getValue('max_smartphone');
+    const sumatera = getValue('sumatera');
+    const jawa = getValue('jawa');
+    const timur = getValue('timur');
+    const instalasi_sumatera = getValue('instalasi_sumatera');
+    const instalasi_jawa = getValue('instalasi_jawa');
+    const instalasi_timur = getValue('instalasi_timur');
+    const tv_4k = getValue('tv_4k');
+    const streaming = getValue('streaming');
+    const gaming = getValue('gaming');
+    const features = getValue('features');
+    const status = getValue('status') || '1';
+    
+    // Ambil file gambar
+    const imageFile = document.getElementById('paket_image')?.files[0];
+
+    // Validasi - PERBAIKAN: Cek string kosong
+    if (!nama || sumatera === '' || jawa === '' || timur === '') {
+        alert('❌ Mohon lengkapi field wajib:\n- Nama Paket\n- Harga Sumatera\n- Harga Jawa\n- Harga Timur');
+        return;
+    }
+
+    if (instalasi_sumatera === '' || instalasi_jawa === '' || instalasi_timur === '') {
+        alert('❌ Biaya instalasi wajib diisi untuk semua wilayah!\n(Boleh diisi 0 jika gratis)');
+        return;
+    }
+
+    if (max_perangkat === '' || max_laptop === '' || max_smartphone === '') {
+        alert('❌ Data perangkat ideal wajib diisi semua!\n(Boleh diisi 0 jika tidak ada)');
+        return;
+    }
+
+    // GUNAKAN FormData untuk upload file
+    const formData = new FormData();
+    formData.append('nama', nama);
+    formData.append('kecepatan', kecepatan);
+    formData.append('max_perangkat', parseInt(max_perangkat) || 0);
+    formData.append('max_laptop', parseInt(max_laptop) || 0);
+    formData.append('max_smartphone', parseInt(max_smartphone) || 0);
+    formData.append('sumatera', parseInt(sumatera) || 0);
+    formData.append('jawa', parseInt(jawa) || 0);
+    formData.append('timur', parseInt(timur) || 0);
+    formData.append('instalasi_sumatera', parseInt(instalasi_sumatera) || 0);
+    formData.append('instalasi_jawa', parseInt(instalasi_jawa) || 0);
+    formData.append('instalasi_timur', parseInt(instalasi_timur) || 0);
+    formData.append('tv_4k', tv_4k);
+    formData.append('streaming', streaming);
+    formData.append('gaming', gaming);
+    formData.append('features', features);
+    formData.append('status', parseInt(status) || 1);
+    
+    // Tambahkan file jika ada
+    if (imageFile) {
+        formData.append('image', imageFile);
+    }
+
+    console.log('📤 Mengirim data dengan gambar ke api_paket.php');
+
+    // KIRIM DENGAN FormData (BUKAN JSON)
+    fetch('api_paket.php', {
         method: 'POST',
-        body: formData
+        body: formData  // JANGAN gunakan headers Content-Type untuk FormData
     })
-    .then(response => response.json())
+    .then(response => {
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            return response.text().then(text => {
+                console.error('❌ Response bukan JSON:', text);
+                throw new Error('Server error');
+            });
+        }
+        return response.json();
+    })
     .then(data => {
-        showToast(data.message);
         if (data.success) {
-            bootstrap.Modal.getInstance(document.getElementById('addPaketModal')).hide();
-            loadPaketTable();
-            loadDashboardStats();
+            alert('✅ Paket berhasil ditambahkan!');
+            
+            const modalElement = document.getElementById('modalTambahPaket');
+            if (modalElement) {
+                const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                if (modalInstance) modalInstance.hide();
+            }
+            
+            const form = document.getElementById('form-paket');
+            if (form) form.reset();
+            
+            removeImagePaket();
+            
+            if (typeof loadPaket === 'function') {
+                loadPaket();
+            }
+            
+            if (typeof loadDashboardStats === 'function') {
+                loadDashboardStats();
+            }
+        } else {
+            alert('❌ Gagal menambahkan paket:\n\n' + (data.message || 'Unknown error'));
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        showToast('Gagal menambahkan data', 'error');
+        console.error('❌ Error:', error);
+        alert('❌ Terjadi kesalahan:\n\n' + error.message);
     });
 }
+
+function editPaket(id) {
+    console.log('✏️ Edit paket ID:', id);
+    
+    // Fetch data paket dari API (GET method)
+    fetch(`api_paket.php`, {
+        method: 'GET'
+    })
+    .then(response => {
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            return response.text().then(text => {
+                console.error('❌ Response bukan JSON:', text);
+                throw new Error('Server error. Periksa api_paket.php');
+            });
+        }
+        return response.json();
+    })
+    .then(paketList => {
+        console.log('📥 Data semua paket:', paketList);
+        
+        // Cari paket berdasarkan ID
+        const paket = paketList.find(p => p.id == id);
+        
+        if (!paket) {
+            alert('❌ Paket dengan ID ' + id + ' tidak ditemukan!');
+            return;
+        }
+        
+        console.log('📋 Data paket yang dipilih:', paket);
+        
+        // Isi form edit - SESUAI dengan ID di HTML
+        const setValue = (fieldId, value) => {
+            const el = document.getElementById(fieldId);
+            if (el) {
+                el.value = value || '';
+            } else {
+                console.warn(`⚠️ Element ${fieldId} tidak ditemukan`);
+            }
+        };
+        
+        setValue('edit_id', paket.id);
+        setValue('edit_nama', paket.name);
+        setValue('edit_kecepatan', paket.kecepatan);
+        setValue('edit_sumatera', paket.harga_sumatera);
+        setValue('edit_jawa', paket.harga_jawa);
+        setValue('edit_timur', paket.harga_timur);
+        setValue('edit_instalasi_sumatera', paket.instalasi_sumatera);
+        setValue('edit_instalasi_jawa', paket.instalasi_jawa);
+        setValue('edit_instalasi_timur', paket.instalasi_timur);
+        setValue('edit_max_perangkat', paket.max_perangkat);
+        setValue('edit_max_laptop', paket.max_laptop);
+        setValue('edit_max_smartphone', paket.max_smartphone);
+        setValue('edit_tv_4k', paket.tv_4k);
+        setValue('edit_streaming', paket.streaming);
+        setValue('edit_gaming', paket.gaming);
+        setValue('edit_features', paket.features);
+        setValue('edit_status', paket.status); // dari api_paket.php status = is_active
+        
+        // Buka modal
+        const modalElement = document.getElementById('modalEditPaket');
+        if (modalElement) {
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+            console.log('✅ Modal edit dibuka');
+        } else {
+            console.error('❌ Modal modalEditPaket tidak ditemukan!');
+            alert('Error: Modal edit tidak ditemukan!');
+        }
+    })
+    .catch(error => {
+        console.error('❌ Error:', error);
+        alert('❌ Gagal memuat data:\n\n' + error.message);
+    });
+}
+
+function updatePaket() {
+    console.log('🔄 updatePaket() dipanggil');
+    
+    // Ambil nilai dari form dengan helper function
+    const getValue = (id) => {
+        const el = document.getElementById(id);
+        const value = el ? el.value.trim() : '';
+        console.log(`Field ${id}: "${value}"`); // Debug log
+        return value;
+    };
+    
+    const id = getValue('edit_id');
+    const nama = getValue('edit_nama');
+    const kecepatan = getValue('edit_kecepatan'); // PASTIKAN INI BENAR, BUKAN "Recepatan"
+    const sumatera = getValue('edit_sumatera');
+    const jawa = getValue('edit_jawa');
+    const timur = getValue('edit_timur');
+    const instalasi_sumatera = getValue('edit_instalasi_sumatera');
+    const instalasi_jawa = getValue('edit_instalasi_jawa');
+    const instalasi_timur = getValue('edit_instalasi_timur');
+    const max_perangkat = getValue('edit_max_perangkat');
+    const max_laptop = getValue('edit_max_laptop');
+    const max_smartphone = getValue('edit_max_smartphone');
+    const tv_4k = getValue('edit_tv_4k');
+    const streaming = getValue('edit_streaming');
+    const gaming = getValue('edit_gaming');
+    const features = getValue('edit_features');
+    const status = getValue('edit_status') || '1';
+
+    console.log('📝 Raw form values:', {
+        id, nama, kecepatan, sumatera, jawa, timur,
+        instalasi_sumatera, instalasi_jawa, instalasi_timur,
+        max_perangkat, max_laptop, max_smartphone,
+        tv_4k, streaming, gaming, features, status
+    });
+
+    // Validasi field wajib
+    if (!id || !nama || !sumatera || !jawa || !timur) {
+        alert('❌ Mohon lengkapi field wajib:\n- ID\n- Nama Paket\n- Harga Sumatera/Jawa/Timur');
+        return;
+    }
+
+    if (!instalasi_sumatera || !instalasi_jawa || !instalasi_timur) {
+        alert('❌ Biaya instalasi wajib diisi untuk semua wilayah!');
+        return;
+    }
+
+    if (!max_perangkat || !max_laptop || !max_smartphone) {
+        alert('❌ Data perangkat ideal wajib diisi semua!');
+        return;
+    }
+
+    // Prepare data dengan NAMA FIELD YANG BENAR
+    const data = {
+        id: parseInt(id),
+        nama: nama,
+        kecepatan: kecepatan, // BUKAN "Recepatan"
+        sumatera: parseInt(sumatera) || 0,
+        jawa: parseInt(jawa) || 0,
+        timur: parseInt(timur) || 0,
+        instalasi_sumatera: parseInt(instalasi_sumatera) || 0,
+        instalasi_jawa: parseInt(instalasi_jawa) || 0,
+        instalasi_timur: parseInt(instalasi_timur) || 0,
+        max_perangkat: parseInt(max_perangkat) || 0,
+        max_laptop: parseInt(max_laptop) || 0,
+        max_smartphone: parseInt(max_smartphone) || 0,
+        tv_4k: tv_4k,
+        streaming: streaming,
+        gaming: gaming,
+        features: features,
+        status: parseInt(status) || 1
+    };
+
+    console.log('📤 Data yang akan dikirim ke api_paket.php:', data);
+    console.log('📤 JSON String:', JSON.stringify(data));
+
+    // Kirim ke API
+    fetch('api_paket.php', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        console.log('📥 Response status:', response.status);
+        
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            return response.text().then(text => {
+                console.error('❌ Response bukan JSON:', text);
+                throw new Error('Server error: Response bukan JSON');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('✅ Response data:', data);
+        
+        if (data.success) {
+            alert('✅ Paket berhasil diupdate!');
+            
+            // Tutup modal
+            const modalElement = document.getElementById('modalEditPaket');
+            if (modalElement) {
+                const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+            }
+            
+            // Reload table
+            if (typeof loadPaket === 'function') {
+                loadPaket();
+            }
+            
+            // Reload stats
+            if (typeof loadDashboardStats === 'function') {
+                loadDashboardStats();
+            }
+        } else {
+            alert('❌ Gagal mengupdate paket:\n\n' + (data.message || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('❌ Error:', error);
+        alert('❌ Terjadi kesalahan:\n\n' + error.message);
+    });
+}
+
+function deletePaket(id) {
+    if (!confirm('⚠️ Apakah Anda yakin ingin menghapus paket ini?\n\nTindakan ini tidak dapat dibatalkan!')) {
+        return;
+    }
+
+    console.log('🗑️ Delete paket ID:', id);
+
+    fetch('api_paket.php', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({id: parseInt(id)})
+    })
+    .then(response => {
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            return response.text().then(text => {
+                console.error('❌ Response bukan JSON:', text);
+                throw new Error('Server error');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            alert('✅ Paket berhasil dihapus!');
+            
+            // Reload table (jika ada fungsi loadPaket)
+            if (typeof loadPaket === 'function') {
+                loadPaket();
+            }
+            
+            // Reload stats dashboard
+            if (typeof loadDashboardStats === 'function') {
+                loadDashboardStats();
+            }
+        } else {
+            alert('❌ Gagal menghapus paket:\n\n' + (data.message || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('❌ Error:', error);
+        alert('❌ Terjadi kesalahan:\n\n' + error.message);
+    });
+}
+
 
 // ==================== BERITA MANAGEMENT ====================
 
@@ -679,17 +1044,20 @@ function showToast(message) {
 // ==================== PROMO MANAGEMENT ====================
 // Tambahkan kode ini di akhir file dashboard.js
 
+// ==================== PROMO MANAGEMENT - COMPLETE FIX ====================
+// COPY PASTE KODE INI KE dashboard.js (GANTI yang lama)
+
+// ==================== PROMO MANAGEMENT - FINAL VERSION ====================
+// COPY PASTE ke dashboard.js (GANTI bagian promo yang lama)
+
 function loadPromoTable() {
     fetch(`${API_URL}?action=get_all&table=promo`)
         .then(response => response.json())
         .then(data => {
-            console.log('Promo:', data);
+            console.log('Promo data:', data);
             if (data.success) {
                 const tbody = document.getElementById('promo-table-body');
-                if (!tbody) {
-                    console.error('Element promo-table-body not found');
-                    return;
-                }
+                if (!tbody) return;
                 
                 tbody.innerHTML = '';
                 
@@ -699,7 +1067,8 @@ function loadPromoTable() {
                 }
                 
                 data.data.forEach(promo => {
-                    const regionLabel = {
+                    const regionMap = {
+                        'all': 'Semua Wilayah',
                         'jawa': 'Jawa & Bali',
                         'sumatera': 'Sumatera & Kalimantan',
                         'timur': 'Indonesia Timur'
@@ -708,25 +1077,13 @@ function loadPromoTable() {
                     tbody.innerHTML += `
                         <tr>
                             <td>${promo.title}</td>
-                            <td><span class="badge bg-info">${regionLabel[promo.region] || promo.region}</span></td>
+                            <td><span class="badge bg-info">${regionMap[promo.region] || promo.region}</span></td>
                             <td>${promo.discount_percentage ? promo.discount_percentage + '%' : '-'}</td>
+                            <td><small class="text-muted">${formatDate(promo.start_date)} - ${formatDate(promo.end_date)}</small></td>
+                            <td><span class="badge-status ${promo.is_active ? 'badge-active' : 'badge-inactive'}">${promo.is_active ? 'Aktif' : 'Nonaktif'}</span></td>
                             <td>
-                                <small class="text-muted">
-                                    ${formatDate(promo.start_date)} s/d ${formatDate(promo.end_date)}
-                                </small>
-                            </td>
-                            <td>
-                                <span class="badge-status ${promo.is_active ? 'badge-active' : 'badge-inactive'}">
-                                    ${promo.is_active ? 'Aktif' : 'Nonaktif'}
-                                </span>
-                            </td>
-                            <td>
-                                <button class="btn btn-sm btn-warning btn-action" onclick="editPromo(${promo.id})">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-sm btn-danger btn-action" onclick="deletePromo(${promo.id})">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                                <button class="btn btn-sm btn-warning btn-action" onclick="editPromo(${promo.id})"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-danger btn-action" onclick="deletePromo(${promo.id})"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
                     `;
@@ -737,211 +1094,332 @@ function loadPromoTable() {
 }
 
 function openPromoModal() {
-    // Reset form dengan pengecekan
-    const form = document.getElementById('addPromoForm');
-    if (form) {
-        form.reset();
-    }
+    console.log('🎯 Opening promo modal...');
     
-    // Set default dates
-    const today = new Date();
-    const endDate = new Date();
-    endDate.setMonth(endDate.getMonth() + 1);
+    const form = document.getElementById('form-promo');
+    if (form) form.reset();
     
-    const startInput = document.getElementById('add-promo-start');
-    const endInput = document.getElementById('add-promo-end');
+    const today = new Date().toISOString().split('T')[0];
+    const nextMonth = new Date();
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+    const endDate = nextMonth.toISOString().split('T')[0];
     
-    if (startInput) startInput.valueAsDate = today;
-    if (endInput) endInput.valueAsDate = endDate;
+    const startInput = document.getElementById('promo_start_date');
+    const endInput = document.getElementById('promo_end_date');
     
-    // Buka modal
-    const modalElement = document.getElementById('addPromoModal');
-    if (modalElement) {
-        const modal = new bootstrap.Modal(modalElement);
+    if (startInput) startInput.value = today;
+    if (endInput) endInput.value = endDate;
+    
+    const modalEl = document.getElementById('modalTambahPromo');
+    if (modalEl) {
+        const modal = new bootstrap.Modal(modalEl);
         modal.show();
-    } else {
-        console.error('Modal addPromoModal not found');
     }
 }
 
 function addPromo() {
-    // Helper function untuk get value dengan aman
-    const getValue = (id) => {
-        const element = document.getElementById(id);
-        return element ? element.value.trim() : '';
+    console.log('🚀 addPromo() called');
+    
+    const getVal = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : '';
     };
     
-    // Validasi form
-    const title = getValue('add-promo-title');
-    const description = getValue('add-promo-description');
-    const region = getValue('add-promo-region');
-    const startDate = getValue('add-promo-start');
-    const endDate = getValue('add-promo-end');
+    const title = getVal('promo_title');
+    const desc = getVal('promo_description');
+    const region = getVal('promo_region');
+    const discount = getVal('promo_discount');
+    const startDate = getVal('promo_start_date');
+    const endDate = getVal('promo_end_date');
+    const status = getVal('promo_status') || '1';
     
-    console.log('Form values:', { title, description, region, startDate, endDate });
+    console.log('Form values:', {title, desc, region, discount, startDate, endDate, status});
     
-    if (!title || !description || !region || !startDate || !endDate) {
-        alert('Mohon lengkapi semua field yang wajib diisi!');
+    if (!title || !desc || !region || !startDate || !endDate) {
+        alert('❌ Mohon lengkapi semua field wajib!');
         return;
     }
     
-    // Validasi tanggal
     if (new Date(startDate) > new Date(endDate)) {
-        alert('Tanggal mulai tidak boleh lebih besar dari tanggal berakhir!');
+        alert('❌ Tanggal mulai tidak boleh lebih besar dari tanggal berakhir!');
         return;
     }
     
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('image_path', getValue('add-promo-image'));
-    formData.append('region', region);
-    formData.append('discount_percentage', getValue('add-promo-discount') || 0);
-    formData.append('start_date', startDate);
-    formData.append('end_date', endDate);
+    const imgFile = document.getElementById('promo_image')?.files[0];
     
-    const statusElement = document.getElementById('add-promo-status');
-    const isActive = statusElement && statusElement.value === 'true' ? 1 : 0;
-    formData.append('is_active', isActive);
+    const fd = new FormData();
+    fd.append('title', title);
+    fd.append('description', desc);
+    fd.append('region', region);
+    fd.append('discount_percentage', parseInt(discount) || 0);
+    fd.append('start_date', startDate);
+    fd.append('end_date', endDate);
+    fd.append('is_active', parseInt(status));
     
-    console.log('Sending promo data...');
+    if (imgFile) {
+        fd.append('image', imgFile);
+        console.log('📷 Image:', imgFile.name);
+    }
+    
+    console.log('📤 Sending...');
     
     fetch(`${API_URL}?action=insert&table=promo`, {
         method: 'POST',
-        body: formData
+        body: fd
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Response:', data);
-        showToast(data.message);
+    .then(res => {
+        console.log('Status:', res.status);
+        return res.text();
+    })
+    .then(text => {
+        console.log('Raw response:', text);
+        
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            console.error('JSON parse error:', e);
+            console.error('Response:', text.substring(0, 500));
+            alert('Server Error!\n\n' + 
+                  'Response bukan JSON.\n\n' +
+                  'Kemungkinan:\n' +
+                  '1. PHP Error\n' +
+                  '2. Folder uploads/promo/ tidak ada\n' +
+                  '3. Permission denied\n\n' +
+                  'Cek console untuk detail!\n\n' +
+                  text.substring(0, 300));
+            throw new Error('Invalid JSON');
+        }
+        
+        console.log('Parsed:', data);
+        
         if (data.success) {
-            const modalElement = document.getElementById('addPromoModal');
-            if (modalElement) {
-                bootstrap.Modal.getInstance(modalElement).hide();
+            alert('✅ Promo berhasil ditambahkan!');
+            
+            const modal = document.getElementById('modalTambahPromo');
+            if (modal) {
+                const inst = bootstrap.Modal.getInstance(modal);
+                if (inst) inst.hide();
             }
+            
+            const form = document.getElementById('form-promo');
+            if (form) form.reset();
+            
+            const preview = document.getElementById('image-preview-promo');
+            if (preview) preview.style.display = 'none';
+            
             loadPromoTable();
             loadDashboardStats();
+        } else {
+            alert('❌ Gagal: ' + (data.message || 'Unknown error'));
         }
     })
-    .catch(error => {
-        console.error('Error:', error);
-        showToast('Gagal menambahkan promo', 'error');
+    .catch(err => {
+        console.error('Error:', err);
     });
 }
 
 function editPromo(id) {
     fetch(`${API_URL}?action=get_by_id&table=promo&id=${id}`)
-        .then(response => response.json())
+        .then(res => res.json())
         .then(data => {
             if (data.success) {
-                const promo = data.data;
+                const p = data.data;
                 
-                // Helper function untuk set value dengan aman
-                const setValue = (id, value) => {
-                    const element = document.getElementById(id);
-                    if (element) element.value = value || '';
+                const setVal = (id, val) => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = val || '';
                 };
                 
-                setValue('edit-promo-id', promo.id);
-                setValue('edit-promo-title', promo.title);
-                setValue('edit-promo-description', promo.description);
-                setValue('edit-promo-image', promo.image_path);
-                setValue('edit-promo-region', promo.region);
-                setValue('edit-promo-discount', promo.discount_percentage);
-                setValue('edit-promo-start', promo.start_date);
-                setValue('edit-promo-end', promo.end_date);
+                setVal('edit_promo_id', p.id);
+                setVal('edit_promo_title', p.title);
+                setVal('edit_promo_description', p.description);
+                setVal('edit_promo_region', p.region);
+                setVal('edit_promo_discount', p.discount_percentage);
+                setVal('edit_promo_start_date', p.start_date);
+                setVal('edit_promo_end_date', p.end_date);
                 
-                const statusElement = document.getElementById('edit-promo-status');
-                if (statusElement) {
-                    statusElement.value = promo.is_active ? 'true' : 'false';
+                const statusEl = document.getElementById('edit_promo_status');
+                if (statusEl) statusEl.value = p.is_active ? '1' : '0';
+                
+                if (p.image_path) {
+                    const img = document.getElementById('edit-current-img-promo');
+                    const cont = document.getElementById('edit-current-image-promo');
+                    if (img) img.src = p.image_path;
+                    if (cont) cont.style.display = 'block';
                 }
                 
-                const modalElement = document.getElementById('editPromoModal');
-                if (modalElement) {
-                    const modal = new bootstrap.Modal(modalElement);
-                    modal.show();
+                const modal = document.getElementById('modalEditPromo');
+                if (modal) {
+                    new bootstrap.Modal(modal).show();
                 }
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(err => console.error(err));
 }
 
-function savePromo() {
-    // Helper function untuk get value dengan aman
-    const getValue = (id) => {
-        const element = document.getElementById(id);
-        return element ? element.value.trim() : '';
+function updatePromo() {
+    const getVal = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : '';
     };
     
-    // Validasi form
-    const title = getValue('edit-promo-title');
-    const description = getValue('edit-promo-description');
-    const region = getValue('edit-promo-region');
-    const startDate = getValue('edit-promo-start');
-    const endDate = getValue('edit-promo-end');
+    const id = getVal('edit_promo_id');
+    const title = getVal('edit_promo_title');
+    const desc = getVal('edit_promo_description');
+    const region = getVal('edit_promo_region');
+    const discount = getVal('edit_promo_discount');
+    const startDate = getVal('edit_promo_start_date');
+    const endDate = getVal('edit_promo_end_date');
+    const status = getVal('edit_promo_status') || '1';
     
-    if (!title || !description || !region || !startDate || !endDate) {
-        alert('Mohon lengkapi semua field yang wajib diisi!');
+    if (!id || !title || !desc || !region || !startDate || !endDate) {
+        alert('Mohon lengkapi semua field!');
         return;
     }
     
-    // Validasi tanggal
     if (new Date(startDate) > new Date(endDate)) {
-        alert('Tanggal mulai tidak boleh lebih besar dari tanggal berakhir!');
+        alert('Tanggal mulai tidak boleh lebih besar!');
         return;
     }
     
-    const formData = new FormData();
-    formData.append('id', getValue('edit-promo-id'));
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('image_path', getValue('edit-promo-image'));
-    formData.append('region', region);
-    formData.append('discount_percentage', getValue('edit-promo-discount') || 0);
-    formData.append('start_date', startDate);
-    formData.append('end_date', endDate);
+    const imgFile = document.getElementById('edit_promo_image')?.files[0];
     
-    const statusElement = document.getElementById('edit-promo-status');
-    const isActive = statusElement && statusElement.value === 'true' ? 1 : 0;
-    formData.append('is_active', isActive);
+    const fd = new FormData();
+    fd.append('id', id);
+    fd.append('title', title);
+    fd.append('description', desc);
+    fd.append('region', region);
+    fd.append('discount_percentage', parseInt(discount) || 0);
+    fd.append('start_date', startDate);
+    fd.append('end_date', endDate);
+    fd.append('is_active', parseInt(status));
+    
+    if (imgFile) fd.append('image', imgFile);
     
     fetch(`${API_URL}?action=update&table=promo`, {
         method: 'POST',
-        body: formData
+        body: fd
     })
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
-        showToast(data.message);
         if (data.success) {
-            const modalElement = document.getElementById('editPromoModal');
-            if (modalElement) {
-                bootstrap.Modal.getInstance(modalElement).hide();
+            alert('✅ Promo berhasil diupdate!');
+            
+            const modal = document.getElementById('modalEditPromo');
+            if (modal) {
+                const inst = bootstrap.Modal.getInstance(modal);
+                if (inst) inst.hide();
             }
+            
             loadPromoTable();
+        } else {
+            alert('❌ Gagal: ' + data.message);
         }
     })
-    .catch(error => console.error('Error:', error));
+    .catch(err => console.error(err));
 }
 
 function deletePromo(id) {
-    if (confirm('Apakah Anda yakin ingin menghapus promo ini?')) {
-        fetch(`${API_URL}?action=delete&table=promo&id=${id}`)
-            .then(response => response.json())
-            .then(data => {
-                showToast(data.message);
-                if (data.success) {
-                    loadPromoTable();
-                    loadDashboardStats();
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    }
+    if (!confirm('Hapus promo ini?')) return;
+    
+    fetch(`${API_URL}?action=delete&table=promo&id=${id}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert('✅ Promo berhasil dihapus!');
+                loadPromoTable();
+                loadDashboardStats();
+            } else {
+                alert('❌ Gagal: ' + data.message);
+            }
+        })
+        .catch(err => console.error(err));
 }
 
-// Helper function untuk format tanggal
-function formatDate(dateString) {
-    if (!dateString) return '-';
-    const date = new Date(dateString);
-    const options = { day: 'numeric', month: 'short', year: 'numeric' };
-    return date.toLocaleDateString('id-ID', options);
+function formatDate(dateStr) {
+    if (!dateStr) return '-';
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
+}
+
+// Image preview handlers
+document.addEventListener('DOMContentLoaded', function() {
+    // Add promo image
+    const addImg = document.getElementById('promo_image');
+    if (addImg) {
+        addImg.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            if (file.size > 2*1024*1024) {
+                alert('File terlalu besar! Max 2MB');
+                e.target.value = '';
+                return;
+            }
+            
+            if (!file.type.match('image.*')) {
+                alert('File harus gambar!');
+                e.target.value = '';
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const img = document.getElementById('preview-img-promo');
+                const cont = document.getElementById('image-preview-promo');
+                if (img) img.src = ev.target.result;
+                if (cont) cont.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+    
+    // Edit promo image
+    const editImg = document.getElementById('edit_promo_image');
+    if (editImg) {
+        editImg.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            if (file.size > 2*1024*1024) {
+                alert('File terlalu besar! Max 2MB');
+                e.target.value = '';
+                return;
+            }
+            
+            if (!file.type.match('image.*')) {
+                alert('File harus gambar!');
+                e.target.value = '';
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const img = document.getElementById('edit-preview-img-promo');
+                const cont = document.getElementById('edit-image-preview-promo');
+                const curr = document.getElementById('edit-current-image-promo');
+                if (img) img.src = ev.target.result;
+                if (cont) cont.style.display = 'block';
+                if (curr) curr.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+});
+
+function removeImagePromo() {
+    const inp = document.getElementById('promo_image');
+    const cont = document.getElementById('image-preview-promo');
+    if (inp) inp.value = '';
+    if (cont) cont.style.display = 'none';
+}
+
+function removeEditImagePromo() {
+    const inp = document.getElementById('edit_promo_image');
+    const cont = document.getElementById('edit-image-preview-promo');
+    const curr = document.getElementById('edit-current-image-promo');
+    if (inp) inp.value = '';
+    if (cont) cont.style.display = 'none';
+    if (curr) curr.style.display = 'block';
 }

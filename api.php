@@ -144,17 +144,34 @@ if ($action === 'insert' && $_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
             
         case 'promo':
-            $title = clean_input($_POST['title']);
-            $description = clean_input($_POST['description']);
-            $image_path = isset($_POST['image_path']) ? clean_input($_POST['image_path']) : '';
-            $region = clean_input($_POST['region']);
-            $discount_percentage = isset($_POST['discount_percentage']) ? clean_input($_POST['discount_percentage']) : 0;
-            $start_date = clean_input($_POST['start_date']);
-            $end_date = clean_input($_POST['end_date']);
+            // FIXED: Jangan cek $_POST['id'] untuk INSERT!
+            $title = isset($_POST['title']) ? clean_input($_POST['title']) : '';
+            $description = isset($_POST['description']) ? clean_input($_POST['description']) : '';
+            $region = isset($_POST['region']) ? clean_input($_POST['region']) : '';
+            $discount_percentage = isset($_POST['discount_percentage']) ? (int)clean_input($_POST['discount_percentage']) : 0;
+            $start_date = isset($_POST['start_date']) ? clean_input($_POST['start_date']) : '';
+            $end_date = isset($_POST['end_date']) ? clean_input($_POST['end_date']) : '';
             $is_active = isset($_POST['is_active']) ? (int)$_POST['is_active'] : 1;
             
+            // Validasi field wajib
+            if (empty($title) || empty($description) || empty($region) || empty($start_date) || empty($end_date)) {
+                json_response(false, 'Field wajib tidak boleh kosong!');
+            }
+            
+            // Handle upload gambar
+            $image_path = '';
+            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                $upload_result = upload_image($_FILES['image'], 'uploads/promo/');
+                if ($upload_result['success']) {
+                    $image_path = $upload_result['path'];
+                } else {
+                    json_response(false, $upload_result['message']);
+                }
+            }
+            
+            // Query INSERT
             $sql = "INSERT INTO promo (title, description, image_path, region, discount_percentage, start_date, end_date, is_active, created_at, updated_at) 
-                    VALUES ('$title', '$description', '$image_path', '$region', '$discount_percentage', '$start_date', '$end_date', $is_active, NOW(), NOW())";
+                    VALUES ('$title', '$description', '$image_path', '$region', $discount_percentage, '$start_date', '$end_date', $is_active, NOW(), NOW())";
             break;
     }
     
@@ -241,24 +258,46 @@ if ($action === 'update' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'promo':
             $title = clean_input($_POST['title']);
             $description = clean_input($_POST['description']);
-            $image_path = isset($_POST['image_path']) ? clean_input($_POST['image_path']) : '';
             $region = clean_input($_POST['region']);
-            $discount_percentage = isset($_POST['discount_percentage']) ? clean_input($_POST['discount_percentage']) : 0;
+            $discount_percentage = isset($_POST['discount_percentage']) ? (int)clean_input($_POST['discount_percentage']) : 0;
             $start_date = clean_input($_POST['start_date']);
             $end_date = clean_input($_POST['end_date']);
             $is_active = isset($_POST['is_active']) ? (int)$_POST['is_active'] : 0;
             
-            $sql = "UPDATE promo SET 
-                    title = '$title',
-                    description = '$description',
-                    image_path = '$image_path',
-                    region = '$region',
-                    discount_percentage = '$discount_percentage',
-                    start_date = '$start_date',
-                    end_date = '$end_date',
-                    is_active = $is_active,
-                    updated_at = NOW()
-                    WHERE id = '$id'";
+            // Cek apakah ada upload gambar baru
+            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                $upload_result = upload_image($_FILES['image'], 'uploads/promo/');
+                if ($upload_result['success']) {
+                    $image_path = $upload_result['path'];
+                    
+                    // Update dengan gambar baru
+                    $sql = "UPDATE promo SET 
+                            title = '$title',
+                            description = '$description',
+                            image_path = '$image_path',
+                            region = '$region',
+                            discount_percentage = $discount_percentage,
+                            start_date = '$start_date',
+                            end_date = '$end_date',
+                            is_active = $is_active,
+                            updated_at = NOW()
+                            WHERE id = '$id'";
+                } else {
+                    json_response(false, $upload_result['message']);
+                }
+            } else {
+                // Update tanpa gambar baru
+                $sql = "UPDATE promo SET 
+                        title = '$title',
+                        description = '$description',
+                        region = '$region',
+                        discount_percentage = $discount_percentage,
+                        start_date = '$start_date',
+                        end_date = '$end_date',
+                        is_active = $is_active,
+                        updated_at = NOW()
+                        WHERE id = '$id'";
+            }
             break;
     }
     
@@ -369,6 +408,7 @@ if ($action === 'get_promo_by_id') {
         json_response(false, 'Promo tidak ditemukan');
     }
 }
+
 // Get Promo by Region
 if ($action === 'get_promo_by_region') {
     $region = clean_input($_GET['region']);
@@ -383,5 +423,6 @@ if ($action === 'get_promo_by_region') {
     
     json_response(true, 'Promo loaded', $data);
 }
+
 $conn->close();
 ?>
