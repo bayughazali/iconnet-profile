@@ -35,58 +35,35 @@
         }
 
         /* ========== NAVBAR ========== */
-        .navbar {
-            padding: 0.5rem 0;
-            background: white !important;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
+        /* ========== NAVBAR (SAMA DENGAN INDEX) ========== */
+.navbar {
+    padding: 0.5rem 0;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    left: 0;
+}
 
         .navbar-brand img {
-            height: 70px;
-            object-fit: contain;
-            transition: transform 0.3s;
-        }
+    height: 70px;
+    object-fit: contain;
+}
 
-        .navbar-brand:hover img {
-            transform: scale(1.05);
-        }
+.nav-link {
+    color: var(--text-dark) !important;
+    margin: 0 15px;
+    font-weight: 600;
+    transition: color 0.3s;
+    font-size: 1rem;
+}
 
-        .nav-link {
-            color: var(--text-dark) !important;
-            margin: 0 15px;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-size: 1rem;
-            position: relative;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            width: 0;
-            height: 3px;
-            background: var(--primary-color);
-            transition: all 0.3s;
-            transform: translateX(-50%);
-        }
-
-        .nav-link:hover::after,
-        .nav-link.active::after {
-            width: 80%;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            color: var(--primary-color) !important;
-        }
-
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary-color) !important;
+}
         .btn-promo {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
@@ -773,7 +750,7 @@
 /* GLOBAL SCALE ADJUSTMENT */
 /* ============================= */
 html {
-    font-size: 80%; /* 🔥 Ubah ke 88% / 85% jika masih besar */
+    font-size: 110%; /* 🔥 Ubah ke 88% / 85% jika masih besar */
 }
 .product-header-section h1 {
     font-size: 32px;
@@ -1144,7 +1121,8 @@ html {
 <body>
 
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-light">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+
         <div class="container">
             <a class="navbar-brand" href="index.html">
                 <img src="image/iconnet.png" alt="ICONNET">
@@ -1342,6 +1320,10 @@ let selectedRegion = "jawa";
 function updateRegion() {
     selectedRegion = document.getElementById("regionSelect").value;
 
+    // 🔥 RENDER ULANG PAKET SESUAI WILAYAH
+    renderFilteredPaket();
+
+    // Jika modal compare sedang terbuka, update juga
     const modal = document.getElementById("compareModal");
     if (modal.classList.contains("show")) {
         openCompareModal();
@@ -1483,6 +1465,13 @@ function checkVisibleProducts() {
     });
     html += `</tr>`;
 
+       // Instalasi
+    html += `<tr><td>Biaya Instalasi (${getRegionLabel()})</td>`;
+    paketList.forEach(p => {
+        html += `<td>Rp ${formatRupiah(getInstalasiByRegion(p))}</td>`;
+    });
+    html += `</tr>`;
+
     // Kecepatan
     html += `<tr><td>Kecepatan</td>`;
     paketList.forEach(p => html += `<td>${p.kecepatan}</td>`);
@@ -1516,13 +1505,6 @@ function checkVisibleProducts() {
     // Gaming
     html += `<tr><td>Gaming</td>`;
     paketList.forEach(p => html += `<td>${p.gaming}</td>`);
-    html += `</tr>`;
-
-    // Instalasi
-    html += `<tr><td>Biaya Instalasi (${getRegionLabel()})</td>`;
-    paketList.forEach(p => {
-        html += `<td>Rp ${formatRupiah(getInstalasiByRegion(p))}</td>`;
-    });
     html += `</tr>`;
 
     // Fitur Tambahan
@@ -1843,9 +1825,9 @@ function renderPaketCard(p) {
             <div class="product-card-body">
                 <div class="product-price-section">
                     <span class="price-label">Mulai dari</span>
-                    <div class="product-price-tag">
-                        Rp ${formatRupiah(p.harga_jawa)}
-                    </div>
+                <div class="product-price-tag">
+                    Rp ${formatRupiah(getHargaByRegion(p))}
+                </div>
                 </div>
 
                 <button class="btn-product-detail"
