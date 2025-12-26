@@ -1,15 +1,14 @@
 /* ========================================
    COMPLETE LANDING PAGE STYLES - ICONNET
-   Clean & Fixed Version - No Duplicates
+   Fixed Slider Implementation
    ======================================== */
 
 :root {
-    --primary-color: #2B9EB3;
-    --primary-teal: #20b2aa;
-    --dark-blue: #1A5F7A;
-    --dark-teal: #008080;
-    --light-bg: #F0F8FF;
+    --primary-teal: #00bcd4;
     --light-teal: #4dd0e1;
+    --primary-color: #2B9EB3;
+    --dark-blue: #1A5F7A;
+    --light-bg: #F0F8FF;
     --text-dark: #2c3e50;
     --border-color: #e0e0e0;
 }
@@ -43,11 +42,11 @@ body {
    NAVBAR
    ======================================== */
 .navbar {
-    padding: 0.5rem 0;
+    padding: 3px 0;
     background: white;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    position: fixed;
     width: 100%;
+    position: fixed;
     top: 0;
     z-index: 1000;
     left: 0;
@@ -55,19 +54,16 @@ body {
 
 .navbar-brand img {
     height: 70px;
-    object-fit: contain;
 }
 
 .nav-link {
     color: var(--text-dark) !important;
-    margin: 0 15px;
     font-weight: 600;
+    padding: 10px 20px !important;
     transition: color 0.3s;
-    font-size: 1rem;
 }
 
-.nav-link:hover,
-.nav-link.active {
+.nav-link:hover {
     color: var(--primary-color) !important;
 }
 
@@ -79,7 +75,6 @@ body {
     text-decoration: none;
     border: none;
     transition: all 0.3s;
-    font-weight: 600;
 }
 
 .btn-promo:hover {
@@ -89,7 +84,7 @@ body {
 }
 
 /* ========================================
-   HERO SECTION (SLIDER)
+   HERO SECTION (SLIDER) - FIXED VERSION
    ======================================== */
 .hero-section {
     padding: 100px 0 60px 0;
@@ -97,62 +92,58 @@ body {
     width: 100%;
 }
 
+/* Slider Container - Dari CSS Lama yang Berfungsi */
 .slider-container {
+    position: relative;
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
 }
 
 .slider-wrapper {
-    width: 100%;
-    overflow: hidden;
-    position: relative;
+    display: flex;
+    width: 300%;
+    transition: transform 1s ease-in-out;
 }
 
 .slide {
-    display: none;
-    width: 100%;
-    animation: fadeIn 0.5s ease-in-out;
+    min-width: 100%;
+    flex-shrink: 0;
 }
 
-.slide.active-slide {
-    display: block;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
+/* Hero Card - PERBAIKAN UTAMA */
 .hero-card {
     width: 100%;
     height: 450px;
-    background-size: contain !important;
-    background-repeat: no-repeat;
+    border-radius: 18px;
+    background-size: cover !important; /* Ubah dari contain ke cover */
     background-position: center;
-    border-radius: 15px;
+    background-repeat: no-repeat;
+    background-color: var(--light-bg);
 }
 
+/* Slider Indicators - Dari CSS Lama */
 .slider-indicators {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
     margin-top: 20px;
     padding: 10px 0;
 }
 
-.slider-indicators span {
-    display: inline-block;
+.slider-indicators .indicator {
     width: 12px;
     height: 12px;
-    background: #ccc;
     border-radius: 50%;
-    margin: 0 5px;
+    background-color: #ccc;
     cursor: pointer;
     transition: all 0.3s;
 }
 
-.slider-indicators span.active {
-    background: var(--primary-teal);
+.slider-indicators .indicator.active {
+    background-color: var(--primary-color);
     width: 30px;
     border-radius: 6px;
 }
@@ -186,6 +177,7 @@ body {
     justify-content: center;
     margin: 0 auto 20px;
     transition: all 0.3s;
+    font-size: 0.95rem;
 }
 
 .feature-box:hover .feature-icon {
@@ -223,20 +215,20 @@ body {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-    height: fit-content;
 }
 
 .location-selector h4 {
     color: var(--text-dark);
+    font-weight: bold;
+    margin-bottom: 25px;
     font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 20px;
 }
 
 .location-dropdown-container {
     position: relative;
     background-color: #fff;
     border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .custom-dropdown-toggle {
@@ -260,6 +252,7 @@ body {
 .custom-dropdown-toggle .fa-map-marker-alt {
     color: var(--light-teal);
     font-size: 1.2rem;
+    margin-right: 10px;
 }
 
 .dropdown-icon {
@@ -293,119 +286,93 @@ body {
     padding-left: 25px;
 }
 
-/* ========================================
-   PACKAGE CAROUSEL - FINAL FIX
-   ======================================== */
+/* Package Carousel */
 #packageCarousel {
     background: linear-gradient(135deg, var(--light-teal), var(--primary-teal));
     border-radius: 15px;
     padding: 40px 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     position: relative;
-    overflow: visible !important;
+    overflow: visible;
 }
 
-#packageCarousel .carousel-inner {
-    padding: 0 50px !important;
-    overflow: visible !important;
-    position: relative !important;
-    min-height: 600px !important;
+.carousel-inner {
+    padding: 0 50px;
+    overflow: visible;
 }
 
-/* CRITICAL: Force carousel item display */
-#packageCarousel .carousel-item {
-    display: none !important;
-    opacity: 0 !important;
-    transition: opacity 0.6s ease-in-out !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100% !important;
+.carousel-item {
+    display: none;
 }
 
-#packageCarousel .carousel-item.active {
-    display: block !important;
-    opacity: 1 !important;
-    position: relative !important;
+.carousel-item.active {
+    display: block;
 }
 
-/* Hide Bootstrap carousel transitions */
-.carousel-item-next,
-.carousel-item-prev,
-.carousel-item-next.carousel-item-start,
-.carousel-item-prev.carousel-item-end,
-.carousel-item-start,
-.carousel-item-end {
-    display: none !important;
-}
-
-/* Carousel Controls */
 .carousel-control-prev, 
 .carousel-control-next {
-    width: 50px !important;
-    height: 50px !important;
-    background-color: white !important;
-    border-radius: 50% !important;
-    opacity: 1 !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    transition: all 0.3s !important;
-    position: absolute !important;
-    z-index: 10 !important;
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 1;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    z-index: 10;
 }
 
 .carousel-control-prev {
-    left: -20px !important;
+    left: -20px;
 }
 
 .carousel-control-next {
-    right: -20px !important;
+    right: -20px;
 }
 
 .carousel-control-prev:hover, 
 .carousel-control-next:hover {
-    background-color: var(--text-dark) !important;
+    background-color: var(--text-dark);
 }
 
 .carousel-control-prev:hover .carousel-control-icon,
 .carousel-control-next:hover .carousel-control-icon {
-    color: white !important;
+    color: white;
 }
 
 .carousel-control-icon {
-    color: var(--light-teal) !important;
-    font-size: 1.5rem !important;
-    font-weight: bold !important;
-}
-
-/* Package Cards Container */
-.card-group-row {
-    display: flex !important;
-    justify-content: center !important;
-    gap: 20px !important;
-    flex-wrap: nowrap !important;
-    width: 100% !important;
-    min-height: 560px !important;
+    color: var(--light-teal);
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
 /* Package Cards */
+.card-group-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
 .package-card {
-    background-color: white !important;
-    padding: 25px !important;
-    border-radius: 12px !important;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08) !important;
-    border: 2px solid transparent !important;
-    width: 100% !important;
-    flex: 0 0 calc(33.333% - 14px) !important;
-    max-width: 320px !important;
-    min-height: 560px !important;
-    transition: all 0.3s !important;
-    display: flex !important;
-    flex-direction: column !important;
-    opacity: 1 !important;
-    visibility: visible !important;
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    border: 2px solid transparent;
+    width: 100%;
+    flex: 0 0 calc(33.333% - 14px);
+    max-width: 320px;
+    min-height: 480px;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
 }
 
 .package-card:hover {
@@ -434,6 +401,7 @@ body {
     border-radius: 5px;
     font-size: 0.9rem;
     font-weight: bold;
+    margin-bottom: 8px;
     display: inline-block;
 }
 
@@ -464,94 +432,12 @@ body {
     margin-right: 8px;
 }
 
-/* ========================================
-   PRICE SECTION WITH DISCOUNT (NEW)
-   ======================================== */
-
-/* Container untuk harga - Background Pink seperti gambar */
-.price-container {
-    text-align: center;
-    margin: 15px 0;
-    padding: 20px 15px;
-    background: linear-gradient(135deg, #ff1493, #ff69b4);
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(255, 20, 147, 0.3);
-}
-
-/* Label harga - Hidden karena di gambar tidak ada */
-.price-label {
-    display: none;
-}
-
-/* Harga lama (dicoret) - Style seperti gambar */
-.price-old {
-    font-size: 1rem;
-    color: #fff;
-    font-weight: 600;
-    margin-bottom: 5px;
-    position: relative;
-    display: inline-block;
-    opacity: 0.8;
-}
-
-.price-old::before {
-    content: '';
-    position: absolute;
-    left: -5%;
-    right: -5%;
-    top: 50%;
-    height: 3px;
-    background-color: #fff;
-    transform: translateY(-50%) rotate(-8deg);
-    box-shadow: 0 0 3px rgba(0,0,0,0.3);
-}
-
-/* Harga baru (diskon) - Putih Besar seperti gambar */
-.price-new {
-    font-size: 2.5rem;
-    font-weight: 900;
-    color: #ffffff;
-    margin-bottom: 0;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    letter-spacing: -1px;
-}
-
-/* Badge diskon - Disesuaikan atau bisa dihapus */
-.price-discount-badge {
-    display: none; /* Hide badge karena di gambar tidak ada */
-}
-
-/* Animasi untuk harga baru */
-@keyframes pricePopIn {
-    0% {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    50% {
-        transform: scale(1.05);
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-/* Hover effect untuk price container - Disesuaikan dengan pink */
-.package-card:hover .price-new {
-    color: #ffffff;
-    transform: scale(1.05);
-    transition: all 0.3s ease;
-}
-
-/* OLD PRICE CLASSES - KEPT FOR BACKWARD COMPATIBILITY */
-.package-price,
-.price-abonemen,
-.price-instalasi {
+.package-price {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--primary-teal);
+    margin: 10px 0 5px 0;
     text-align: center;
-    margin: 10px 0;
 }
 
 .package-card small {
@@ -559,7 +445,6 @@ body {
     color: #6c757d;
     font-size: 0.85rem;
     text-align: center;
-    margin-top: 15px;
 }
 
 .btn-pilih {
@@ -623,8 +508,8 @@ body {
     border: none;
     border-radius: 8px;
     font-weight: 600;
-    transition: all 0.3s;
     cursor: pointer;
+    transition: all 0.3s;
     display: inline-block;
     text-decoration: none;
 }
@@ -664,7 +549,7 @@ body {
     margin-bottom: 20px;
 }
 
-/* Service Icons */
+/* Service Icons Section */
 .service-icons-section {
     margin-top: 60px;
     padding: 40px 0;
@@ -675,6 +560,12 @@ body {
     width: 100%;
     max-width: 900px;
     margin: 0 auto;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    position: relative;
+    filter: drop-shadow(0 0 15px rgba(32, 178, 170, 0.4));
 }
 
 .icon-group-wrapper {
@@ -686,7 +577,6 @@ body {
     padding: 30px;
     background: white;
     border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
 }
 
 .service-item {
@@ -695,6 +585,11 @@ body {
     align-items: center;
     gap: 15px;
     text-align: center;
+    transition: transform 0.3s;
+}
+
+.service-item:hover .service-icon-svg {
+    transform: scale(1.1);
 }
 
 .service-icon-svg {
@@ -703,11 +598,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.3s;
+    flex-shrink: 0;
 }
 
-.service-item:hover .service-icon-svg {
-    transform: scale(1.1);
+.service-icon-svg svg {
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
 .service-text h6 {
@@ -728,12 +625,18 @@ body {
    ======================================== */
 .app-section {
     padding: 80px 0;
-    background: white;
+    background: linear-gradient(180deg, var(--primary-color) 0%, var(--dark-blue) 100%);
+    color: white;
     width: 100%;
 }
 
+.app-section img {
+    max-width: 100%;
+    height: auto;
+}
+
 .app-section h2 {
-    color: var(--text-dark);
+    color: white;
     font-weight: bold;
     margin-bottom: 30px;
     font-size: 1.8rem;
@@ -761,60 +664,34 @@ body {
 }
 
 /* ========================================
-   NEWS SECTION
+   TESTIMONIAL SECTION
    ======================================== */
-.news-section {
+.testimonial-section {
+    background: var(--light-bg);
     padding: 80px 0;
-    background: #ffffff;
     width: 100%;
 }
 
-.news-section .badge {
-    background-color: var(--primary-teal) !important;
+.testimonial-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin: 15px;
+}
+
+.play-button {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: white;
-    padding: 8px 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-}
-
-.news-section h2 {
-    color: var(--text-dark);
-    font-weight: bold;
-    font-size: 2rem;
-}
-
-.news-card {
-    border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.3s;
-    height: 100%;
-}
-
-.news-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
-}
-
-.news-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.news-card .card-title {
-    color: var(--text-dark);
-    font-size: 1.1rem;
-    font-weight: bold;
-}
-
-.news-card .text-primary {
-    color: var(--primary-teal) !important;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.news-card .text-primary:hover {
-    color: var(--primary-color) !important;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin: 30px auto;
 }
 
 /* ========================================
@@ -840,6 +717,7 @@ body {
     margin-bottom: 15px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     transition: all 0.3s;
+    cursor: pointer;
 }
 
 .faq-item:hover {
@@ -861,11 +739,15 @@ body {
 
 .faq-item i {
     transition: transform 0.3s;
-    cursor: pointer;
 }
 
 .faq-item:hover i {
     color: var(--primary-teal);
+}
+
+.house-illustration img {
+    max-width: 100%;
+    height: auto;
 }
 
 /* ========================================
@@ -895,47 +777,38 @@ footer .btn-outline-light:hover {
 }
 
 /* ========================================
-   UTILITY CLASSES
-   ======================================== */
-.img-fluid {
-    max-width: 100%;
-    height: auto;
-}
-
-/* ========================================
    RESPONSIVE DESIGN
    ======================================== */
+@media (max-width: 1200px) {
+    .hero-card {
+        height: 400px;
+    }
+}
+
 @media (max-width: 992px) {
     .hero-card {
         height: 350px;
     }
 
-    #packageCarousel .carousel-inner {
-        padding: 0 30px !important;
-        min-height: 580px !important;
+    .carousel-inner {
+        padding: 0 30px;
     }
 
     .card-group-row {
-        flex-wrap: wrap !important;
-        min-height: 580px !important;
+        flex-wrap: wrap;
     }
 
     .package-card {
-        flex: 0 0 calc(50% - 10px) !important;
-        max-width: 100% !important;
-        min-height: 560px !important;
+        flex: 0 0 calc(50% - 10px);
+        max-width: 100%;
+    }
+
+    .icon-group-wrapper {
+        gap: 20px;
     }
 
     .vertical-divider {
         display: none;
-    }
-    
-    .price-old {
-        font-size: 0.9rem;
-    }
-    
-    .price-new {
-        font-size: 2rem;
     }
 }
 
@@ -952,45 +825,49 @@ footer .btn-outline-light:hover {
         height: 300px;
     }
 
+    .card-group-row {
+        flex-wrap: wrap;
+    }
+
     .package-card {
-        flex: 0 0 100% !important;
-        max-width: 100% !important;
+        flex: 0 0 100%;
+        max-width: 100%;
         margin-bottom: 20px;
-        min-height: 540px !important;
     }
 
     .carousel-control-prev,
     .carousel-control-next {
-        width: 40px !important;
-        height: 40px !important;
+        width: 40px;
+        height: 40px;
     }
 
     .carousel-control-prev {
-        left: -10px !important;
+        left: -10px;
     }
 
     .carousel-control-next {
-        right: -10px !important;
+        right: -10px;
     }
 
-    #packageCarousel .carousel-inner {
-        min-height: 560px !important;
+    .service-icon-svg {
+        width: 60px;
+        height: 60px;
     }
-    
-    .card-group-row {
-        min-height: 560px !important;
+
+    .subscription-card,
+    .mascot-section {
+        text-align: center;
     }
-    
-    .price-old {
-        font-size: 0.85rem;
+
+    .subscription-card h2,
+    .mascot-section h2 {
+        font-size: 1.6rem;
     }
-    
-    .price-new {
-        font-size: 1.8rem;
-    }
-    
-    .price-container {
-        padding: 15px 10px;
+
+    .icon-group-wrapper {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
     }
 }
 
@@ -999,25 +876,102 @@ footer .btn-outline-light:hover {
         height: 250px;
     }
 
-    #packageCarousel .carousel-inner {
-        padding: 0 20px !important;
-        min-height: 560px !important;
+    .carousel-inner {
+        padding: 0 20px;
     }
 
     .package-card {
-        padding: 20px !important;
-        min-height: 540px !important;
+        padding: 20px;
     }
 
-    .price-old {
-        font-size: 0.8rem;
+    .package-price {
+        font-size: 1.3rem;
     }
-    
-    .price-new {
-        font-size: 1.6rem;
+
+    .feature-box {
+        padding: 20px 10px;
     }
-    
-    .price-container {
-        padding: 12px 8px;
+
+    .subscription-card h2,
+    .mascot-section h2,
+    .faq-section h2 {
+        font-size: 1.4rem;
     }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+.mb-4 {
+    margin-bottom: 1.5rem !important;
+}
+
+.mt-4 {
+    margin-top: 1.5rem !important;
+}
+
+.mt-3 {
+    margin-top: 1rem !important;
+}
+
+.mb-3 {
+    margin-bottom: 1rem !important;
+}
+
+.fw-bold {
+    font-weight: bold !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+.d-block {
+    display: block !important;
+}
+
+.d-flex {
+    display: flex !important;
+}
+
+.align-items-center {
+    align-items: center !important;
+}
+
+.justify-content-center {
+    justify-content: center !important;
+}
+
+.gap-3 {
+    gap: 1rem !important;
+}
+
+.flex-wrap {
+    flex-wrap: wrap !important;
+}
+
+/* Force Carousel Display */
+.carousel-item {
+    transition: transform 0.6s ease-in-out;
+}
+
+.carousel-item-next,
+.carousel-item-prev,
+.carousel-item.active {
+    display: block;
+}
+
+.carousel-item-next:not(.carousel-item-start),
+.active.carousel-item-end {
+    transform: translateX(100%);
+}
+
+.carousel-item-prev:not(.carousel-item-end),
+.active.carousel-item-start {
+    transform: translateX(-100%);
 }
