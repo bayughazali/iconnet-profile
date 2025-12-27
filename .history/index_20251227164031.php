@@ -153,6 +153,7 @@ if (!is_array($paket)) {
                             </div>
                         </div>
                     </div>
+=======
             <!-- Package Carousel -->
             <div class="col-lg-8 mb-4">
                 <div id="packageCarousel" class="carousel slide" data-bs-ride="false">
@@ -260,6 +261,8 @@ $active = 'active';
                         <i class="fas fa-chevron-right carousel-control-icon"></i>
                         <span class="visually-hidden">Next</span>
                     </button>
+                    
+>>>>>>> Stashed changes
                 </div>
 
                 <!-- Package Carousel -->

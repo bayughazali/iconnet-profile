@@ -995,6 +995,7 @@ footer .btn-outline-light:hover {
 }
 
 
+
 /* ================= NEWS SECTION ================= */
 
 .news-section {
@@ -1124,6 +1125,7 @@ footer .btn-outline-light:hover {
     height: 260px;
     object-fit: cover;
 }
+=======
 .package-card::before {
   pointer-events: none;
 }
@@ -1203,3 +1205,5 @@ footer .btn-outline-light:hover {
   pointer-events: auto;
   cursor: pointer;
 }
+
+>>>>>>> Stashed changes

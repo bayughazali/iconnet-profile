@@ -260,6 +260,8 @@ $active = 'active';
                         <i class="fas fa-chevron-right carousel-control-icon"></i>
                         <span class="visually-hidden">Next</span>
                     </button>
+                    
+>>>>>>> Stashed changes
                 </div>
 
                 <!-- Package Carousel -->

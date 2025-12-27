@@ -145,6 +145,8 @@ if (!is_array($paket)) {
                                 </span>
                                 <i class="fas fa-chevron-down dropdown-icon"></i>
                             </button>
+
+<<<<<<< Updated upstream
                             <div class="collapse location-options-list show" id="locationOptions">
                                 <div class="location-item" data-location="sumatera-kalimantan">Sumatera & Kalimantan
                                 </div>
@@ -153,6 +155,7 @@ if (!is_array($paket)) {
                             </div>
                         </div>
                     </div>
+=======
             <!-- Package Carousel -->
             <div class="col-lg-8 mb-4">
                 <div id="packageCarousel" class="carousel slide" data-bs-ride="false">
@@ -260,6 +263,8 @@ $active = 'active';
                         <i class="fas fa-chevron-right carousel-control-icon"></i>
                         <span class="visually-hidden">Next</span>
                     </button>
+                    
+>>>>>>> Stashed changes
                 </div>
 
                 <!-- Package Carousel -->
@@ -673,7 +678,35 @@ $active = 'active';
 
             reset();
         });
+<<<<<<< Updated upstream
     </script>
+=======
+
+        indicators.appendChild(dot);
+    }
+
+    const dots = indicators.children;
+
+    function update() {
+        slider.style.transform = `translateX(-${index * 100}%)`;
+        [...dots].forEach(d => d.classList.remove("active"));
+        dots[index].classList.add("active");
+    }
+
+    function next() {
+        index = (index + 1) % total;
+        update();
+    }
+
+    function reset() {
+        clearInterval(interval);
+        interval = setInterval(next, 5000);
+    }
+
+    reset();
+}); 
+
+
 </script>
 <div id="modalPesan" class="modal">
   <div class="modal-content">
@@ -684,6 +717,7 @@ $active = 'active';
     <button id="btnWhatsapp" class="btn-wa">Pesan via WhatsApp</button>
   </div>
 </div>
+>
 
 </body>
 
