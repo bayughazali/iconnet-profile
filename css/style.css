@@ -617,15 +617,16 @@ body {
    APP SECTION
    ======================================== */
 .app-section {
-    padding: 80px 0;
-    background: linear-gradient(180deg, var(--primary-color) 0%, var(--dark-blue) 100%);
-    color: white;
-    width: 100%;
+    background: linear-gradient(180deg, #1b6f82, #0e4f5c);
+    padding: 100px 0;
+    position: relative;
+    overflow: hidden;
 }
 
 .app-section img {
     max-width: 100%;
     height: auto;
+    display: block;
 }
 
 .app-section h2 {
@@ -993,3 +994,133 @@ footer .btn-outline-light:hover {
     }
 }
 
+
+/* ================= NEWS SECTION ================= */
+
+.news-section {
+    padding: 90px 0;
+    background: #ffffff;
+}
+
+/* Header */
+.section-header {
+    max-width: 650px;
+    margin: 0 auto 60px;
+}
+
+.news-badge {
+    display: inline-block;
+    background: #0dcaf0;
+    color: #fff;
+    padding: 6px 18px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.section-header h2 {
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.section-header p {
+    color: #6c757d;
+    font-size: 0.95rem;
+}
+
+/* Card */
+.news-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    transition: all 0.35s ease;
+}
+
+.news-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.15);
+}
+
+/* Image */
+.news-image img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+/* Content */
+.news-content {
+    padding: 22px;
+}
+
+.news-date {
+    font-size: 0.8rem;
+    color: #6c757d;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.news-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.news-desc {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 18px;
+}
+
+/* Link */
+.news-link {
+    font-weight: 600;
+    color: #0dcaf0;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+.news-link span {
+    transition: transform 0.3s ease;
+}
+
+.news-link:hover {
+    text-decoration: underline;
+}
+
+.news-link:hover span {
+    transform: translateX(5px);
+}
+
+/* Button */
+.btn-news {
+    display: inline-block;
+    background: #0dcaf0;
+    color: #fff;
+    padding: 14px 50px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-news:hover {
+    background: #0bb3d9;
+    color: #fff;
+}
+
+.news-section {
+    width: 100%;
+}
+
+.news-image img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+}

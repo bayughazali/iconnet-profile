@@ -254,9 +254,6 @@ body {
   </nav>
 </header>
 
-
-
-
 <div class="container mt-3">
 
   <a href="index.php" class="text-decoration-none text-secondary mb-2 d-inline-block">
