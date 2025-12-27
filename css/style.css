@@ -1,6 +1,6 @@
 /* ========================================
    COMPLETE LANDING PAGE STYLES - ICONNET
-   Fixed Slider Implementation
+   CLEAN & FIXED VERSION
    ======================================== */
 
 :root {
@@ -84,7 +84,7 @@ body {
 }
 
 /* ========================================
-   HERO SECTION (SLIDER) - FIXED VERSION
+   HERO SECTION (SLIDER)
    ======================================== */
 .hero-section {
     padding: 100px 0 60px 0;
@@ -92,7 +92,6 @@ body {
     width: 100%;
 }
 
-/* Slider Container - Dari CSS Lama yang Berfungsi */
 .slider-container {
     overflow: hidden;
     border-radius: 20px;
@@ -109,15 +108,13 @@ body {
 
 .hero-card {
     height: 450px;
-    background-size: cover; /* WAJIB */
-    background-position: center;
-    background-repeat: no-repeat;
+    background-size: contain !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    max-height: 450px;
+    width: 100%;
 }
 
-
-
-
-/* Slider Indicators - Dari CSS Lama */
 .slider-indicators {
     display: flex;
     justify-content: center;
@@ -202,12 +199,34 @@ body {
     width: 100%;
 }
 
-/* Location Selector */
+/* Layout: Lokasi di Kiri, Paket di Kanan */
+.pricing-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+}
+
+.pricing-left {
+    flex: 0 0 360px;
+    position: relative;
+    z-index: 2000;
+}
+
+.pricing-right {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    z-index: 1000;
+}
+
+/* Location Selector - FIXED */
 .location-selector {
     background: white;
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    position: relative;
+    z-index: 2000;
 }
 
 .location-selector h4 {
@@ -217,13 +236,16 @@ body {
     font-size: 1.1rem;
 }
 
+/* Dropdown Container */
 .location-dropdown-container {
     position: relative;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    z-index: 2001;
 }
 
+/* Button Toggle */
 .custom-dropdown-toggle {
     display: flex;
     align-items: center;
@@ -236,10 +258,13 @@ body {
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s;
+    position: relative;
+    z-index: 2002;
 }
 
 .custom-dropdown-toggle:hover {
     border-color: var(--light-teal);
+    background-color: #e8f5f7;
 }
 
 .custom-dropdown-toggle .fa-map-marker-alt {
@@ -253,45 +278,64 @@ body {
     color: var(--text-dark);
 }
 
-.custom-dropdown-toggle[aria-expanded="true"] .dropdown-icon {
-    transform: rotate(180deg);
-}
-
+/* Dropdown List */
 .location-options-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 2px solid var(--light-teal);
+    border-top: none;
     border-radius: 0 0 8px 8px;
     overflow: hidden;
+    margin-top: -8px;
+    z-index: 2003;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
 }
 
+/* Location Items */
 .location-item {
     padding: 15px 20px;
     background-color: white;
-    border-top: 1px solid #dcdcdc;
+    border-top: 1px solid #e0e0e0;
     cursor: pointer;
     font-size: 1rem;
     color: var(--text-dark);
     transition: all 0.2s;
-    border-left: 3px solid var(--light-teal);
-    border-right: 3px solid var(--light-teal);
+    position: relative;
+    z-index: 2004;
+}
+
+.location-item:first-child {
+    border-top: none;
 }
 
 .location-item:hover {
-    background-color: #f0f8ff;
+    background-color: #e8f5f7;
     padding-left: 25px;
+    color: var(--primary-teal);
+    font-weight: 600;
 }
 
-/* Package Carousel */
+.location-item:active {
+    background-color: var(--light-teal);
+    color: white;
+}
+
+/* Package Carousel - FIXED: Card tidak keluar dari kotak biru */
 #packageCarousel {
     background: linear-gradient(135deg, var(--light-teal), var(--primary-teal));
     border-radius: 15px;
-    padding: 40px 20px;
+    padding: 40px 30px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     position: relative;
-    overflow: visible;
+    overflow: hidden; /* ✅ PENTING: Cegah card keluar */
 }
 
 .carousel-inner {
     padding: 0 50px;
-    overflow: visible;
+    overflow: hidden; /* ✅ PENTING */
 }
 
 .carousel-item {
@@ -302,6 +346,7 @@ body {
     display: block;
 }
 
+/* Carousel Controls */
 .carousel-control-prev, 
 .carousel-control-next {
     width: 50px;
@@ -344,7 +389,7 @@ body {
     font-weight: bold;
 }
 
-/* Package Cards */
+/* Package Cards - FIXED */
 .card-group-row {
     display: flex;
     justify-content: center;
@@ -361,11 +406,13 @@ body {
     border: 2px solid transparent;
     width: 100%;
     flex: 0 0 calc(33.333% - 14px);
-    max-width: 320px;
+    max-width: 300px; /* ✅ DIKURANGI agar tidak keluar */
     min-height: 480px;
     transition: all 0.3s;
     display: flex;
     flex-direction: column;
+    position: relative;
+    z-index: 999;
 }
 
 .package-card:hover {
@@ -380,29 +427,6 @@ body {
     font-weight: bold;
     text-align: center;
     margin-bottom: 15px;
-}
-
-.package-rating {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.rating-badge {
-    background-color: #ffc107;
-    color: #343a40;
-    padding: 4px 10px;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    font-weight: bold;
-    margin-bottom: 8px;
-    display: inline-block;
-}
-
-.package-rating small {
-    display: block;
-    color: #6c757d;
-    margin-top: 5px;
-    font-size: 0.85rem;
 }
 
 .package-specs {
@@ -433,6 +457,17 @@ body {
     text-align: center;
 }
 
+.package-price .text-decoration-line-through {
+    color: #9ca3af;
+    font-size: 16px;
+}
+
+.package-price .fw-bold {
+    color: #14b8a6;
+    font-size: 28px;
+    line-height: 1.2;
+}
+
 .package-card small {
     display: block;
     color: #6c757d;
@@ -452,6 +487,9 @@ body {
     margin-top: 15px;
     transition: all 0.3s;
     cursor: pointer;
+    position: relative;
+    z-index: 999;
+    pointer-events: auto;
 }
 
 .btn-pilih:hover {
@@ -617,16 +655,15 @@ body {
    APP SECTION
    ======================================== */
 .app-section {
-    background: linear-gradient(180deg, #1b6f82, #0e4f5c);
-    padding: 100px 0;
-    position: relative;
-    overflow: hidden;
+    padding: 80px 0;
+    background: linear-gradient(180deg, var(--primary-color) 0%, var(--dark-blue) 100%);
+    color: white;
+    width: 100%;
 }
 
 .app-section img {
     max-width: 100%;
     height: auto;
-    display: block;
 }
 
 .app-section h2 {
@@ -655,37 +692,6 @@ body {
 .store-icon {
     height: 50px;
     width: auto;
-}
-
-/* ========================================
-   TESTIMONIAL SECTION
-   ======================================== */
-.testimonial-section {
-    background: var(--light-bg);
-    padding: 80px 0;
-    width: 100%;
-}
-
-.testimonial-card {
-    background: white;
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    margin: 15px;
-}
-
-.play-button {
-    width: 60px;
-    height: 60px;
-    background: var(--primary-color);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-    margin: 30px auto;
 }
 
 /* ========================================
@@ -771,6 +777,52 @@ footer .btn-outline-light:hover {
 }
 
 /* ========================================
+   MODAL
+   ======================================== */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    right: 12px;
+    top: 10px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.btn-wa {
+    background: #25D366;
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* ========================================
    RESPONSIVE DESIGN
    ======================================== */
 @media (max-width: 1200px) {
@@ -779,9 +831,19 @@ footer .btn-outline-light:hover {
     }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 991px) {
     .hero-card {
         height: 350px;
+    }
+
+    .pricing-layout {
+        flex-direction: column;
+    }
+
+    .pricing-left,
+    .pricing-right {
+        width: 100%;
+        flex: none;
     }
 
     .carousel-inner {
@@ -816,7 +878,7 @@ footer .btn-outline-light:hover {
     }
 
     .hero-card {
-        height: 300px;
+        height: 280px;
     }
 
     .card-group-row {
@@ -867,7 +929,7 @@ footer .btn-outline-light:hover {
 
 @media (max-width: 576px) {
     .hero-card {
-        height: 250px;
+        height: 220px;
     }
 
     .carousel-inner {
@@ -896,310 +958,30 @@ footer .btn-outline-light:hover {
 /* ========================================
    UTILITY CLASSES
    ======================================== */
-.mb-4 {
-    margin-bottom: 1.5rem !important;
+.mb-4 { margin-bottom: 1.5rem !important; }
+.mt-4 { margin-top: 1.5rem !important; }
+.mt-3 { margin-top: 1rem !important; }
+.mb-3 { margin-bottom: 1rem !important;     }
+.mt-1 { margin-top: 0.25rem !important; }
+.d-block { display: block !important; }
+.fw-bold { font-weight: bold !important; }
+.text-center { text-align: center !important; }
+.img-fluid { max-width: 100%; height: auto; }
+.d-flex { display: flex !important; }
+.align-items-center { align-items: center !important; }
+.justify-content-center { justify-content: center !important; }
+.gap-3 { gap: 1rem !important; }
+.flex-wrap { flex-wrap: wrap !important; }
+
+#packageCarousel {
+    overflow: hidden; /* ✅ TAMBAH INI */
+    padding: 40px 30px; /* Padding ditambah */
 }
 
-.mt-4 {
-    margin-top: 1.5rem !important;
+.carousel-inner {
+    overflow: hidden; /* ✅ TAMBAH INI */
 }
 
-.mt-3 {
-    margin-top: 1rem !important;
-}
-
-.mb-3 {
-    margin-bottom: 1rem !important;
-}
-
-.fw-bold {
-    font-weight: bold !important;
-}
-
-.text-center {
-    text-align: center !important;
-}
-
-.img-fluid {
-    max-width: 100%;
-    height: auto;
-}
-
-.d-block {
-    display: block !important;
-}
-
-.d-flex {
-    display: flex !important;
-}
-
-.align-items-center {
-    align-items: center !important;
-}
-
-.justify-content-center {
-    justify-content: center !important;
-}
-
-.gap-3 {
-    gap: 1rem !important;
-}
-
-.flex-wrap {
-    flex-wrap: wrap !important;
-}
-
-/* Force Carousel Display */
-.carousel-item {
-    transition: transform 0.6s ease-in-out;
-}
-
-.carousel-item-next,
-.carousel-item-prev,
-.carousel-item.active {
-    display: block;
-}
-
-.carousel-item-next:not(.carousel-item-start),
-.active.carousel-item-end {
-    transform: translateX(100%);
-}
-
-.carousel-item-prev:not(.carousel-item-end),
-.active.carousel-item-start {
-    transform: translateX(-100%);
-}
-
-/* ===== HERO SLIDER FIX (ANTI ZOOM & ANTI MEMBESAR) ===== */
-
-.hero-card {
-    background-size: contain !important;
-    background-position: center center !important;
-    background-repeat: no-repeat !important;
-
-    height: 450px !important;
-    max-height: 450px;
-    width: 100%;
-}
-
-@media (max-width: 768px) {
-    .hero-card {
-        height: 280px;
-    }
-}
-
-@media (max-width: 576px) {
-    .hero-card {
-        height: 220px;
-    }
-}
-
-
-/* ================= NEWS SECTION ================= */
-
-.news-section {
-    padding: 90px 0;
-    background: #ffffff;
-}
-
-/* Header */
-.section-header {
-    max-width: 650px;
-    margin: 0 auto 60px;
-}
-
-.news-badge {
-    display: inline-block;
-    background: #0dcaf0;
-    color: #fff;
-    padding: 6px 18px;
-    border-radius: 50px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-bottom: 15px;
-}
-
-.section-header h2 {
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.section-header p {
-    color: #6c757d;
-    font-size: 0.95rem;
-}
-
-/* Card */
-.news-card {
-    background: #fff;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    transition: all 0.35s ease;
-}
-
-.news-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 45px rgba(0,0,0,0.15);
-}
-
-/* Image */
-.news-image img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-}
-
-/* Content */
-.news-content {
-    padding: 22px;
-}
-
-.news-date {
-    font-size: 0.8rem;
-    color: #6c757d;
-    display: block;
-    margin-bottom: 10px;
-}
-
-.news-title {
-    font-weight: 700;
-    font-size: 1.05rem;
-    margin-bottom: 10px;
-    line-height: 1.4;
-}
-
-.news-desc {
-    font-size: 0.9rem;
-    color: #555;
-    margin-bottom: 18px;
-}
-
-/* Link */
-.news-link {
-    font-weight: 600;
-    color: #0dcaf0;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.3s ease;
-}
-
-.news-link span {
-    transition: transform 0.3s ease;
-}
-
-.news-link:hover {
-    text-decoration: underline;
-}
-
-.news-link:hover span {
-    transform: translateX(5px);
-}
-
-/* Button */
-.btn-news {
-    display: inline-block;
-    background: #0dcaf0;
-    color: #fff;
-    padding: 14px 50px;
-    border-radius: 50px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn-news:hover {
-    background: #0bb3d9;
-    color: #fff;
-}
-
-.news-section {
-    width: 100%;
-}
-
-.news-image img {
-    width: 100%;
-    height: 260px;
-    object-fit: cover;
-}
-.package-card::before {
-  pointer-events: none;
-}
-
-
-.package-price .text-decoration-line-through {
-    color: #9ca3af;
-    font-size: 16px;
-}
-
-.package-price .fw-bold {
-    color: #14b8a6;
-    font-size: 28px;
-    line-height: 1.2;
-}
-
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  align-items: center;
-  justify-content: center;
-}
-
-.modal.show {
-  display: flex;
-}
-
-.modal-content {
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 400px;
-  text-align: center;
-  position: relative;
-}
-
-.modal-close {
-  position: absolute;
-  right: 12px;
-  top: 10px;
-  font-size: 22px;
-  cursor: pointer;
-}
-
-.btn-wa {
-  background: #25D366;
-  color: white;
-  border: none;
-  padding: 12px;
-  width: 100%;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  z-index: 9999;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal.show {
-  display: flex;
-}
-
-.btn-pilih {
-  position: relative;
-  z-index: 999;
-  pointer-events: auto;
-  cursor: pointer;
+.package-card {
+    max-width: 300px; /* ✅ DIKURANGI dari 320px */
 }

@@ -92,263 +92,68 @@ if (!is_array($paket)) {
 
 
     <!-- Features Section -->
-    <section class="features-section">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-md-4">
-                    <div class="feature-box">
-                        <div class="feature-icon"><i class="fas fa-truck-fast"></i></div>
-                        <h5>RELIABILITY</h5>
-                        <p>Lorem ipsum dolor sit amet.</p>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="feature-box">
-                        <div class="feature-icon"><i class="fas fa-tags"></i></div>
-                        <h5>AFFORDABLE</h5>
-                        <p>Lorem ipsum dolor sit amet.</p>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="feature-box">
-                        <div class="feature-icon"><i class="fas fa-shield-halved"></i></div>
-                        <h5>UNLIMITED</h5>
-                        <p>Lorem ipsum dolor sit amet.</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
     <!-- ========================================
-     PRICING SECTION - FINAL
-     ======================================== -->
-    <section class="pricing-section" id="product">
-        <div class="container">
-            <div class="row">
+ PRICING SECTION - FIXED
+======================================== -->
+<section class="pricing-section" id="product">
+  <div class="container">
 
-                <!-- Location Selector -->
-                <div class="col-lg-4 mb-4">
-                    <div class="location-selector">
-                        <h4>Silakan pilih lokasi Anda untuk melihat detail paket dan harga yang berlaku.</h4>
+    <div class="pricing-layout">
 
-                        <div class="location-dropdown-container">
-                            <button class="location-toggle custom-dropdown-toggle" type="button"
-                                data-bs-toggle="collapse" data-bs-target="#locationOptions" aria-expanded="false">
-                                <span>
-                                    <i class="fas fa-map-marker-alt me-2"></i>
-                                    <span class="fw-bold" id="selected-location-text">Sumatera & Kalimantan</span>
-                                </span>
-                                <i class="fas fa-chevron-down dropdown-icon"></i>
-                            </button>
-                            <div class="collapse location-options-list show" id="locationOptions">
-                                <div class="location-item" data-location="sumatera-kalimantan">Sumatera & Kalimantan
-                                </div>
-                                <div class="location-item" data-location="jawa-bali">Jawa & Bali</div>
-                                <div class="location-item" data-location="indonesia-timur">Indonesia Timur</div>
-                            </div>
-                        </div>
-                    </div>
-            <!-- Package Carousel -->
-            <div class="col-lg-8 mb-4">
-                <div id="packageCarousel" class="carousel slide" data-bs-ride="false">
-                    
-                    <div class="carousel-inner">
+      <!-- KIRI: PILIH LOKASI -->
+      <div class="pricing-left">
+        <div class="location-selector">
+          <h4>
+            Silakan pilih lokasi Anda untuk melihat detail paket dan harga yang berlaku.
+          </h4>
 
-<?php
-$chunks = array_chunk($paket, 3); // 3 card per slide
-$active = 'active';
-?>
+          <div class="location-dropdown-container">
+            <button class="custom-dropdown-toggle" type="button">
+              <span>
+                <i class="fas fa-map-marker-alt"></i>
+                Sumatera & Kalimantan
+              </span>
+              <i class="fas fa-chevron-down dropdown-icon"></i>
+            </button>
 
-<?php foreach ($chunks as $group): ?>
-<div class="carousel-item <?= $active ?>">
-    <div class="card-group-row">
-
-        <?php foreach ($group as $p): ?>
-        <div class="package-card">
-
-            <h4><?= htmlspecialchars($p['name']) ?></h4>
-
-            <div class="package-rating">
-                <span class="rating-badge">★★ 4.5</span>
-                <small>(1,500+ reviews)</small>
+            <!-- ✅ DROPDOWN LIST - TANPA data-location, pakai text saja -->
+            <div class="location-options-list" style="display: none;">
+              <div class="location-item">Sumatera & Kalimantan</div>
+              <div class="location-item">Jawa & Bali</div>
+              <div class="location-item">Indonesia Timur</div>
             </div>
+          </div>
+        </div>
+      </div>
 
-            <div class="package-specs">
-                <p><i class="fas fa-wifi"></i> <?= htmlspecialchars($p['kecepatan']) ?></p>
-                <p><i class="fas fa-laptop"></i> <?= $p['max_laptop'] ?> Laptop</p>
-                <p><i class="fas fa-mobile-alt"></i> <?= $p['max_smartphone'] ?> Smartphone</p>
-                <p><i class="fas fa-network-wired"></i> <?= $p['max_perangkat'] ?> Total Devices</p>
-            </div>
+      <!-- KANAN: PROMO / PACKAGE -->
+      <div class="pricing-right">
 
-            <!-- HARGA SUMATERA -->
-            <div class="package-card"
-                data-sumatera-before="<?= $p['harga_sumatera_before'] ?>"
-                data-sumatera="<?= $p['harga_sumatera'] ?>"
-                data-jawa-before="<?= $p['harga_jawa_before'] ?>"
-                data-jawa="<?= $p['harga_jawa'] ?>"
-                data-timur-before="<?= $p['harga_timur_before'] ?>"
-                data-timur="<?= $p['harga_timur'] ?>"
-            >
+        <div id="packageCarousel" class="carousel slide" data-bs-ride="false">
 
-    <h4><?= htmlspecialchars($p['name']) ?></h4>
+          <div class="carousel-inner">
+            <!-- Data akan diisi oleh JavaScript -->
+          </div>
 
-    <div class="package-rating">
-        <span class="rating-badge">★★ 4.5</span>
-        <small>(1,500+ reviews)</small>
-    </div>
+          <!-- CONTROLS -->
+          <button class="carousel-control-prev" type="button" data-bs-target="#packageCarousel" data-bs-slide="prev">
+            <i class="fas fa-chevron-left carousel-control-icon"></i>
+          </button>
 
-    <div class="package-specs">
-        <p><i class="fas fa-wifi"></i> <?= htmlspecialchars($p['kecepatan']) ?></p>
-        <p><i class="fas fa-laptop"></i> <?= $p['max_laptop'] ?> Laptop</p>
-        <p><i class="fas fa-mobile-alt"></i> <?= $p['max_smartphone'] ?> Smartphone</p>
-        <p><i class="fas fa-network-wired"></i> <?= $p['max_perangkat'] ?> Total Devices</p>
-    </div>
-
-    <!-- 🔥 HARGA DINAMIS (JS ISI) -->
-   <div class="package-price">
-
-<?php if (!empty($p['harga_sumatera_before']) 
-    && $p['harga_sumatera_before'] > $p['harga_sumatera']) : ?>
-
-    <div class="text-muted text-decoration-line-through small">
-        Rp <?= number_format($p['harga_sumatera_before'],0,',','.') ?>
-    </div>
-
-<?php endif; ?>
-
-<div class="fw-bold text-primary fs-5">
-    Rp <?= number_format($p['harga_sumatera'],0,',','.') ?>
-</div>
-
-</div>
-
-<small>Biaya Bulanan</small>
-
-
-
-    <button type="button" class="btn-pilih">
-    Pesan Sekarang →
-    </button>
-
-
-    <small class="d-block mt-1">*Harga sudah termasuk PPN</small>
-
-</div>
-
+          <button class="carousel-control-next" type="button" data-bs-target="#packageCarousel" data-bs-slide="next">
+            <i class="fas fa-chevron-right carousel-control-icon"></i>
+          </button>
 
         </div>
-        <?php endforeach; ?>
+
+      </div>
 
     </div>
-</div>
-<?php $active = ''; endforeach; ?>
 
-</div>
+  </div>
+</section>
 
 
-                    <!-- Carousel Controls -->
-                    <button class="carousel-control-prev" type="button" data-bs-target="#packageCarousel" data-bs-slide="prev">
-                        <i class="fas fa-chevron-left carousel-control-icon"></i>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#packageCarousel" data-bs-slide="next">
-                        <i class="fas fa-chevron-right carousel-control-icon"></i>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-
-                <!-- Package Carousel -->
-                <div class="col-lg-8 mb-4">
-                    <div id="packageCarousel" class="carousel slide" data-bs-ride="false">
-
-                        <div class="carousel-inner">
-
-                            <!-- Slide 1 -->
-                            <div class="carousel-item active">
-                                <div class="card-group-row">
-
-                                    <div class="package-card">
-                                        <h4>ICONNET 100</h4>
-                                        <div class="package-rating">
-                                            <span class="rating-badge">★★ 4.5</span>
-                                            <small>(1,500+ reviews)</small>
-                                        </div>
-                                        <div class="package-specs">
-                                            <p><i class="fas fa-wifi"></i> 100 Mbps</p>
-                                            <p><i class="fas fa-laptop"></i> 40 Laptop</p>
-                                            <p><i class="fas fa-mobile-alt"></i> 60 Smartphone</p>
-                                            <p><i class="fas fa-network-wired"></i> 100 Total Devices</p>
-                                        </div>
-                                        <div class="package-price">Rp. 999.000</div>
-                                        <small>Biaya Bulanan</small>
-                                        <button class="btn-pilih">Pesan Sekarang →</button>
-                                        <small>*Harga sudah termasuk PPN</small>
-                                    </div>
-
-                                    <div class="package-card">
-                                        <h4>ICONNET 35</h4>
-                                        <div class="package-rating">
-                                            <span class="rating-badge">★★ 4.5</span>
-                                            <small>(1,500+ reviews)</small>
-                                        </div>
-                                        <div class="package-specs">
-                                            <p><i class="fas fa-wifi"></i> 35 Mbps</p>
-                                            <p><i class="fas fa-laptop"></i> 15 Laptop</p>
-                                            <p><i class="fas fa-mobile-alt"></i> 25 Smartphone</p>
-                                            <p><i class="fas fa-network-wired"></i> 40 Total Devices</p>
-                                        </div>
-                                        <div class="package-price">Rp. 335.000</div>
-                                        <small>Biaya Bulanan</small>
-                                        <button class="btn-pilih">Pesan Sekarang →</button>
-                                        <small>*Harga sudah termasuk PPN</small>
-                                    </div>
-
-                                    <div class="package-card">
-                                        <h4>ICONNET 50</h4>
-                                        <div class="package-rating">
-                                            <span class="rating-badge">★★ 4.5</span>
-                                            <small>(1,500+ reviews)</small>
-                                        </div>
-                                        <div class="package-specs">
-                                            <p><i class="fas fa-wifi"></i> 50 Mbps</p>
-                                            <p><i class="fas fa-laptop"></i> 20 Laptop</p>
-                                            <p><i class="fas fa-mobile-alt"></i> 30 Smartphone</p>
-                                            <p><i class="fas fa-network-wired"></i> 50 Total Devices</p>
-                                        </div>
-                                        <div class="package-price">Rp. 535.000</div>
-                                        <small>Biaya Bulanan</small>
-                                        <button class="btn-pilih">Pesan Sekarang →</button>
-                                        <small>*Harga sudah termasuk PPN</small>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Carousel Controls -->
-                        <button class="carousel-control-prev" type="button" data-bs-target="#packageCarousel"
-                            data-bs-slide="prev">
-                            <i class="fas fa-chevron-left carousel-control-icon"></i>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#packageCarousel"
-                            data-bs-slide="next">
-                            <i class="fas fa-chevron-right carousel-control-icon"></i>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
 
     <!-- Subscription Section -->
     <section class="subscription-section" id="cara">

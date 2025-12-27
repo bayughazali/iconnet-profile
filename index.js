@@ -1,19 +1,88 @@
-// index.js - Load Data dari Database untuk Homepage - FIXED
+// index.js - FIXED VERSION - Load Data dari Database untuk Homepage
 
 // ==================== LOAD DATA SAAT HALAMAN DIMUAT ====================
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Index.php loaded, fetching data from database...');
     loadPaketFromDatabase();
+    setupLocationDropdown(); // ✅ TAMBAH INI
 });
 
 // ==================== GLOBAL VARIABLES ====================
 let paketData = [];
-let currentLocation = 'sumatera-kalimantan';
+let currentLocation = 'sumatera'; // ✅ GANTI dari 'sumatera-kalimantan' ke 'sumatera'
 
 // ==================== FORMAT RUPIAH ====================
 function formatRupiah(angka) {
     if (!angka) return 'Rp. 0';
     return 'Rp. ' + parseInt(angka).toLocaleString('id-ID');
+}
+
+// ==================== SETUP LOCATION DROPDOWN - FIXED ====================
+function setupLocationDropdown() {
+    console.log('🎯 Setting up location dropdown...');
+    
+    const dropdownBtn = document.querySelector('.custom-dropdown-toggle');
+    const dropdownList = document.querySelector('.location-options-list');
+    const locationItems = document.querySelectorAll('.location-item');
+    
+    if (!dropdownBtn || !dropdownList) {
+        console.error('❌ Dropdown elements not found!');
+        return;
+    }
+    
+    // Toggle dropdown saat button diklik
+    dropdownBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const isOpen = dropdownList.style.display === 'block';
+        dropdownList.style.display = isOpen ? 'none' : 'block';
+        
+        console.log('🔽 Dropdown toggled:', !isOpen ? 'OPEN' : 'CLOSED');
+    });
+    
+    // Handle klik pada setiap lokasi
+    locationItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const locationText = this.textContent.trim();
+            console.log('📍 Location clicked:', locationText);
+            
+            // Tentukan region berdasarkan teks
+            if (locationText.includes('Sumatera')) {
+                currentLocation = 'sumatera';
+            } else if (locationText.includes('Jawa')) {
+                currentLocation = 'jawa';
+            } else if (locationText.includes('Timur')) {
+                currentLocation = 'timur';
+            }
+            
+            console.log('🌍 Current location set to:', currentLocation);
+            
+            // Update button text
+            const buttonText = dropdownBtn.querySelector('span');
+            if (buttonText) {
+                buttonText.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${locationText}`;
+            }
+            
+            // Tutup dropdown
+            dropdownList.style.display = 'none';
+            
+            // Update harga
+            updatePricesByLocation();
+        });
+    });
+    
+    // Tutup dropdown jika klik di luar
+    document.addEventListener('click', function(e) {
+        if (!dropdownBtn.contains(e.target) && !dropdownList.contains(e.target)) {
+            dropdownList.style.display = 'none';
+        }
+    });
+    
+    console.log('✅ Location dropdown setup complete');
 }
 
 // ==================== LOAD PAKET FROM DATABASE ====================
@@ -54,9 +123,9 @@ function loadPaketFromDatabase() {
             
             paketData = data;
             console.log('✅ Paket data stored:', paketData.length, 'items');
+            console.log('📊 First package data:', paketData[0]);
             
             renderPaketCards();
-            setupLocationSelector();
         })
         .catch(error => {
             console.error('❌ Error loading paket:', error);
@@ -93,13 +162,15 @@ function renderPaketCards() {
         const carouselItem = document.createElement('div');
         carouselItem.className = `carousel-item ${isActive}`;
         
-        // ✅ FIX: Create card-group-row WITHOUT "row" class
+        // Create card-group-row
         const cardGroupRow = document.createElement('div');
         cardGroupRow.className = 'card-group-row';
         
-        // ✅ FIX: Add package cards DIRECTLY (no col wrapper)
+        // Add package cards
         slidePackages.forEach((paket, idx) => {
             console.log(`  📦 Adding package ${idx + 1}:`, paket.name || paket.nama);
+            console.log(`  💰 Prices - Sumatera: ${paket.harga_sumatera}, Jawa: ${paket.harga_jawa}, Timur: ${paket.harga_timur}`);
+            
             const packageCard = createPackageCardElement(paket);
             cardGroupRow.appendChild(packageCard);
         });
@@ -111,6 +182,7 @@ function renderPaketCards() {
     
     console.log(`✅ Successfully rendered ${paketData.length} packages in ${slideCount} slides`);
     
+    // Update prices setelah render
     setTimeout(() => {
         updatePricesByLocation();
     }, 100);
@@ -118,18 +190,23 @@ function renderPaketCards() {
 
 // ==================== CREATE PACKAGE CARD ELEMENT - FIXED ====================
 function createPackageCardElement(paket) {
-
     const card = document.createElement('div');
     card.className = 'package-card';
 
-    // ===== DATASET HARGA =====
-    card.dataset.hargaSumatera = paket.harga_sumatera;
-    card.dataset.hargaJawa     = paket.harga_jawa;
-    card.dataset.hargaTimur    = paket.harga_timur;
+    // ✅ PENTING: Simpan data harga di dataset dengan nama yang benar
+    card.dataset.sumatera = paket.harga_sumatera || 0;
+    card.dataset.jawa = paket.harga_jawa || 0;
+    card.dataset.timur = paket.harga_timur || 0;
+    
+    card.dataset.sumateraBefore = paket.harga_sumatera_before || 0;
+    card.dataset.jawaBefore = paket.harga_jawa_before || 0;
+    card.dataset.timurBefore = paket.harga_timur_before || 0;
 
-    card.dataset.hargaSumateraBefore = paket.harga_sumatera_before;
-    card.dataset.hargaJawaBefore     = paket.harga_jawa_before;
-    card.dataset.hargaTimurBefore    = paket.harga_timur_before;
+    console.log('🏷️ Card dataset created:', {
+        sumatera: card.dataset.sumatera,
+        jawa: card.dataset.jawa,
+        timur: card.dataset.timur
+    });
 
     card.innerHTML = `
         <h4>${paket.name}</h4>
@@ -141,116 +218,139 @@ function createPackageCardElement(paket) {
             <p><i class="fas fa-network-wired"></i> ${paket.max_perangkat} Total Devices</p>
         </div>
 
-        <!-- 🔥 HARGA PROMO -->
-        <div class="package-price price-abonemen"></div>
+        <div class="package-price"></div>
 
         <small>Biaya Bulanan</small>
 
-        <!-- 🔴 BUTTON TARUH DI SINI -->
         <button type="button" class="btn-pilih">
-        Pesan Sekarang →
+            Pesan Sekarang →
         </button>
 
-
-        </div>
-
-        <small>*Harga sudah termasuk PPN</small>
+        <small class="d-block mt-1">*Harga sudah termasuk PPN</small>
     `;
 
     return card;
 }
 
-
-
-// ==================== UPDATE PRICES BY LOCATION ====================
+// ==================== UPDATE PRICES BY LOCATION - FIXED ====================
 function updatePricesByLocation() {
-
+    console.log('💰 Updating prices for location:', currentLocation);
     
-
-
-    document.querySelectorAll('.package-card').forEach(card => {
-        
-
+    const cards = document.querySelectorAll('.package-card');
+    console.log('📋 Found', cards.length, 'package cards');
+    
+    cards.forEach((card, index) => {
         let before = 0;
-        let after  = 0;
+        let after = 0;
 
-        if (currentLocation === 'sumatera-kalimantan') {
-            before = card.dataset.hargaSumateraBefore;
-            after  = card.dataset.hargaSumatera;
+        // ✅ AMBIL DATA BERDASARKAN LOKASI YANG BENAR
+        if (currentLocation === 'sumatera') {
+            before = card.dataset.sumateraBefore || 0;
+            after = card.dataset.sumatera || 0;
         } 
-        else if (currentLocation === 'jawa-bali') {
-            before = card.dataset.hargaJawaBefore;
-            after  = card.dataset.hargaJawa;
+        else if (currentLocation === 'jawa') {
+            before = card.dataset.jawaBefore || 0;
+            after = card.dataset.jawa || 0;
         } 
-        else if (currentLocation === 'indonesia-timur') {
-            before = card.dataset.hargaTimurBefore;
-            after  = card.dataset.hargaTimur;
+        else if (currentLocation === 'timur') {
+            before = card.dataset.timurBefore || 0;
+            after = card.dataset.timur || 0;
         }
 
-        // 🔍 DEBUG (INI YANG KITA CEK)
-        console.log({
-            before,
-            after,
-            location: currentLocation
-        });
+        console.log(`📦 Card ${index + 1} - Location: ${currentLocation}, Before: ${before}, After: ${after}`);
 
-        const el = card.querySelector('.price-abonemen');
-        if (el) {
-            el.innerHTML = hargaView(before, after);
+        const priceEl = card.querySelector('.package-price');
+        if (priceEl) {
+            priceEl.innerHTML = hargaView(before, after);
+            console.log(`✅ Price updated for card ${index + 1}`);
+        } else {
+            console.error(`❌ Price element not found for card ${index + 1}`);
         }
     });
+    
+    console.log('✅ All prices updated');
 }
 
-
-
-// ==================== SETUP LOCATION SELECTOR ====================
-function setupLocationSelector() {
-    const locationItems = document.querySelectorAll('.location-item');
-    const selectedLocationText = document.getElementById('selected-location-text');
+// ==================== HARGA VIEW (CORET + AFTER) ====================
+const hargaView = (before, after) => {
+    before = parseInt(before) || 0;
+    after = parseInt(after) || 0;
     
-    if (locationItems.length === 0) {
-        console.warn('⚠️ Location selector items not found');
-        return;
+    console.log('🎨 Rendering price view - Before:', before, 'After:', after);
+    
+    if (before > 0 && before > after) {
+        return `
+            <div style="text-decoration:line-through;color:#9ca3af;font-size:16px;">
+                Rp ${before.toLocaleString('id-ID')}
+            </div>
+            <div style="font-size:28px;font-weight:700;color:#14b8a6;">
+                Rp ${after.toLocaleString('id-ID')}
+            </div>
+        `;
     }
     
-    console.log(`✅ Found ${locationItems.length} location items`);
-    
-    locationItems.forEach(item => {
-        const newItem = item.cloneNode(true);
-        item.parentNode.replaceChild(newItem, item);
+    return `
+        <div style="font-size:28px;font-weight:700;color:#14b8a6;">
+            Rp ${after.toLocaleString('id-ID')}
+        </div>
+    `;
+};
+
+// ==================== MODAL PESAN SEKARANG ====================
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('modalPesan');
+    const modalNama = document.getElementById('modalNama');
+    const modalKecepatan = document.getElementById('modalKecepatan');
+    const modalHarga = document.getElementById('modalHarga');
+    const btnWhatsapp = document.getElementById('btnWhatsapp');
+
+    document.addEventListener('click', e => {
+        const btn = e.target.closest('.btn-pilih');
+        if (!btn) return;
+
+        const card = btn.closest('.package-card');
+        if (!card) return;
+
+        const nama = card.querySelector('h4')?.textContent || '';
+        const kecepatan = card.querySelector('.package-specs p')?.textContent || '';
+
+        let before = 0;
+        let after = 0;
+
+        if (currentLocation === 'sumatera') {
+            before = card.dataset.sumateraBefore;
+            after = card.dataset.sumatera;
+        } else if (currentLocation === 'jawa') {
+            before = card.dataset.jawaBefore;
+            after = card.dataset.jawa;
+        } else if (currentLocation === 'timur') {
+            before = card.dataset.timurBefore;
+            after = card.dataset.timur;
+        }
+
+        modalNama.textContent = nama;
+        modalKecepatan.textContent = kecepatan;
+        modalHarga.textContent = formatRupiah(after);
+
+        btnWhatsapp.dataset.text =
+`Halo, saya ingin pesan paket ${nama}
+${kecepatan}
+Harga: ~${formatRupiah(before)}~
+Menjadi ${formatRupiah(after)}`;
+
+        modal.classList.add('show');
     });
-    
-    const newLocationItems = document.querySelectorAll('.location-item');
-    
-    newLocationItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const newLocation = this.getAttribute('data-location');
-            const locationName = this.textContent.trim();
-            
-            console.log('📍 Location clicked:', newLocation);
-            
-            currentLocation = newLocation;
-            
-            if (selectedLocationText) {
-                selectedLocationText.textContent = locationName;
-            }
-            
-            updatePricesByLocation();
-            
-            const collapseElement = document.getElementById('locationOptions');
-            if (collapseElement && typeof bootstrap !== 'undefined') {
-                const bsCollapse = bootstrap.Collapse.getInstance(collapseElement);
-                if (bsCollapse) {
-                    bsCollapse.hide();
-                }
-            }
-        });
+
+    document.querySelector('.modal-close')?.addEventListener('click', () => {
+        modal.classList.remove('show');
     });
-    
-    console.log('✅ Location selector initialized');
-}
+
+    btnWhatsapp?.addEventListener('click', () => {
+        const nomorWA = '6289502434324';
+        const text = encodeURIComponent(btnWhatsapp.dataset.text);
+        window.open(`https://wa.me/${nomorWA}?text=${text}`, '_blank');
+    });
+});
 
 // ==================== SHOW ERROR MESSAGE ====================
 function showErrorMessage(errorMsg) {
@@ -293,198 +393,3 @@ function showNoDataMessage() {
         `;
     }
 }
-
-// ===== HELPER VIEW HARGA =====
-const hargaView = (before, after) => {
-    if (Number(before) >= Number(after)) {
-        return `
-            <div style="text-decoration:line-through;color:#9ca3af">
-                Rp ${Number(before).toLocaleString('id-ID')}
-            </div>
-            <div style="font-size:28px;font-weight:700;color:#14b8a6">
-                Rp ${Number(after).toLocaleString('id-ID')}
-            </div>
-        `;
-    }
-
-    return `
-        <div style="font-size:28px;font-weight:700;color:#14b8a6">
-            Rp ${Number(after).toLocaleString('id-ID')}
-        </div>
-    `;
-};
-
-
-
-// data.forEach(paket => {
-
-//     const card = document.createElement('div');
-//     card.className = 'package-card';
-
-//     const priceEl = document.createElement('div');
-//     priceEl.className = 'package-price';
-
-//     let before = 0;
-//     let after  = 0;
-
-//     if (lokasi === 'sumatera-kalimantan') {
-//         before = paket.harga_sumatera_before;
-//         after  = paket.harga_sumatera;
-//     } 
-//     else if (lokasi === 'jawa-bali') {
-//         before = paket.harga_jawa_before;
-//         after  = paket.harga_jawa;
-//     } 
-//     else if (lokasi === 'indonesia-timur') {
-//         before = paket.harga_timur_before;
-//         after  = paket.harga_timur;
-//     }
-
-//     priceEl.innerHTML = hargaView(before, after);
-
-//     card.innerHTML = `
-//         <h4>${paket.name}</h4>
-//         <div class="package-specs">
-//             <p>${paket.kecepatan}</p>
-//             <p>${paket.max_laptop} Laptop</p>
-//             <p>${paket.max_smartphone} Smartphone</p>
-//         </div>
-//     `;
-
-//     card.appendChild(priceEl);
-//     container.appendChild(card);
-// });
-
-// ==================== MODAL PESAN SEKARANG ====================
-document.addEventListener('DOMContentLoaded', () => {
-
-  const modal = document.getElementById('modalPesan');
-  const modalNama = document.getElementById('modalNama');
-  const modalKecepatan = document.getElementById('modalKecepatan');
-  const modalHarga = document.getElementById('modalHarga');
-  const btnWhatsapp = document.getElementById('btnWhatsapp');
-
-  document.addEventListener('click', e => {
-    const btn = e.target.closest('.btn-pilih');
-    if (!btn) return;
-
-    const card = btn.closest('.package-card');
-    if (!card) return;
-
-    // ===== DATA =====
-    const nama = card.querySelector('h4')?.textContent || '';
-    const kecepatan = card.querySelector('.package-specs p')?.textContent || '';
-
-    let before = 0;
-    let after = 0;
-
-    if (currentLocation === 'sumatera-kalimantan') {
-      before = card.dataset.hargaSumateraBefore;
-      after  = card.dataset.hargaSumatera;
-    } else if (currentLocation === 'jawa-bali') {
-      before = card.dataset.hargaJawaBefore;
-      after  = card.dataset.hargaJawa;
-    } else {
-      before = card.dataset.hargaTimurBefore;
-      after  = card.dataset.hargaTimur;
-    }
-
-    // ===== MODAL =====
-    modalNama.textContent = nama;
-    modalKecepatan.textContent = kecepatan;
-    modalHarga.textContent = formatRupiah(after);
-
-    // ===== WHATSAPP (PAKAI CORET WA) =====
-    btnWhatsapp.dataset.text =
-`Halo, saya ingin pesan paket ${nama}
-${kecepatan}
-Harga: ~${formatRupiah(before)}~
-Menjadi ${formatRupiah(after)}`;
-
-    modal.classList.add('show');
-  });
-
-  document.querySelector('.modal-close')?.addEventListener('click', () => {
-    modal.classList.remove('show');
-  });
-
-  btnWhatsapp?.addEventListener('click', () => {
-    const nomorWA = '6289502434324';
-    const text = encodeURIComponent(btnWhatsapp.dataset.text);
-    window.open(`https://wa.me/${nomorWA}?text=${text}`, '_blank');
-  });
-
-});
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  renderHarga('sumatera-kalimantan');
-
-  document.querySelectorAll('.location-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const lokasi = item.dataset.location;
-      document.getElementById('selected-location-text').innerText = item.innerText;
-      renderHarga(lokasi);
-    });
-  });
-});
-
-document.querySelectorAll('.btn-pilih').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const card = btn.closest('.package-card');
-
-    const nama = card.dataset.nama;
-    const kecepatan = card.dataset.kecepatan;
-    const harga = card.dataset.harga;
-
-    // isi modal
-  });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-
-  const modal = document.getElementById('modalPesan');
-  const modalNama = document.getElementById('modalNama');
-  const modalKecepatan = document.getElementById('modalKecepatan');
-  const modalHarga = document.getElementById('modalHarga');
-  const btnWhatsapp = document.getElementById('btnWhatsapp');
-
-  document.querySelectorAll('.btn-pilih').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const card = btn.closest('.package-card');
-
-      if (!card) {
-        console.error('package-card tidak ditemukan');
-        return;
-      }
-
-      modalNama.textContent = card.dataset.nama;
-      modalKecepatan.textContent = card.dataset.kecepatan;
-      modalHarga.textContent = 'Rp ' + Number(card.dataset.harga).toLocaleString('id-ID');
-
-      btnWhatsapp.dataset.text =
-        `Halo, saya ingin pesan paket ${card.dataset.nama}
-Kecepatan: ${card.dataset.kecepatan}
-Harga: Rp ${Number(card.dataset.harga).toLocaleString('id-ID')}`;
-
-      modal.classList.add('show');
-    });
-  });
-
-  document.querySelector('.modal-close').onclick = () => {
-    modal.classList.remove('show');
-  };
-
-  btnWhatsapp.onclick = () => {
-    const nomorWA = '6281252519535'; // GANTI
-    const text = encodeURIComponent(btnWhatsapp.dataset.text);
-    window.open(`https://wa.me/${nomorWA}?text=${text}`, '_blank');
-  };
-
-});
-
-document.addEventListener('click', e => {
-  if (e.target.classList.contains('btn-pilih')) {
-    alert('BUTTON TERKLIK');
-  }
-});
