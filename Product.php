@@ -1120,32 +1120,37 @@ html {
 </head>
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+   <!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top">
 
-        <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <img src="image/iconnet.png" alt="ICONNET">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto me-4">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="product.php">Product & Add on</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php#cara">Cara Berlangganan</a>
-                    </li>
-                </ul>
-                <a href="promo.php" class="btn-promo">PROMO</a>
-            </div>
+    <div class="container-fluid px-5">
+        
+        <a class="navbar-brand" href="index.php">
+            <img src="image/iconnet.png" alt="ICONNET">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto me-4">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="product.php">Product & Add on</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php#cara">Cara Berlangganan</a>
+                </li>
+            </ul>
+            <a href="promo.php" class="btn-promo">PROMO</a>
         </div>
-    </nav>
+
+    </div>
+</nav>
+
 
     <!-- HEADER SECTION -->
     <section class="product-header-section">

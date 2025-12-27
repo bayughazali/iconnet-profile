@@ -185,41 +185,76 @@
     from { transform: scale(0.9); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
 }
+.main-header {
+    background: #eef7fb;
+}
+
+.navbar {
+    padding: 12px 0;
+}
+
+.logo-iconnet {
+    height: 60px;
+    object-fit: contain;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    color: #333;
+}
+
+.navbar-nav .nav-link.active {
+    font-weight: 600;
+    color: #0d6efd;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #0d6efd;
+}
+body {
+    padding-top: 90px; /* SESUAI tinggi navbar */
+}
+
   </style>
 </head>
 <body>
 
 <header class="main-header">
-  <nav class="navbar navbar-expand-lg container">
-    
-    <!-- LOGO -->
-    <a class="navbar-brand" href="index.php">
-      <img src="image/iconnet.png" alt="ICONNET Logo" class="logo-iconnet">
-    </a>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+    <div class="container-fluid px-5">
 
-    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navMenu">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+      <!-- LOGO KIRI -->
+      <a class="navbar-brand" href="index.php">
+        <img src="image/iconnet.png" class="logo-iconnet" alt="ICONNET">
+      </a>
 
-    <div id="navMenu" class="collapse navbar-collapse">
-      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
-        <li class="nav-item">
-          <a class="nav-link active" href="index.php">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="product.php">Product & Add On</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Blog</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">About Us</a>
-        </li>
-      </ul>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- MENU KANAN -->
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto gap-4">
+          <li class="nav-item">
+            <a class="nav-link active" href="index.php">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="product.php">Product & Add On</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About Us</a>
+          </li>
+        </ul>
+      </div>
+
     </div>
-
   </nav>
 </header>
+
+
 
 
 <div class="container mt-3">

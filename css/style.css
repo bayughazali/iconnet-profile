@@ -94,35 +94,28 @@ body {
 
 /* Slider Container - Dari CSS Lama yang Berfungsi */
 .slider-container {
-    position: relative;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
     overflow: hidden;
     border-radius: 20px;
 }
 
 .slider-wrapper {
     display: flex;
-    width: 300%;
-    transition: transform 1s ease-in-out;
+    transition: transform 0.6s ease-in-out;
 }
 
 .slide {
     min-width: 100%;
-    flex-shrink: 0;
 }
 
-/* Hero Card - PERBAIKAN UTAMA */
 .hero-card {
-    width: 100%;
     height: 450px;
-    border-radius: 18px;
-    background-size: cover !important; /* Ubah dari contain ke cover */
+    background-size: cover; /* WAJIB */
     background-position: center;
     background-repeat: no-repeat;
-    background-color: var(--light-bg);
 }
+
+
+
 
 /* Slider Indicators - Dari CSS Lama */
 .slider-indicators {
@@ -975,3 +968,28 @@ footer .btn-outline-light:hover {
 .active.carousel-item-start {
     transform: translateX(-100%);
 }
+
+/* ===== HERO SLIDER FIX (ANTI ZOOM & ANTI MEMBESAR) ===== */
+
+.hero-card {
+    background-size: contain !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+
+    height: 450px !important;
+    max-height: 450px;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .hero-card {
+        height: 280px;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-card {
+        height: 220px;
+    }
+}
+
