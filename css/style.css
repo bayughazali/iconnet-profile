@@ -994,6 +994,7 @@ footer .btn-outline-light:hover {
     }
 }
 
+<<<<<<< Updated upstream
 
 /* ================= NEWS SECTION ================= */
 
@@ -1124,3 +1125,85 @@ footer .btn-outline-light:hover {
     height: 260px;
     object-fit: cover;
 }
+=======
+.package-card::before {
+  pointer-events: none;
+}
+
+
+.package-price .text-decoration-line-through {
+    color: #9ca3af;
+    font-size: 16px;
+}
+
+.package-price .fw-bold {
+    color: #14b8a6;
+    font-size: 28px;
+    line-height: 1.2;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.btn-wa {
+  background: #25D366;
+  color: white;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.btn-pilih {
+  position: relative;
+  z-index: 999;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+>>>>>>> Stashed changes

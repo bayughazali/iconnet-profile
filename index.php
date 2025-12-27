@@ -1,3 +1,25 @@
+<?php
+$paket = [];
+
+// WAJIB URL HTTP, BUKAN PATH FILE
+$apiUrl = "http://localhost/iconnet-profile/api_paket.php";
+
+// Ambil data dari API
+$response = @file_get_contents($apiUrl);
+
+if ($response !== false) {
+    $json = json_decode($response, true);
+    if (is_array($json)) {
+        $paket = $json;
+    }
+}
+
+// Anti error mutlak
+if (!is_array($paket)) {
+    $paket = [];
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -124,6 +146,7 @@
                                 <i class="fas fa-chevron-down dropdown-icon"></i>
                             </button>
 
+<<<<<<< Updated upstream
                             <div class="collapse location-options-list show" id="locationOptions">
                                 <div class="location-item" data-location="sumatera-kalimantan">Sumatera & Kalimantan
                                 </div>
@@ -132,6 +155,116 @@
                             </div>
                         </div>
                     </div>
+=======
+            <!-- Package Carousel -->
+            <div class="col-lg-8 mb-4">
+                <div id="packageCarousel" class="carousel slide" data-bs-ride="false">
+                    
+                    <div class="carousel-inner">
+
+<?php
+$chunks = array_chunk($paket, 3); // 3 card per slide
+$active = 'active';
+?>
+
+<?php foreach ($chunks as $group): ?>
+<div class="carousel-item <?= $active ?>">
+    <div class="card-group-row">
+
+        <?php foreach ($group as $p): ?>
+        <div class="package-card">
+
+            <h4><?= htmlspecialchars($p['name']) ?></h4>
+
+            <div class="package-rating">
+                <span class="rating-badge">★★ 4.5</span>
+                <small>(1,500+ reviews)</small>
+            </div>
+
+            <div class="package-specs">
+                <p><i class="fas fa-wifi"></i> <?= htmlspecialchars($p['kecepatan']) ?></p>
+                <p><i class="fas fa-laptop"></i> <?= $p['max_laptop'] ?> Laptop</p>
+                <p><i class="fas fa-mobile-alt"></i> <?= $p['max_smartphone'] ?> Smartphone</p>
+                <p><i class="fas fa-network-wired"></i> <?= $p['max_perangkat'] ?> Total Devices</p>
+            </div>
+
+            <!-- HARGA SUMATERA -->
+            <div class="package-card"
+                data-sumatera-before="<?= $p['harga_sumatera_before'] ?>"
+                data-sumatera="<?= $p['harga_sumatera'] ?>"
+                data-jawa-before="<?= $p['harga_jawa_before'] ?>"
+                data-jawa="<?= $p['harga_jawa'] ?>"
+                data-timur-before="<?= $p['harga_timur_before'] ?>"
+                data-timur="<?= $p['harga_timur'] ?>"
+            >
+
+    <h4><?= htmlspecialchars($p['name']) ?></h4>
+
+    <div class="package-rating">
+        <span class="rating-badge">★★ 4.5</span>
+        <small>(1,500+ reviews)</small>
+    </div>
+
+    <div class="package-specs">
+        <p><i class="fas fa-wifi"></i> <?= htmlspecialchars($p['kecepatan']) ?></p>
+        <p><i class="fas fa-laptop"></i> <?= $p['max_laptop'] ?> Laptop</p>
+        <p><i class="fas fa-mobile-alt"></i> <?= $p['max_smartphone'] ?> Smartphone</p>
+        <p><i class="fas fa-network-wired"></i> <?= $p['max_perangkat'] ?> Total Devices</p>
+    </div>
+
+    <!-- 🔥 HARGA DINAMIS (JS ISI) -->
+   <div class="package-price">
+
+<?php if (!empty($p['harga_sumatera_before']) 
+    && $p['harga_sumatera_before'] > $p['harga_sumatera']) : ?>
+
+    <div class="text-muted text-decoration-line-through small">
+        Rp <?= number_format($p['harga_sumatera_before'],0,',','.') ?>
+    </div>
+
+<?php endif; ?>
+
+<div class="fw-bold text-primary fs-5">
+    Rp <?= number_format($p['harga_sumatera'],0,',','.') ?>
+</div>
+
+</div>
+
+<small>Biaya Bulanan</small>
+
+
+
+    <button type="button" class="btn-pilih">
+    Pesan Sekarang →
+    </button>
+
+
+    <small class="d-block mt-1">*Harga sudah termasuk PPN</small>
+
+</div>
+
+
+        </div>
+        <?php endforeach; ?>
+
+    </div>
+</div>
+<?php $active = ''; endforeach; ?>
+
+</div>
+
+
+                    <!-- Carousel Controls -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#packageCarousel" data-bs-slide="prev">
+                        <i class="fas fa-chevron-left carousel-control-icon"></i>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#packageCarousel" data-bs-slide="next">
+                        <i class="fas fa-chevron-right carousel-control-icon"></i>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                    
+>>>>>>> Stashed changes
                 </div>
 
                 <!-- Package Carousel -->
@@ -545,7 +678,46 @@
 
             reset();
         });
+<<<<<<< Updated upstream
     </script>
+=======
+
+        indicators.appendChild(dot);
+    }
+
+    const dots = indicators.children;
+
+    function update() {
+        slider.style.transform = `translateX(-${index * 100}%)`;
+        [...dots].forEach(d => d.classList.remove("active"));
+        dots[index].classList.add("active");
+    }
+
+    function next() {
+        index = (index + 1) % total;
+        update();
+    }
+
+    function reset() {
+        clearInterval(interval);
+        interval = setInterval(next, 5000);
+    }
+
+    reset();
+}); 
+
+
+</script>
+<div id="modalPesan" class="modal">
+  <div class="modal-content">
+    <span class="modal-close">&times;</span>
+    <h3 id="modalNama"></h3>
+    <p id="modalKecepatan"></p>
+    <p id="modalHarga"></p>
+    <button id="btnWhatsapp" class="btn-wa">Pesan via WhatsApp</button>
+  </div>
+</div>
+>>>>>>> Stashed changes
 
 </body>
 
