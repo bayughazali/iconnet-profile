@@ -477,6 +477,14 @@
                 gap: 20px;
             }
         }
+
+        td:last-child {
+            display: table-cell !important;
+        }
+
+        td button {
+            display: inline-block !important;
+        }
     </style>
 </head>
 <body>
@@ -493,6 +501,7 @@
             <li><a onclick="showPage('berita')"><i class="fas fa-newspaper"></i><span>Kelola Berita</span></a></li>
             <li><a onclick="showPage('faq')"><i class="fas fa-question-circle"></i><span>Kelola FAQ</span></a></li>
             <li><a onclick="showPage('promo')"><i class="fas fa-tags"></i><span>Kelola Promo</span></a></li>
+            <li><a onclick="showPage('addon')"><i class="fas fa-info"></i><span>Kelola Add On</span></a></li>
             <!-- <li><a onclick="showPage('transaksi')"><i class="fas fa-file-invoice"></i><span>Transaksi</span></a></li> -->
         </ul>
     </div>
@@ -516,6 +525,40 @@
                 </button>
             </div>
         </div>
+
+        <!-- ADD ON PAGE -->
+<!-- ADD ON PAGE -->
+<div id="page-addon" class="page-section">
+    <div class="content-card">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="mb-0"><i class="fas fa-info"></i> Kelola Add On</h4>
+            <button class="btn btn-primary" onclick="openAddonModal()">
+                <i class="fas fa-plus me-2"></i>Tambah Add On
+            </button>
+        </div>
+
+        <div class="table-responsive">
+           <table class="table table-hover align-middle">
+                <thead class="table-info">
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Add On</th>
+                        <th>Kategori</th>
+                        <th>Deskripsi</th>
+                        <th>Harga</th>
+                        <th>Biaya Instalasi</th>
+                        <th>Gambar</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="addonTable">
+                    <!-- DATA DIISI OLEH dashboard.js -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
         <!-- DASHBOARD PAGE -->
         <div id="page-dashboard" class="page-section active">
@@ -1292,6 +1335,280 @@ function addSlider() {
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-warning" onclick="updatePaket()">
+                    <i class="fas fa-save me-2"></i>Simpan Perubahan
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Tambah Add On -->
+<div class="modal fade" id="modalTambahAddon" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-plus-circle me-2"></i>Tambah Add On Baru
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formAddon">
+                    <!-- Informasi Dasar -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-info-circle me-2"></i>Informasi Dasar</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-tag me-2 text-primary"></i>Nama Add On *
+                                </label>
+                                <input type="text" class="form-control" id="addon_name" required>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-list me-2 text-primary"></i>Kategori *
+                                    </label>
+                                    <select class="form-select" id="addon_category" required>
+                                        <option value="">-- Pilih Kategori --</option>
+                                        <option value="wifi_extender">WiFi Extender</option>
+                                        <option value="iconplay">ICONPLAY</option>
+                                        <option value="other">Lainnya</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-toggle-on me-2 text-primary"></i>Status
+                                    </label>
+                                    <select class="form-select" id="addon_status">
+                                        <option value="1">✓ Aktif (Tampil di Website)</option>
+                                        <option value="0">✗ Nonaktif (Tersembunyi)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-align-left me-2 text-primary"></i>Deskripsi
+                                </label>
+                                <textarea class="form-control" id="addon_description" rows="3" 
+                                          placeholder="Jelaskan detail add on..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Harga -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-money-bill-wave me-2"></i>Informasi Harga</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Harga Add On *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="addon_price" 
+                                               placeholder="145000" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Biaya Instalasi</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="addon_installation_fee" 
+                                               placeholder="0" value="0">
+                                    </div>
+                                    <small class="text-muted">Kosongkan atau isi 0 jika gratis instalasi</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upload Gambar -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-image me-2"></i>Gambar Add On</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Upload Gambar</label>
+                                <input type="file" class="form-control" id="addon_image" 
+                                       accept="image/png, image/jpeg, image/jpg, image/webp">
+                                <small class="text-muted">Format: PNG, JPG, WEBP (Max. 2MB)</small>
+                                
+                                <!-- Preview Image -->
+                                <div id="image-preview-addon" class="mt-3" style="display: none;">
+                                    <img id="preview-img-addon" src="" alt="Preview" 
+                                         class="img-thumbnail" style="max-width: 200px;">
+                                    <button type="button" class="btn btn-sm btn-danger mt-2" 
+                                            onclick="removeImageAddon()">
+                                        <i class="fas fa-times"></i> Hapus Gambar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fitur/Layanan Tersedia -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-list-check me-2"></i>Layanan Tersedia (Opsional)</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Fitur/Layanan</label>
+                                <textarea class="form-control" id="addon_fitur" rows="3" 
+                                          placeholder="Contoh: cepat dan luas, stabil, dll (pisahkan dengan enter)"></textarea>
+                                <small class="text-muted">Pisahkan setiap fitur dengan enter/baris baru</small>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" onclick="addAddon()">
+                    Simpan
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit Add On -->
+<div class="modal fade" id="modalEditAddon" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-warning text-dark">
+                <h5 class="modal-title">
+                    <i class="fas fa-edit me-2"></i>Edit Add On
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-edit-addon">
+                    <input type="hidden" id="edit_addon_id">
+                    
+                    <!-- Informasi Dasar -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-info-circle me-2"></i>Informasi Dasar</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Nama Add On *</label>
+                                <input type="text" class="form-control" id="edit_addon_name" required>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Kategori *</label>
+                                    <select class="form-select" id="edit_addon_category" required>
+                                        <option value="wifi_extender">WiFi Extender</option>
+                                        <option value="iconplay">ICONPLAY</option>
+                                        <option value="other">Lainnya</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Status</label>
+                                    <select class="form-select" id="edit_addon_status">
+                                        <option value="1">✓ Aktif</option>
+                                        <option value="0">✗ Nonaktif</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Deskripsi</label>
+                                <textarea class="form-control" id="edit_addon_description" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Harga -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-money-bill-wave me-2"></i>Informasi Harga</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Harga Add On *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_addon_price" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Biaya Instalasi</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_addon_installation_fee">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gambar -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-image me-2"></i>Gambar Add On</strong>
+                        </div>
+                        <div class="card-body">
+                            <!-- Current Image -->
+                            <div id="edit-current-image-addon" style="display: none;" class="mb-2">
+                                <p class="text-muted small">Gambar saat ini:</p>
+                                <img id="edit-current-img-addon" src="" alt="Current" 
+                                     class="img-thumbnail" style="max-width: 150px;">
+                            </div>
+                            
+                            <!-- Upload New -->
+                            <div class="mb-3">
+                                <label class="form-label">Upload Gambar Baru (Opsional)</label>
+                                <input type="file" class="form-control" id="edit_addon_image" 
+                                       accept="image/png, image/jpeg, image/jpg, image/webp">
+                                <small class="text-muted">Kosongkan jika tidak ingin mengubah gambar</small>
+                                
+                                <!-- Preview New Image -->
+                                <div id="edit-image-preview-addon" class="mt-3" style="display: none;">
+                                    <img id="edit-preview-img-addon" src="" alt="Preview" 
+                                         class="img-thumbnail" style="max-width: 200px;">
+                                    <button type="button" class="btn btn-sm btn-danger mt-2" 
+                                            onclick="removeEditImageAddon()">
+                                        <i class="fas fa-times"></i> Hapus
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fitur -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-list-check me-2"></i>Layanan Tersedia</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Fitur/Layanan</label>
+                                <textarea class="form-control" id="edit_addon_fitur" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-warning" onclick="updateAddon()">
                     <i class="fas fa-save me-2"></i>Simpan Perubahan
                 </button>
             </div>

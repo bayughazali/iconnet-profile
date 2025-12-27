@@ -1423,3 +1423,461 @@ function removeEditImagePromo() {
     if (cont) cont.style.display = 'none';
     if (curr) curr.style.display = 'block';
 }
+
+// =============================================
+// ADDON FUNCTIONS
+// =============================================
+
+// Load Add On Data
+function loadAddon() {
+    fetch('addon_action.php?action=list')
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.getElementById('addon-table-body');
+            if (!tbody) return;
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Belum ada data add on</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.map(addon => `
+                <tr>
+                    <td><strong>${addon.name}</strong></td>
+                    <td><strong class="text-success">Rp ${parseInt(addon.price).toLocaleString('id-ID')}</strong></td>
+                    <td>${addon.description || '-'}</td>
+                    <td>
+                        <span class="badge-status ${addon.status == 1 ? 'badge-active' : 'badge-inactive'}">
+                            ${addon.status == 1 ? '✓ Aktif' : '✗ Nonaktif'}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-warning btn-action" onclick="editAddon(${addon.id})">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-sm btn-danger btn-action" onclick="deleteAddon(${addon.id}, '${addon.name}')">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        })
+        .catch(error => {
+            console.error('Error loading addon:', error);
+            const tbody = document.getElementById('addon-table-body');
+            if (tbody) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error loading data</td></tr>';
+            }
+        });
+}
+
+// Open Add On Modal
+function openAddonModal() {
+    const form = document.getElementById('form-addon');
+    if (form) form.reset();
+    
+    const modal = new bootstrap.Modal(document.getElementById('modalTambahAddon'));
+    modal.show();
+}
+
+// Add Add On
+function addAddon() {
+    const name = document.getElementById('addon_name').value;
+    const price = document.getElementById('addon_price').value;
+    const description = document.getElementById('addon_description').value;
+    const status = document.getElementById('addon_status').value;
+
+    if (!name || !price) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Nama dan harga wajib diisi!'
+        });
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('price', price);
+    formData.append('description', description);
+    formData.append('status', status);
+
+    fetch('addon_action.php?action=add', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Add On berhasil ditambahkan',
+                timer: 1500
+            }).then(() => {
+                bootstrap.Modal.getInstance(document.getElementById('modalTambahAddon')).hide();
+                loadAddon();
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: data.message || 'Terjadi kesalahan'
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Terjadi kesalahan saat mengirim data'
+        });
+    });
+}
+
+// Edit Add On
+function editAddon(id) {
+    fetch(`addon_action.php?action=get&id=${id}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const addon = data.data;
+                document.getElementById('edit_addon_id').value = addon.id;
+                document.getElementById('edit_addon_name').value = addon.name;
+                document.getElementById('edit_addon_price').value = addon.price;
+                document.getElementById('edit_addon_description').value = addon.description || '';
+                document.getElementById('edit_addon_status').value = addon.status;
+
+                const modal = new bootstrap.Modal(document.getElementById('modalEditAddon'));
+                modal.show();
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// =============================================
+// ADDON FUNCTIONS
+// =============================================
+
+// ========================================
+// FUNGSI ADD ON - LENGKAP
+// ========================================
+
+// Load data Add On
+function loadAddon() {
+    fetch("api_addon.php")
+        .then(res => res.json())
+        .then(data => {
+            let html = "";
+
+            data.forEach((item, index) => {
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>  <!-- Nomor urut 1,2,3,4,5... -->
+                        <td>${item.name}</td>
+                        <td>${item.category}</td>
+                        <td>${item.description ?? '-'}</td>
+                        <td>Rp ${Number(item.price).toLocaleString('id-ID')}</td>
+                        <td>Rp ${Number(item.installation_fee || 0).toLocaleString('id-ID')}</td>
+                        <td>
+                            ${item.image_path ? 
+                                `<img src="${item.image_path}" width="50" class="img-thumbnail" style="object-fit: cover; height: 50px;">` 
+                                : '<span class="text-muted">-</span>'}
+                        </td>
+                        <td>
+                            <span class="badge ${item.is_active == 1 ? 'bg-success' : 'bg-secondary'}">
+                                ${item.is_active == 1 ? 'Aktif' : 'Nonaktif'}
+                            </span>
+                        </td>
+                        <td class="text-nowrap">
+                            <button class="btn btn-warning btn-sm" onclick="editAddon(${item.id})" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteAddon(${item.id})" title="Hapus">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById("addonTable").innerHTML = html || '<tr><td colspan="9" class="text-center text-muted">Belum ada data</td></tr>';
+        })
+        .catch(err => {
+            console.error('Error loading addon:', err);
+            document.getElementById("addonTable").innerHTML = '<tr><td colspan="9" class="text-center text-danger">Gagal memuat data</td></tr>';
+        });
+}
+
+// Open Modal Tambah Add On
+function openAddonModal() {
+    // Reset form
+    document.getElementById('formAddon').reset();
+    
+    // Reset preview
+    document.getElementById('image-preview-addon').style.display = 'none';
+    document.getElementById('addon_image').value = '';
+    
+    // Buka modal
+    const modal = new bootstrap.Modal(document.getElementById('modalTambahAddon'));
+    modal.show();
+}
+
+// Preview gambar saat upload (Tambah Add On)
+document.addEventListener('DOMContentLoaded', function() {
+    const addonImageInput = document.getElementById('addon_image');
+    if (addonImageInput) {
+        addonImageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview-img-addon').src = e.target.result;
+                    document.getElementById('image-preview-addon').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    
+    // Preview gambar saat upload (Edit Add On)
+    const editAddonImageInput = document.getElementById('edit_addon_image');
+    if (editAddonImageInput) {
+        editAddonImageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('edit-preview-img-addon').src = e.target.result;
+                    document.getElementById('edit-image-preview-addon').style.display = 'block';
+                    // Sembunyikan gambar lama
+                    document.getElementById('edit-current-image-addon').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+});
+
+// Hapus preview gambar (Tambah)
+function removeImageAddon() {
+    document.getElementById('addon_image').value = '';
+    document.getElementById('image-preview-addon').style.display = 'none';
+}
+
+// Hapus preview gambar (Edit)
+function removeEditImageAddon() {
+    document.getElementById('edit_addon_image').value = '';
+    document.getElementById('edit-image-preview-addon').style.display = 'none';
+    document.getElementById('edit-current-image-addon').style.display = 'block';
+}
+
+// Tambah Add On Baru
+function addAddon() {
+    console.log('➕ Adding new addon...');
+    
+    const formData = new FormData();
+    
+    // Ambil nilai dari form
+    const name = document.getElementById('addon_name').value;
+    const category = document.getElementById('addon_category').value;
+    const description = document.getElementById('addon_description').value;
+    const price = document.getElementById('addon_price').value;
+    const installation_fee = document.getElementById('addon_installation_fee').value;
+    const status = document.getElementById('addon_status').value;
+    const fitur = document.getElementById('addon_fitur').value;
+    const imageFile = document.getElementById('addon_image').files[0];
+    
+    // Debug: Log semua data
+    console.log('📝 Form data:', {
+        name, category, description, price, installation_fee, status, fitur,
+        hasImage: !!imageFile
+    });
+    
+    // Validasi
+    if (!name || !category || !price) {
+        alert('❌ Nama, Kategori, dan Harga harus diisi!');
+        return;
+    }
+    
+    // Tambahkan ke FormData
+    formData.append('action', 'add');
+    formData.append('name', name);
+    formData.append('category', category);
+    formData.append('description', description);
+    formData.append('price', price);
+    formData.append('installation_fee', installation_fee || 0);
+    formData.append('is_active', status);
+    formData.append('fitur', fitur);
+    
+    // Tambahkan gambar jika ada
+    if (imageFile) {
+        formData.append('image', imageFile);
+        console.log('🖼️ Image:', imageFile.name, imageFile.size, 'bytes');
+    }
+    
+    // Kirim via AJAX
+    fetch('api_addon.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => {
+        console.log('📡 Response status:', res.status);
+        console.log('📡 Response headers:', res.headers.get('content-type'));
+        return res.text(); // Ubah ke text dulu untuk debug
+    })
+    .then(text => {
+        console.log('📦 Raw response:', text);
+        
+        // Parse JSON
+        try {
+            const data = JSON.parse(text);
+            console.log('✅ Parsed JSON:', data);
+            
+            if (data.success) {
+                alert('✅ Add On berhasil ditambahkan!');
+                bootstrap.Modal.getInstance(document.getElementById('modalTambahAddon')).hide();
+                loadAddon();
+            } else {
+                alert('❌ Gagal menambahkan Add On: ' + (data.message || 'Unknown error'));
+            }
+        } catch (e) {
+            console.error('❌ JSON Parse Error:', e);
+            console.error('Response text:', text);
+            alert('❌ Server response error. Lihat console untuk detail.');
+        }
+    })
+    .catch(err => {
+        console.error('❌ Fetch Error:', err);
+        alert('❌ Terjadi kesalahan saat mengirim data. Lihat console untuk detail.');
+    });
+}
+
+// Edit Add On - Fetch data dan isi form
+function editAddon(id) {
+    console.log('🔍 Fetching addon ID:', id);
+    
+    fetch(`api_addon.php?id=${id}`)
+        .then(res => {
+            console.log('📡 Response status:', res.status);
+            return res.json();
+        })
+        .then(data => {
+            console.log('📦 Data received:', data);
+            
+            // Cek apakah data valid
+            if (!data || data.error) {
+                alert('❌ Data tidak ditemukan: ' + (data.error || 'Unknown error'));
+                return;
+            }
+            
+            // Isi form dengan data yang ada
+            document.getElementById('edit_addon_id').value = data.id || '';
+            document.getElementById('edit_addon_name').value = data.name || '';
+            document.getElementById('edit_addon_category').value = data.category || '';
+            document.getElementById('edit_addon_status').value = data.is_active || '1';
+            document.getElementById('edit_addon_description').value = data.description || '';
+            document.getElementById('edit_addon_price').value = data.price || '';
+            document.getElementById('edit_addon_installation_fee').value = data.installation_fee || '';
+            document.getElementById('edit_addon_fitur').value = data.fitur || '';
+            
+            console.log('✅ Form filled successfully');
+            
+            // Tampilkan gambar saat ini jika ada
+            if (data.image_path) {
+                document.getElementById('edit-current-image-addon').style.display = 'block';
+                document.getElementById('edit-current-img-addon').src = data.image_path;
+                console.log('🖼️ Image loaded:', data.image_path);
+            } else {
+                document.getElementById('edit-current-image-addon').style.display = 'none';
+                console.log('⚠️ No image found');
+            }
+            
+            // Reset preview gambar baru
+            document.getElementById('edit-image-preview-addon').style.display = 'none';
+            document.getElementById('edit_addon_image').value = '';
+            
+            // Buka modal
+            const modal = new bootstrap.Modal(document.getElementById('modalEditAddon'));
+            modal.show();
+            console.log('✅ Modal opened');
+        })
+        .catch(err => {
+            console.error('❌ Error:', err);
+            alert('❌ Gagal memuat data addon. Lihat console untuk detail.');
+        });
+}
+
+// Update Add On
+function updateAddon() {
+    const formData = new FormData();
+    const id = document.getElementById('edit_addon_id').value;
+    
+    formData.append('id', id);
+    formData.append('name', document.getElementById('edit_addon_name').value);
+    formData.append('category', document.getElementById('edit_addon_category').value);
+    formData.append('is_active', document.getElementById('edit_addon_status').value);
+    formData.append('description', document.getElementById('edit_addon_description').value);
+    formData.append('price', document.getElementById('edit_addon_price').value);
+    formData.append('installation_fee', document.getElementById('edit_addon_installation_fee').value || 0);
+    formData.append('fitur', document.getElementById('edit_addon_fitur').value);
+    formData.append('action', 'update');
+    
+    // Tambahkan gambar jika ada yang dipilih
+    const imageFile = document.getElementById('edit_addon_image').files[0];
+    if (imageFile) {
+        formData.append('image', imageFile);
+    }
+    
+    fetch('api_addon.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert('✅ Data berhasil diupdate!');
+            bootstrap.Modal.getInstance(document.getElementById('modalEditAddon')).hide();
+            loadAddon();
+        } else {
+            alert('❌ Gagal update data: ' + (data.message || 'Unknown error'));
+        }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        alert('❌ Terjadi kesalahan saat update data');
+    });
+}
+
+// Delete Add On
+function deleteAddon(id) {
+    if (!confirm('⚠️ Yakin ingin menghapus add on ini?')) return;
+    
+    console.log('🗑️ Deleting addon ID:', id);
+    
+    // Gunakan GET method dengan parameter action dan id
+    fetch(`api_addon.php?action=delete&id=${id}`)
+    .then(res => {
+        console.log('📡 Response status:', res.status);
+        return res.json();
+    })
+    .then(data => {
+        console.log('📦 Response data:', data);
+        
+        if (data.success) {
+            alert('✅ Add on berhasil dihapus!');
+            loadAddon(); // Reload tabel
+        } else {
+            alert('❌ Gagal menghapus add on: ' + (data.message || 'Unknown error'));
+        }
+    })
+    .catch(err => {
+        console.error('❌ Error:', err);
+        alert('❌ Terjadi kesalahan saat menghapus data. Lihat console untuk detail.');
+    });
+}
+// Load data saat halaman dibuka
+document.addEventListener('DOMContentLoaded', function() {
+    loadAddon();
+});

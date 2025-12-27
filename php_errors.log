@@ -1,0 +1,1 @@
+[27-Dec-2025 02:26:48 UTC] PHP Fatal error:  Cannot redeclare clean_input() (previously declared in C:\laragon\www\iconnet-profile\config.php:29) in C:\laragon\www\iconnet-profile\config.php on line 34
