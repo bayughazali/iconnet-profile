@@ -164,7 +164,9 @@ if (!is_array($paket)) {
                     <div class="subscription-card">
                         <h2 class="mb-4">Cara Berlangganan</h2>
                         <p>Enjoy the large 200+ of unrealistic templates perfect slice of sensibilities.</p>
-                        <button class="btn-detail mt-3">LIHAT DETAIL →</button>
+                        <button class="btn-detail mt-3" data-bs-toggle="modal" data-bs-target="#modalVideo">
+                            LIHAT DETAIL →
+                        </button>
                     </div>
                 </div>
 
@@ -176,6 +178,32 @@ if (!is_array($paket)) {
         </div>
     </section>
 
+<!-- Modal Video Cara Berlangganan -->
+<div class="modal fade" id="modalVideo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">Cara Berlangganan ICONNET</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="ratio ratio-16x9">
+                    <iframe
+                        src="https://www.youtube.com/embed/VIDEO_ID_KAMU"
+                        title="YouTube video player"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    
     <!-- Mascot Section -->
     <section class="mascot-section">
         <div class="container">
@@ -195,6 +223,34 @@ if (!is_array($paket)) {
 
             </div>
         </div>
+
+        <!-- Modal Syarat & Ketentuan -->
+        <div class="modal fade" id="modalSyarat" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title fw-bold">Syarat & Ketentuan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            Cum fuga exercitationem, voluptatem minima dolore quas
+                            repellendus deserunt officiis doloremque.
+                        </p>
+
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            Repudiandae, quaerat? Amet aliquid neque officiis.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
 
         <!-- Service Icons Section -->
         <div class="row mt-5">
@@ -297,65 +353,65 @@ if (!is_array($paket)) {
         </div>
     </section>
 
-   <section class="news-section">
-    <div class="container-fluid px-5">
+    <section class="news-section">
+        <div class="container-fluid px-5">
 
-        <!-- Header -->
-        <div class="section-header text-center">
-            <span class="news-badge">BERITA TERKINI</span>
-            <h2>Update Info ICONNET</h2>
-            <p>Informasi terbaru seputar layanan, promo, dan aktivitas ICONNET</p>
+            <!-- Header -->
+            <div class="section-header text-center">
+                <span class="news-badge">BERITA TERKINI</span>
+                <h2>Update Info ICONNET</h2>
+                <p>Informasi terbaru seputar layanan, promo, dan aktivitas ICONNET</p>
+            </div>
+
+            <!-- News Grid -->
+            <div class="row g-4">
+
+                <div class="col-lg-4 col-md-6">
+                    <article class="news-card h-100">
+                        <div class="news-image">
+                            <img src="image/pakkomang.png">
+                        </div>
+                        <div class="news-content">
+                            <span class="news-date">27 November 2025</span>
+                            <h5 class="news-title">ICONNET Capai 100+ Pelanggan Baru</h5>
+                            <p class="news-desc">ICONNET terus memperluas jangkauan layanan.</p>
+                            <a href="#" class="news-link">Baca Selengkapnya →</a>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <article class="news-card h-100">
+                        <div class="news-image">
+                            <img src="https://via.placeholder.com/600x400">
+                        </div>
+                        <div class="news-content">
+                            <span class="news-date">25 November 2025</span>
+                            <h5 class="news-title">Promo Akhir Tahun ICONNET</h5>
+                            <p class="news-desc">Promo menarik akhir tahun ICONNET.</p>
+                            <a href="#" class="news-link">Baca Selengkapnya →</a>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <article class="news-card h-100">
+                        <div class="news-image">
+                            <img src="https://via.placeholder.com/600x400">
+                        </div>
+                        <div class="news-content">
+                            <span class="news-date">20 November 2025</span>
+                            <h5 class="news-title">Perluasan Jaringan ICONNET</h5>
+                            <p class="news-desc">ICONNET memperluas jaringan nasional.</p>
+                            <a href="#" class="news-link">Baca Selengkapnya →</a>
+                        </div>
+                    </article>
+                </div>
+
+            </div>
+
         </div>
-
-        <!-- News Grid -->
-        <div class="row g-4">
-
-            <div class="col-lg-4 col-md-6">
-                <article class="news-card h-100">
-                    <div class="news-image">
-                        <img src="image/pakkomang.png">
-                    </div>
-                    <div class="news-content">
-                        <span class="news-date">27 November 2025</span>
-                        <h5 class="news-title">ICONNET Capai 100+ Pelanggan Baru</h5>
-                        <p class="news-desc">ICONNET terus memperluas jangkauan layanan.</p>
-                        <a href="#" class="news-link">Baca Selengkapnya →</a>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-lg-4 col-md-6">
-                <article class="news-card h-100">
-                    <div class="news-image">
-                        <img src="https://via.placeholder.com/600x400">
-                    </div>
-                    <div class="news-content">
-                        <span class="news-date">25 November 2025</span>
-                        <h5 class="news-title">Promo Akhir Tahun ICONNET</h5>
-                        <p class="news-desc">Promo menarik akhir tahun ICONNET.</p>
-                        <a href="#" class="news-link">Baca Selengkapnya →</a>
-                    </div>
-                </article>
-            </div>
-
-            <div class="col-lg-4 col-md-6">
-                <article class="news-card h-100">
-                    <div class="news-image">
-                        <img src="https://via.placeholder.com/600x400">
-                    </div>
-                    <div class="news-content">
-                        <span class="news-date">20 November 2025</span>
-                        <h5 class="news-title">Perluasan Jaringan ICONNET</h5>
-                        <p class="news-desc">ICONNET memperluas jaringan nasional.</p>
-                        <a href="#" class="news-link">Baca Selengkapnya →</a>
-                    </div>
-                </article>
-            </div>
-
-        </div>
-
-    </div>
-</section>
+    </section>
 
 
 
