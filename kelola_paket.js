@@ -380,21 +380,27 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ Ready!');
 });
 
-// ================= HARGA VIEW (CORET + AFTER) =================
+// ================= HARGA VIEW (CORET + AFTER) - FIXED =================
 const hargaView = (before, after) => {
-  if (before && before > after) {
+  before = parseInt(before) || 0;
+  after = parseInt(after) || 0;
+  
+  // ✅ LOGIKA BARU: Tampilkan coret HANYA jika before > 0 DAN before > after
+  if (before > 0 && before > after) {
     return `
       <div class="text-danger text-decoration-line-through small">
-        Rp ${parseInt(before).toLocaleString('id-ID')}
+        Rp ${before.toLocaleString('id-ID')}
       </div>
       <div class="fw-bold text-success">
-        Rp ${parseInt(after).toLocaleString('id-ID')}
+        Rp ${after.toLocaleString('id-ID')}
       </div>
     `;
   }
+  
+  // ✅ Jika before kosong/0 atau before <= after, tampilkan after saja TANPA coret
   return `
-    <div class="fw-bold">
-      Rp ${parseInt(after).toLocaleString('id-ID')}
+    <div class="fw-bold text-success">
+      Rp ${after.toLocaleString('id-ID')}
     </div>
   `;
 };

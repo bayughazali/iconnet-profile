@@ -295,13 +295,14 @@ function updatePricesByLocation() {
     console.log('✅ All prices updated');
 }
 
-// ==================== HARGA VIEW (CORET + AFTER) ====================
+// ==================== HARGA VIEW (CORET + AFTER) - FIXED ====================
 const hargaView = (before, after) => {
     before = parseInt(before) || 0;
     after = parseInt(after) || 0;
     
     console.log('🎨 Rendering price view - Before:', before, 'After:', after);
     
+    // ✅ LOGIKA BARU: Tampilkan coret HANYA jika before > 0 DAN before > after
     if (before > 0 && before > after) {
         return `
             <div style="text-decoration:line-through;color:#9ca3af;font-size:16px;">
@@ -313,6 +314,7 @@ const hargaView = (before, after) => {
         `;
     }
     
+    // ✅ Jika before kosong/0 atau before <= after, tampilkan after saja TANPA coret
     return `
         <div style="font-size:28px;font-weight:700;color:#14b8a6;">
             Rp ${after.toLocaleString('id-ID')}
@@ -571,5 +573,88 @@ function showNoDataMessage() {
                 </div>
             </div>
         `;
+    }
+}
+// ==================== SMOOTH CAROUSEL ANIMATION ====================
+document.addEventListener('DOMContentLoaded', function() {
+    const carousel = document.querySelector('#packageCarousel');
+    
+    if (carousel) {
+        // ✅ Tambahkan smooth transition untuk Bootstrap carousel
+        carousel.addEventListener('slide.bs.carousel', function (e) {
+            const activeItem = e.relatedTarget;
+            const direction = e.direction;
+            
+            // Tambahkan class untuk animasi
+            if (direction === 'left') {
+                activeItem.style.transform = 'translateX(50px)';
+                activeItem.style.opacity = '0';
+            } else {
+                activeItem.style.transform = 'translateX(-50px)';
+                activeItem.style.opacity = '0';
+            }
+            
+            // Trigger reflow untuk smooth animation
+            setTimeout(() => {
+                activeItem.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                activeItem.style.transform = 'translateX(0)';
+                activeItem.style.opacity = '1';
+            }, 50);
+        });
+        
+        // ✅ Tambahkan keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                const prevBtn = carousel.querySelector('.carousel-control-prev');
+                if (prevBtn && !prevBtn.classList.contains('disabled')) {
+                    prevBtn.click();
+                }
+            } else if (e.key === 'ArrowRight') {
+                const nextBtn = carousel.querySelector('.carousel-control-next');
+                if (nextBtn && !nextBtn.classList.contains('disabled')) {
+                    nextBtn.click();
+                }
+            }
+        });
+        
+        console.log('✅ Smooth carousel animation initialized');
+    }
+});
+
+// ==================== SWIPE GESTURE SUPPORT (Mobile) ====================
+let touchStartX = 0;
+let touchEndX = 0;
+
+const carouselElement = document.querySelector('#packageCarousel');
+
+if (carouselElement) {
+    carouselElement.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    carouselElement.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+}
+
+function handleSwipe() {
+    const swipeThreshold = 50;
+    const diff = touchStartX - touchEndX;
+    
+    if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+            // Swipe left - next
+            const nextBtn = document.querySelector('#packageCarousel .carousel-control-next');
+            if (nextBtn && !nextBtn.classList.contains('disabled')) {
+                nextBtn.click();
+            }
+        } else {
+            // Swipe right - prev
+            const prevBtn = document.querySelector('#packageCarousel .carousel-control-prev');
+            if (prevBtn && !prevBtn.classList.contains('disabled')) {
+                prevBtn.click();
+            }
+        }
     }
 }

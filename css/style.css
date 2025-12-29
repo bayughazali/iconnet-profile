@@ -304,59 +304,199 @@ body {
     color: white;
 }
 
+/* ✅ TAMBAHAN BARU: Compare Section Styles */
+.compare-section {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 2px dashed #e0f2fe;
+    text-align: center;
+}
+
+.compare-text {
+    color: #64748b;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 18px;
+    font-weight: 500;
+}
+
+.compare-text i {
+    color: var(--primary-teal);
+    margin-right: 8px;
+    font-size: 1.1rem;
+}
+
+.btn-compare {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #0a0053ff 0%, #150050ff 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: none;
+}
+
+.btn-compare:hover {
+    background: linear-gradient(135deg, #0a0053ff 0%, #150050ff 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+.btn-compare i {
+    font-size: 1.2rem;
+}
+/*  AKHIR TAMBAHAN */
+
 /* RIGHT SIDE - PACKAGE CAROUSEL */
+/* ========================================
+   RIGHT SIDE - PACKAGE CAROUSEL - SMOOTH & MODERN
+   ======================================== */
+
 .pricing-right {
     flex: 1;
     min-width: 0;
+    position: relative;
 }
 
 #packageCarousel {
     background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
     border-radius: 24px;
-    padding: 50px 40px;
+    padding: 50px 20px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.15);
     position: relative;
-    overflow: visible;
+    overflow: hidden; /* ✅ UBAH dari visible ke hidden */
 }
 
+/* ✅ WRAPPER untuk smooth scrolling */
 .carousel-inner {
-    padding: 0 60px;
-    overflow: visible;
+    padding: 0 70px; /* Space untuk arrows di dalam container */
+    overflow: hidden; /* ✅ Pastikan card tidak keluar */
+    position: relative;
 }
 
 .carousel-item {
     display: none;
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .carousel-item.active {
     display: block;
+    opacity: 1;
+    animation: slideInSmooth 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* CAROUSEL CONTROLS */
+/* ✅ ANIMASI SMOOTH untuk card masuk */
+@keyframes slideInSmooth {
+    from {
+        opacity: 0;
+        transform: translateX(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+/* ✅ ANIMASI untuk card keluar */
+.carousel-item-prev,
+.carousel-item-next {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transform: translateX(-30px) scale(0.95);
+    transition: opacity 0.6s ease-in-out, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================
+   CAROUSEL CONTROLS - MODERN DESIGN
+   ======================================== */
+
 .carousel-control-prev, 
 .carousel-control-next {
-    width: 55px;
-    height: 55px;
-    background: white;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
     border-radius: 50%;
     opacity: 1;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     top: 50%;
     transform: translateY(-50%);
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
-    z-index: 50;
+    z-index: 100; /* ✅ Lebih tinggi dari card */
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
+/* ✅ Posisi arrow DI DALAM container biru */
 .carousel-control-prev {
-    left: -25px;
+    left: 15px; /* ✅ UBAH dari -25px ke 15px */
 }
 
 .carousel-control-next {
-    right: -25px;
+    right: 15px; /* ✅ UBAH dari -25px ke 15px */
+}
+
+.carousel-control-prev:hover, 
+.carousel-control-next:hover {
+    background: linear-gradient(135deg, var(--primary-teal) 0%, var(--light-teal) 100%);
+    transform: translateY(-50%) scale(1.15);
+    box-shadow: 0 8px 30px rgba(77, 208, 225, 0.5);
+    border-color: var(--light-teal);
+}
+
+.carousel-control-prev:hover .carousel-control-icon,
+.carousel-control-next:hover .carousel-control-icon {
+    color: white;
+    transform: scale(1.1);
+}
+
+.carousel-control-prev:active,
+.carousel-control-next:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-control-icon {
+    color: var(--primary-teal);
+    font-size: 1.4rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+/* ✅ DISABLED state untuk arrow */
+.carousel-control-prev.disabled,
+.carousel-control-next.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ✅ Smooth transition untuk semua interaksi */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .carousel-control-prev:hover, 
@@ -396,7 +536,7 @@ body {
     width: 100%;
     flex: 1;
     max-width: 420px;
-    min-height: 500px;
+    min-height: 460px;
     transition: all 0.4s ease;
     display: flex;
     flex-direction: column;
@@ -434,6 +574,10 @@ body {
     margin-bottom: 24px;
     padding-bottom: 16px;
     border-bottom: 2px solid #e0f2fe;
+    min-height: 60px; /* ✅ TAMBAHKAN ini untuk konsistensi tinggi judul */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* PACKAGE SPECS */
@@ -470,60 +614,252 @@ body {
 }
 
 /* PRICING DISPLAY */
-.package-price {
-    text-align: center;
-    margin: 20px 0 8px 0;
-    padding: 16px;
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    border-radius: 12px;
+/* PACKAGE CARD - COMPACT & CONSISTENT */
+.package-card {
+    background: white;
+    padding: 24px 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+    border: 3px solid transparent;
+    width: 100%;
+    flex: 1;
+    max-width: 420px;
+    min-height: 420px;
+    transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
 }
 
+.package-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-teal) 0%, var(--light-teal) 100%);
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+}
+
+.package-card:hover::before {
+    transform: scaleX(1);
+}
+
+.package-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--light-teal);
+    box-shadow: 0 12px 40px rgba(77, 208, 225, 0.3);
+}
+
+.package-card h4 {
+    color: var(--text-dark);
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e0f7fa;
+}
+
+/* PACKAGE SPECS - COMPACT */
+.package-specs {
+    margin: 16px 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.package-specs p {
+    font-size: 0.85rem;
+    color: #475569;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+    background: #f8fafc;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.package-specs p:hover {
+    background: #e0f7fa;
+    transform: translateX(3px);
+}
+
+.package-specs i {
+    color: #10b981;
+    width: 22px;
+    font-size: 0.95rem;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+/* ========================================
+   PRICING DISPLAY - COMPACT & CONSISTENT
+   ======================================== */
+
+.package-price {
+    text-align: center;
+    margin: 12px 0 4px 0;
+    padding: 10px 12px;
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+    border-radius: 10px;
+    border: 2px solid #4dd0e1;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ✅ Highlight effect di background */
+.package-price::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(77, 208, 225, 0.1) 0%, rgba(14, 165, 233, 0.05) 100%);
+    z-index: 0;
+}
+
+.package-price > div {
+    position: relative;
+    z-index: 1;
+}
+
+/* Harga SEBELUM diskon (coret) */
+.package-price > div:first-child {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    text-decoration: line-through;
+    margin-bottom: 3px;
+    font-weight: 500;
+}
+
+/* ✅ Harga SETELAH diskon - UKURAN LEBIH KECIL tapi TETAP HIGHLIGHT */
 .package-price > div:last-child {
-    font-size: 1.8rem;
+    font-size: 1.1rem; /* ✅ UBAH dari 1.5rem ke 1.1rem */
     font-weight: 800;
-    color: var(--primary-teal);
-    margin-top: 8px;
+    color: #0891b2; /* ✅ Warna lebih bold */
+    line-height: 1.3;
+    text-decoration: none !important;
+    text-shadow: 0 1px 3px rgba(8, 145, 178, 0.2); /* ✅ Tambah shadow untuk highlight */
+    letter-spacing: 0.3px;
 }
 
 .package-card small {
     display: block;
     color: #64748b;
-    font-size: 0.9rem;
+    font-size: 0.7rem;
     text-align: center;
     font-weight: 600;
-    margin-top: 4px;
+    margin-top: 2px;
+    margin-bottom: 6px;
 }
 
-/* INSTALLATION PRICE */
+/* ========================================
+   INSTALLATION PRICE - COMPACT & CONSISTENT
+   ======================================== */
+
 .package-installation-price {
     text-align: center;
-    margin: 16px 0 8px 0;
-    padding: 14px;
-    background: #fef3c7;
-    border-radius: 12px;
-    border-left: 4px solid #f59e0b;
+    margin: 10px 0 4px 0;
+    padding: 10px 12px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-radius: 10px;
+    border: 2px solid #fbbf24;
+    position: relative;
+    overflow: hidden;
 }
 
+/* ✅ Highlight effect di background */
+.package-installation-price::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+    z-index: 0;
+}
+
+.package-installation-price > div {
+    position: relative;
+    z-index: 1;
+}
+
+/* Harga instalasi SEBELUM diskon (coret) */
+.package-installation-price > div:first-child {
+    font-size: 0.7rem;
+    color: #a16207;
+    text-decoration: line-through;
+    margin-bottom: 3px;
+    font-weight: 500;
+}
+
+/* ✅ Harga instalasi SETELAH diskon - UKURAN LEBIH KECIL tapi TETAP HIGHLIGHT */
 .package-installation-price > div:last-child {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #d97706;
+    font-size: 1rem; /* ✅ UBAH dari 1.2rem ke 1rem */
+    font-weight: 800;
+    color: #d97706; /* ✅ Warna lebih bold */
+    line-height: 1.3;
+    text-decoration: none !important;
+    text-shadow: 0 1px 3px rgba(217, 119, 6, 0.2); /* ✅ Tambah shadow untuk highlight */
+    letter-spacing: 0.3px;
 }
 
-/* BUTTON PESAN */
+/* ========================================
+   HOVER EFFECT untuk HIGHLIGHT LEBIH
+   ======================================== */
+
+.package-card:hover .package-price > div:last-child {
+    color: #06b6d4;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
+.package-card:hover .package-installation-price > div:last-child {
+    color: #ea580c;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
+/* ========================================
+   BADGE/LABEL untuk "Biaya Bulanan" & "Biaya Instalasi"
+   ======================================== */
+
+.package-card small {
+    display: inline-block;
+    color: #475569;
+    font-size: 0.7rem;
+    text-align: center;
+    font-weight: 700;
+    margin-top: 2px;
+    margin-bottom: 4px;
+    padding: 3px 10px;
+    background: rgba(148, 163, 184, 0.1);
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+/* BUTTON PESAN - COMPACT */
 .btn-pilih {
     width: 100%;
-    padding: 16px 24px;
+    padding: 12px 20px;
     background: linear-gradient(135deg, var(--light-teal) 0%, var(--primary-teal) 100%);
-    border-radius: 12px;
+    border-radius: 10px;
     border: none;
     color: white;
     font-weight: 700;
-    font-size: 1.05rem;
-    margin-top: 20px;
+    font-size: 0.95rem;
+    margin-top: 14px;
     transition: all 0.4s ease;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(77, 208, 225, 0.3);
+    box-shadow: 0 3px 12px rgba(77, 208, 225, 0.3);
     position: relative;
     overflow: hidden;
 }
@@ -548,14 +884,13 @@ body {
 
 .btn-pilih:hover {
     background: linear-gradient(135deg, var(--primary-teal) 0%, var(--dark-blue) 100%);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(77, 208, 225, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(77, 208, 225, 0.5);
 }
 
 .btn-pilih:active {
-    transform: translateY(-1px);
+    transform: translateY(0);
 }
-
 /* RESPONSIVE ADJUSTMENTS */
 @media (max-width: 1200px) {
     .pricing-layout {
@@ -643,6 +978,23 @@ body {
     .location-selector {
         padding: 25px 20px;
     }
+
+    /* ✅ TAMBAHAN BARU untuk Compare Section Mobile */
+    .compare-section {
+        margin-top: 20px;
+        padding-top: 20px;
+    }
+    
+    .compare-text {
+        font-size: 0.85rem;
+        margin-bottom: 12px;
+    }
+    
+    .btn-compare {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+    }
+    /* ✅ AKHIR TAMBAHAN */
     
     #packageCarousel {
         padding: 30px 20px;
@@ -1885,6 +2237,95 @@ footer .btn-outline-light:hover {
 }
 
 /* Responsive */
+/* ========================================
+   RESPONSIVE - SMOOTH CAROUSEL
+   ======================================== */
+
+@media (max-width: 1200px) {
+    .carousel-inner {
+        padding: 0 60px;
+    }
+}
+
+@media (max-width: 991px) {
+    #packageCarousel {
+        padding: 40px 15px;
+    }
+    
+    .carousel-inner {
+        padding: 0 50px;
+    }
+    
+    .carousel-control-prev {
+        left: 10px;
+    }
+    
+    .carousel-control-next {
+        right: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    #packageCarousel {
+        padding: 35px 10px;
+        border-radius: 20px;
+    }
+    
+    .carousel-inner {
+        padding: 0 45px;
+    }
+    
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 42px;
+        height: 42px;
+    }
+    
+    .carousel-control-prev {
+        left: 8px;
+    }
+    
+    .carousel-control-next {
+        right: 8px;
+    }
+    
+    .carousel-control-icon {
+        font-size: 1.2rem;
+    }
+    
+    .package-card {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    #packageCarousel {
+        padding: 30px 8px;
+        border-radius: 16px;
+    }
+    
+    .carousel-inner {
+        padding: 0 40px;
+    }
+    
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 38px;
+        height: 38px;
+    }
+    
+    .carousel-control-prev {
+        left: 5px;
+    }
+    
+    .carousel-control-next {
+        right: 5px;
+    }
+    
+    .carousel-control-icon {
+        font-size: 1rem;
+    }
+}
 @media (max-width: 768px) {
     .modal-xl {
         max-width: 95%;

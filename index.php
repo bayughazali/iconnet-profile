@@ -101,31 +101,44 @@ if (!is_array($paket)) {
 
     <div class="pricing-layout">
 
-      <!-- KIRI: PILIH LOKASI -->
-      <div class="pricing-left">
-        <div class="location-selector">
-          <h4>
-            Silakan pilih lokasi Anda untuk melihat detail paket dan harga yang berlaku.
-          </h4>
+<!-- KIRI: PILIH LOKASI -->
+<div class="pricing-left">
+  <div class="location-selector">
+    <h4>
+      Silakan pilih lokasi Anda untuk melihat detail paket dan harga yang berlaku.
+    </h4>
 
-          <div class="location-dropdown-container">
-            <button class="custom-dropdown-toggle" type="button">
-              <span>
-                <i class="fas fa-map-marker-alt"></i>
-                Sumatera & Kalimantan
-              </span>
-              <i class="fas fa-chevron-down dropdown-icon"></i>
-            </button>
+    <div class="location-dropdown-container">
+      <button class="custom-dropdown-toggle" type="button">
+        <span>
+          <i class="fas fa-map-marker-alt"></i>
+          Sumatera & Kalimantan
+        </span>
+        <i class="fas fa-chevron-down dropdown-icon"></i>
+      </button>
 
-            <!-- ✅ DROPDOWN LIST - TANPA data-location, pakai text saja -->
-            <div class="location-options-list" style="display: none;">
-              <div class="location-item">Sumatera & Kalimantan</div>
-              <div class="location-item">Jawa & Bali</div>
-              <div class="location-item">Indonesia Timur</div>
-            </div>
-          </div>
-        </div>
+      <div class="location-options-list" style="display: none;">
+        <div class="location-item">Sumatera & Kalimantan</div>
+        <div class="location-item">Jawa & Bali</div>
+        <div class="location-item">Indonesia Timur</div>
       </div>
+    </div>
+
+    <!-- ✅ TAMBAHAN BARU: Text & Button Bandingkan -->
+    <div class="compare-section">
+      <p class="compare-text">
+        <i class="fas fa-question-circle"></i>
+      Masih ragu menentukan pilihan paket? Yuk, bandingkan paket-paket terbaik di sini dan temukan yang paling pas untuk Anda.
+      </p>
+      <a href="product.php" class="btn-compare">
+        <i class="fas fa-balance-scale"></i>
+        Bandingkan Paket
+      </a>
+    </div>
+    <!-- ✅ AKHIR TAMBAHAN -->
+
+  </div>
+</div>
 
       <!-- KANAN: PROMO / PACKAGE -->
       <div class="pricing-right">
