@@ -1031,138 +1031,231 @@ function addSlider() {
                         </div>
 
                         <!-- Tambahkan di Modal Tambah Paket, setelah field "Kecepatan" -->
-                        <div class="mb-3">
-                            <label class="form-label">
-                                <i class="fas fa-image me-2 text-primary"></i>Upload Gambar Paket
-                            </label>
-                            <input type="file" 
-                                class="form-control" 
-                                id="paket_image" 
-                                accept="image/png, image/jpeg, image/jpg, image/webp">
-                            <small class="text-muted">Format: PNG, JPG, WEBP (Max. 2MB)</small>
-                            
-                            <!-- Preview Image -->
-                            <div id="image-preview-paket" class="mt-3" style="display: none;">
-                                <img id="preview-img-paket" src="" alt="Preview" class="img-thumbnail" style="max-width: 200px;">
-                                <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removeImagePaket()">
-                                    <i class="fas fa-times"></i> Hapus Gambar
-                                </button>
-                            </div>
-                        </div>
+<!-- Upload Gambar Paket -->
+<div class="card mb-3">
+    <div class="card-header bg-light">
+        <strong><i class="fas fa-image me-2"></i>Gambar Paket</strong>
+    </div>
+    <div class="card-body">
 
-                        <!-- Harga Regional -->
-                        <div class="card mb-3">
-                            <div class="card-header bg-light">
-                                <strong>
-                                    <i class="fas fa-money-bill-wave me-2"></i>
-                                    Harga Berlangganan per Bulan
-                                </strong>
-                                <small class="text-muted d-block">
-                                    Isi harga sebelum diskon (opsional) & harga setelah diskon
-                                </small>
-                            </div>
+        <div class="mb-3">
+            <label class="form-label">Upload Gambar Paket</label>
+            <input type="file"
+                   class="form-control"
+                   id="paket_image"
+                   accept="image/png, image/jpeg, image/jpg, image/webp">
 
-                            <div class="card-body">
-                                <div class="row">
+            <small class="text-muted">
+                Kosongkan jika tidak ingin menambah gambar
+            </small>
 
-                                    <!-- SUMATERA -->
-                                    <div class="col-md-4 mb-3">
-                                        <label class="form-label">Harga Sumatera (Sebelum)</label>
-                                        <div class="input-group mb-2">
-                                            <span class="input-group-text">Rp</span>
-                                            <input type="number" class="form-control" id="sumatera_before">
-                                        </div>
+            <!-- Preview -->
+            <div id="image-preview-paket" class="mt-3" style="display:none;">
+                <img id="preview-img-paket"
+                     class="img-thumbnail"
+                     style="max-width:200px;">
+                <button type="button"
+                        class="btn btn-sm btn-danger mt-2"
+                        onclick="removeImagePaket()">
+                    <i class="fas fa-times"></i> Hapus
+                </button>
+            </div>
+        </div>
 
-                                        <label class="form-label fw-bold">Harga Sumatera (Sesudah) *</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text">Rp</span>
-                                            <input type="number" class="form-control" id="sumatera" required>
-                                        </div>
-                                    </div>
+    </div>
+</div>
 
-                                    <!-- JAWA -->
-                                    <div class="col-md-4 mb-3">
-                                        <label class="form-label">Harga Jawa (Sebelum)</label>
-                                        <div class="input-group mb-2">
-                                            <span class="input-group-text">Rp</span>
-                                            <input type="number" class="form-control" id="jawa_before">
-                                        </div>
+<!-- Harga Regional -->
+<div class="card mb-3">
+    <div class="card-header bg-light">
+        <strong>
+            <i class="fas fa-money-bill-wave me-2"></i>
+            Harga Berlangganan per Bulan
+        </strong>
+    </div>
 
-                                        <label class="form-label fw-bold">Harga Jawa (Sesudah) *</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text">Rp</span>
-                                            <input type="number" class="form-control" id="jawa" required>
-                                        </div>
-                                    </div>
+    <div class="card-body">
 
-                                    <!-- TIMUR -->
-                                    <div class="col-md-4 mb-3">
-                                        <label class="form-label">Harga Timur (Sebelum)</label>
-                                        <div class="input-group mb-2">
-                                            <span class="input-group-text">Rp</span>
-                                            <input type="number" class="form-control" id="timur_before">
-                                        </div>
+        <!-- SUMATERA -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <h6 class="text-primary mb-3">
+                    <i class="fas fa-map-marker-alt me-2"></i>Sumatera & Kalimantan
+                </h6>
+            </div>
 
-                                        <label class="form-label fw-bold">Harga Timur (Sesudah) *</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text">Rp</span>
-                                            <input type="number" class="form-control" id="timur" required>
-                                        </div>
-                                    </div>
+            <div class="col-md-6 mb-3">
+                <label>Harga Sebelum Diskon</label>
+                <div class="input-group">
+                    <span class="input-group-text">Rp</span>
+                    <input type="number" class="form-control" id="sumatera_before">
+                </div>
+            </div>
 
-                                </div>
-                            </div>
-                        </div>
+            <div class="col-md-6 mb-3">
+                <label class="fw-bold">Harga Sesudah Diskon *</label>
+                <div class="input-group">
+                    <span class="input-group-text">Rp</span>
+                    <input type="number" class="form-control" id="sumatera" required>
+                </div>
+            </div>
+        </div>
 
+        <hr>
+
+        <!-- JAWA -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <h6 class="text-primary mb-3">
+                    <i class="fas fa-map-marker-alt me-2"></i>Jawa & Bali
+                </h6>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Harga Sebelum Diskon</label>
+                <div class="input-group">
+                    <span class="input-group-text">Rp</span>
+                    <input type="number" class="form-control" id="jawa_before">
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="fw-bold">Harga Sesudah Diskon *</label>
+                <div class="input-group">
+                    <span class="input-group-text">Rp</span>
+                    <input type="number" class="form-control" id="jawa" required>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- TIMUR -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <h6 class="text-primary mb-3">
+                    <i class="fas fa-map-marker-alt me-2"></i>Indonesia Timur
+                </h6>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Harga Sebelum Diskon</label>
+                <div class="input-group">
+                    <span class="input-group-text">Rp</span>
+                    <input type="number" class="form-control" id="timur_before">
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="fw-bold">Harga Sesudah Diskon *</label>
+                <div class="input-group">
+                    <span class="input-group-text">Rp</span>
+                    <input type="number" class="form-control" id="timur" required>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- ✅ TUTUP card-body -->
+</div> <!-- ✅ TUTUP card -->
 
                         <!-- Biaya Instalasi - TANPA DEFAULT VALUE -->
-                        <div class="row">
+<div class="card mb-3">
+    <div class="card-header bg-light">
+        <strong><i class="fas fa-tools me-2"></i>Biaya Instalasi</strong>
+    </div>
 
-                            <!-- SUMATERA -->
-                            <div class="col-md-4 mb-3">
-                                <label>Instalasi Sumatera (Sebelum)</label>
-                                <input type="number" class="form-control mb-2" id="instalasi_sumatera_before">
+    <div class="card-body">
 
-                                <label class="fw-bold">Instalasi Sumatera (Sesudah)</label>
-                                <input type="number" class="form-control" id="instalasi_sumatera">
-                            </div>
+        <!-- SUMATERA -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <h6 class="text-primary mb-3">
+                    <i class="fas fa-map-marker-alt me-2"></i>Sumatera & Kalimantan
+                </h6>
+            </div>
 
-                            <!-- JAWA -->
-                            <div class="col-md-4 mb-3">
-                                <label>Instalasi Jawa (Sebelum)</label>
-                                <input type="number" class="form-control mb-2" id="instalasi_jawa_before">
+            <div class="col-md-6 mb-3">
+                <label>Instalasi Sebelum Diskon</label>
+                <input type="number" class="form-control" id="instalasi_sumatera_before">
+            </div>
 
-                                <label class="fw-bold">Instalasi Jawa (Sesudah)</label>
-                                <input type="number" class="form-control" id="instalasi_jawa">
-                            </div>
+            <div class="col-md-6 mb-3">
+                <label class="fw-bold">Instalasi Sesudah Diskon</label>
+                <input type="number" class="form-control" id="instalasi_sumatera">
+            </div>
+        </div>
 
-                            <!-- TIMUR -->
-                            <div class="col-md-4 mb-3">
-                                <label>Instalasi Timur (Sebelum)</label>
-                                <input type="number" class="form-control mb-2" id="instalasi_timur_before">
+        <hr>
 
-                                <label class="fw-bold">Instalasi Timur (Sesudah)</label>
-                                <input type="number" class="form-control" id="instalasi_timur">
-                            </div>
+        <!-- JAWA -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <h6 class="text-primary mb-3">
+                    <i class="fas fa-map-marker-alt me-2"></i>Jawa & Bali
+                </h6>
+            </div>
 
-                        </div>
+            <div class="col-md-6 mb-3">
+                <label>Instalasi Sebelum Diskon</label>
+                <input type="number" class="form-control" id="instalasi_jawa_before">
+            </div>
 
+            <div class="col-md-6 mb-3">
+                <label class="fw-bold">Instalasi Sesudah Diskon</label>
+                <input type="number" class="form-control" id="instalasi_jawa">
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- TIMUR -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <h6 class="text-primary mb-3">
+                    <i class="fas fa-map-marker-alt me-2"></i>Indonesia Timur
+                </h6>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Instalasi Sebelum Diskon</label>
+                <input type="number" class="form-control" id="instalasi_timur_before">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="fw-bold">Instalasi Sesudah Diskon</label>
+                <input type="number" class="form-control" id="instalasi_timur">
+            </div>
+        </div>
+
+    </div>
+</div>
 
                         <!-- Perangkat Ideal - TANPA DEFAULT VALUE -->
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">Total Perangkat</label>
-                                <input type="number" class="form-control" id="max_perangkat" placeholder="0" min="0">
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">Jumlah Laptop</label>
-                                <input type="number" class="form-control" id="max_laptop" placeholder="0" min="0">
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">Jumlah Handphone</label>
-                                <input type="number" class="form-control" id="max_smartphone" placeholder="0" min="0">
-                            </div>
-                        </div>
+<div class="card mb-3">
+    <div class="card-header bg-light">
+        <strong><i class="fas fa-laptop me-2"></i>Perangkat Ideal</strong>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label>Total Perangkat</label>
+                <input type="number" class="form-control" id="max_perangkat" min="0">
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label>Jumlah Laptop</label>
+                <input type="number" class="form-control" id="max_laptop" min="0">
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label>Jumlah Handphone</label>
+                <input type="number" class="form-control" id="max_smartphone" min="0">
+            </div>
+        </div>
+    </div>
+</div>
+
                         <!-- Fitur Tambahan -->
                         <div class="card mb-3">
                             <div class="card-header bg-light">
@@ -1198,7 +1291,8 @@ function addSlider() {
             </div>
         </div>
     </div>
-   <!-- Modal Edit Paket -->
+
+<!-- Modal Edit Paket -->
 <div class="modal fade" id="modalEditPaket" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -1235,117 +1329,205 @@ function addSlider() {
                             </div>
                         </div>
                     </div>
-                    <!-- Di Modal Edit Paket, setelah field "Kecepatan" -->
-                    <div class="mb-3">
-                        <label class="form-label">Upload Gambar Paket (Opsional)</label>
-                        
-                        <!-- Current Image -->
-                        <div id="current-image-paket" style="display: none;" class="mb-2">
-                            <p class="text-muted small">Gambar saat ini:</p>
-                            <img id="current-img-paket" src="" alt="Current" class="img-thumbnail" style="max-width: 150px;">
-                        </div>
-                        
-                        <!-- Upload New -->
-                        <input type="file" 
-                            class="form-control" 
-                            id="edit_paket_image" 
-                            accept="image/png, image/jpeg, image/jpg, image/webp">
-                        <small class="text-muted">Kosongkan jika tidak ingin mengubah gambar</small>
-                        
-                        <!-- Preview New Image -->
-                        <div id="edit-image-preview-paket" class="mt-3" style="display: none;">
-                            <img id="edit-preview-img-paket" src="" alt="Preview" class="img-thumbnail" style="max-width: 200px;">
-                            <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removeEditImagePaket()">
-                                <i class="fas fa-times"></i> Hapus
-                            </button>
-                        </div>
-                    </div>
-                   <!-- ===== HARGA BULANAN ===== -->
+
+                    <!-- Upload Gambar -->
                     <div class="card mb-3">
-                    <div class="card-header bg-light">
-                        <strong>Harga Berlangganan (Edit)</strong>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-
-                        <!-- SUMATERA -->
-                        <div class="col-md-4 mb-3">
-                            <label>Harga Sumatera (Sebelum Diskon)</label>
-                            <input type="number" class="form-control" id="edit_sumatera_before">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-image me-2"></i>Gambar Paket</strong>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Harga Sumatera (Sesudah Diskon)</label>
-                            <input type="number" class="form-control" id="edit_sumatera">
-                        </div>
-
-                        <!-- JAWA -->
-                        <div class="col-md-4 mb-3">
-                            <label>Harga Jawa (Sebelum Diskon)</label>
-                            <input type="number" class="form-control" id="edit_jawa_before">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Harga Jawa (Sesudah Diskon)</label>
-                            <input type="number" class="form-control" id="edit_jawa">
-                        </div>
-
-                        <!-- TIMUR -->
-                        <div class="col-md-4 mb-3">
-                            <label>Harga Timur (Sebelum Diskon)</label>
-                            <input type="number" class="form-control" id="edit_timur_before">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Harga Timur (Sesudah Diskon)</label>
-                            <input type="number" class="form-control" id="edit_timur">
-                        </div>
-
+                        <div class="card-body">
+                            <!-- Current Image -->
+                            <div id="current-image-paket" style="display: none;" class="mb-2">
+                                <p class="text-muted small">Gambar saat ini:</p>
+                                <img id="current-img-paket" src="" alt="Current" class="img-thumbnail" style="max-width: 150px;">
+                            </div>
+                            
+                            <!-- Upload New -->
+                            <div class="mb-3">
+                                <label class="form-label">Upload Gambar Baru (Opsional)</label>
+                                <input type="file" 
+                                    class="form-control" 
+                                    id="edit_paket_image" 
+                                    accept="image/png, image/jpeg, image/jpg, image/webp">
+                                <small class="text-muted">Kosongkan jika tidak ingin mengubah gambar</small>
+                                
+                                <!-- Preview New Image -->
+                                <div id="edit-image-preview-paket" class="mt-3" style="display: none;">
+                                    <img id="edit-preview-img-paket" src="" alt="Preview" class="img-thumbnail" style="max-width: 200px;">
+                                    <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removeEditImagePaket()">
+                                        <i class="fas fa-times"></i> Hapus
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    </div>
 
-
-                    <!-- ===== BIAYA INSTALASI ===== -->
+                    <!-- ===== HARGA BULANAN - LAYOUT DIPERBAIKI ===== -->
                     <div class="card mb-3">
-                    <div class="card-header bg-light">
-                        <strong>Biaya Instalasi (Edit)</strong>
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-money-bill-wave me-2"></i>Harga Berlangganan per Bulan</strong>
+                        </div>
+                        <div class="card-body">
+                            
+                            <!-- SUMATERA -->
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <h6 class="text-primary mb-3">
+                                        <i class="fas fa-map-marker-alt me-2"></i>Sumatera & Kalimantan
+                                    </h6>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Harga Sebelum Diskon</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_sumatera_before" placeholder="0">
+                                    </div>
+                                    <small class="text-muted">Kosongkan jika tidak ada diskon</small>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Harga Sesudah Diskon *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_sumatera" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <hr>
+
+                            <!-- JAWA -->
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <h6 class="text-primary mb-3">
+                                        <i class="fas fa-map-marker-alt me-2"></i>Jawa & Bali
+                                    </h6>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Harga Sebelum Diskon</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_jawa_before" placeholder="0">
+                                    </div>
+                                    <small class="text-muted">Kosongkan jika tidak ada diskon</small>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Harga Sesudah Diskon *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_jawa" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <!-- TIMUR -->
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <h6 class="text-primary mb-3">
+                                        <i class="fas fa-map-marker-alt me-2"></i>Indonesia Timur
+                                    </h6>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Harga Sebelum Diskon</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_timur_before" placeholder="0">
+                                    </div>
+                                    <small class="text-muted">Kosongkan jika tidak ada diskon</small>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Harga Sesudah Diskon *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_timur" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
 
-                        <!-- SUMATERA -->
-                        <div class="col-md-4 mb-3">
-                            <label>Instalasi Sumatera (Sebelum Diskon)</label>
-                            <input type="number" class="form-control" id="edit_instalasi_sumatera_before">
+                    <!-- ===== BIAYA INSTALASI - LAYOUT DIPERBAIKI ===== -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            <strong><i class="fas fa-tools me-2"></i>Biaya Instalasi</strong>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Instalasi Sumatera (Sesudah Diskon)</label>
-                            <input type="number" class="form-control" id="edit_instalasi_sumatera">
-                        </div>
+                        <div class="card-body">
+                            
+                            <!-- SUMATERA -->
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <h6 class="text-primary mb-3">
+                                        <i class="fas fa-map-marker-alt me-2"></i>Sumatera & Kalimantan
+                                    </h6>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Instalasi Sebelum Diskon</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_instalasi_sumatera_before" placeholder="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Instalasi Sesudah Diskon</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_instalasi_sumatera" placeholder="0">
+                                    </div>
+                                </div>
+                            </div>
 
-                        <!-- JAWA -->
-                        <div class="col-md-4 mb-3">
-                            <label>Instalasi Jawa (Sebelum Diskon)</label>
-                            <input type="number" class="form-control" id="edit_instalasi_jawa_before">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Instalasi Jawa (Sesudah Diskon)</label>
-                            <input type="number" class="form-control" id="edit_instalasi_jawa">
-                        </div>
+                            <hr>
 
-                        <!-- TIMUR -->
-                        <div class="col-md-4 mb-3">
-                            <label>Instalasi Timur (Sebelum Diskon)</label>
-                            <input type="number" class="form-control" id="edit_instalasi_timur_before">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Instalasi Timur (Sesudah Diskon)</label>
-                            <input type="number" class="form-control" id="edit_instalasi_timur">
-                        </div>
+                            <!-- JAWA -->
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <h6 class="text-primary mb-3">
+                                        <i class="fas fa-map-marker-alt me-2"></i>Jawa & Bali
+                                    </h6>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Instalasi Sebelum Diskon</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_instalasi_jawa_before" placeholder="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Instalasi Sesudah Diskon</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_instalasi_jawa" placeholder="0">
+                                    </div>
+                                </div>
+                            </div>
 
+                            <hr>
+
+                            <!-- TIMUR -->
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <h6 class="text-primary mb-3">
+                                        <i class="fas fa-map-marker-alt me-2"></i>Indonesia Timur
+                                    </h6>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Instalasi Sebelum Diskon</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_instalasi_timur_before" placeholder="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Instalasi Sesudah Diskon</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" id="edit_instalasi_timur" placeholder="0">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    </div>
-
-
 
                     <!-- Perangkat Ideal -->
                     <div class="card mb-3">

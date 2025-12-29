@@ -78,12 +78,18 @@ function showPage(pageName) {
         'berita': 'Kelola Berita',
         'faq': 'Kelola FAQ',
         'promo': 'Kelola Promo',
+        'addon': 'Kelola Add On',
         'transaksi': 'Daftar Transaksi'
     };
     
     const titleElement = document.getElementById('page-title');
     if (titleElement) {
-        titleElement.textContent = titles[pageName] || 'Dashboard Admin';
+        const icon = document.querySelector('#page-title i');
+        if (icon) {
+            titleElement.innerHTML = `<i class="${icon.className}"></i> ${titles[pageName] || 'Dashboard Admin'}`;
+        } else {
+            titleElement.innerHTML = `<i class="fas fa-tachometer-alt"></i> ${titles[pageName] || 'Dashboard Admin'}`;
+        }
     }
 
     // Add active class to clicked menu
@@ -94,10 +100,11 @@ function showPage(pageName) {
 
     // Load data based on page
     if (pageName === 'slider') loadSliderTable();
-    if (pageName === 'paket') loadPaketTable();
+    if (pageName === 'paket') loadPaketTable(); // ✅ PASTIKAN INI ADA
     if (pageName === 'berita') loadBeritaTable();
     if (pageName === 'faq') loadFaqTable();
-    if (pageName === 'promo') loadPromoTable(); // TAMBAHKAN BARIS INI
+    if (pageName === 'promo') loadPromoTable();
+    if (pageName === 'addon') loadAddon();
 }
 
 // ==================== DASHBOARD STATS ====================
@@ -242,59 +249,62 @@ function addSlider() {
 }
 
 // ==================== PAKET MANAGEMENT ====================
-
 function loadPaketTable() {
-    fetch(`${API_URL}?action=get_all&table=paket`)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Pakets:', data);
-            if (data.success) {
-                const tbody = document.getElementById('paket-table-body');
-                tbody.innerHTML = '';
-                
-                if (data.data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="6" class="text-center">Tidak ada data</td></tr>';
-                    return;
-                }
-                
-                data.data.forEach(paket => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${paket.name}</td>
-                            <td>Rp ${parseInt(paket.harga_sumatera).toLocaleString('id-ID')}</td>
-                            <td>Rp ${parseInt(paket.harga_jawa).toLocaleString('id-ID')}</td>
-                            <td>Rp ${parseInt(paket.harga_timur).toLocaleString('id-ID')}</td>
-                            <td><span class="badge-status ${paket.is_active ? 'badge-active' : 'badge-inactive'}">${paket.is_active ? 'Aktif' : 'Nonaktif'}</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-warning btn-action" onclick="editPaket('${paket.id}')"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger btn-action" onclick="deletePaket('${paket.id}')"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    `;
-                });
-            }
-        })
-        .catch(error => console.error('Error loading pakets:', error));
-}
-
-function editPaket(id) {
-    fetch(`${API_URL}?action=get_by_id&table=paket&id=${id}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const paket = data.data;
-                document.getElementById('edit-paket-id').value = paket.id;
-                document.getElementById('edit-paket-name').value = paket.name;
-                document.getElementById('edit-paket-sumatera').value = paket.harga_sumatera;
-                document.getElementById('edit-paket-jawa').value = paket.harga_jawa;
-                document.getElementById('edit-paket-timur').value = paket.harga_timur;
-                document.getElementById('edit-paket-status').value = paket.is_active ? 'true' : 'false';
-                
-                const modal = new bootstrap.Modal(document.getElementById('editPaketModal'));
-                modal.show();
-            }
-        })
-        .catch(error => console.error('Error:', error));
+    console.log('📊 Loading paket table...');
+    
+    fetch('api_paket.php', {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(paketList => {
+        console.log('📥 Paket data:', paketList);
+        
+        const tbody = document.getElementById('paket-table-body');
+        if (!tbody) {
+            console.error('❌ Table body tidak ditemukan!');
+            return;
+        }
+        
+        if (!paketList || paketList.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center">Tidak ada data paket</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = '';
+        
+        paketList.forEach(paket => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><strong>${paket.name}</strong></td>
+                <td>Rp ${parseInt(paket.harga_sumatera || 0).toLocaleString('id-ID')}</td>
+                <td>Rp ${parseInt(paket.harga_jawa || 0).toLocaleString('id-ID')}</td>
+                <td>Rp ${parseInt(paket.harga_timur || 0).toLocaleString('id-ID')}</td>
+                <td>
+                    <span class="badge-status ${paket.status == 1 ? 'badge-active' : 'badge-inactive'}">
+                        ${paket.status == 1 ? '✓ Aktif' : '✗ Nonaktif'}
+                    </span>
+                </td>
+                <td class="text-nowrap">
+                    <button class="btn btn-sm btn-warning btn-action" onclick="editPaket(${paket.id})" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-danger btn-action" onclick="deletePaket(${paket.id})" title="Hapus">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+        console.log('✅ Tabel paket berhasil dimuat');
+    })
+    .catch(error => {
+        console.error('❌ Error loading paket:', error);
+        const tbody = document.getElementById('paket-table-body');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Gagal memuat data</td></tr>';
+        }
+    });
 }
 
 function savePaket() {
@@ -371,135 +381,110 @@ const modalElement = document.getElementById('modalTambahPaket'); // ✅ BENAR
 function addPaket() {
     console.log('🚀 addPaket() dipanggil');
 
-    const getValue = (id) => {
-        const el = document.getElementById(id);
-        return el ? el.value.trim() : '';
-    };
+    // Validasi basic
+    const nama = document.getElementById('nama')?.value.trim();
+    const sumatera = document.getElementById('sumatera')?.value;
+    const jawa = document.getElementById('jawa')?.value;
+    const timur = document.getElementById('timur')?.value;
 
-    // ===== DATA UTAMA =====
-    const nama = getValue('nama');
-    const kecepatan = getValue('kecepatan');
-    const status = getValue('status') || '1';
-
-    // ===== HARGA (BEFORE & AFTER) =====
-    const sumatera_before = getValue('sumatera_before');
-    const jawa_before     = getValue('jawa_before');
-    const timur_before    = getValue('timur_before');
-
-    const sumatera = getValue('sumatera');
-    const jawa     = getValue('jawa');
-    const timur    = getValue('timur');
-
-    // ===== INSTALASI (BEFORE & AFTER) =====
-    const instalasi_sumatera_before = getValue('instalasi_sumatera_before');
-    const instalasi_jawa_before     = getValue('instalasi_jawa_before');
-    const instalasi_timur_before    = getValue('instalasi_timur_before');
-
-    const instalasi_sumatera = getValue('instalasi_sumatera');
-    const instalasi_jawa     = getValue('instalasi_jawa');
-    const instalasi_timur    = getValue('instalasi_timur');
-
-    // ===== PERANGKAT =====
-    const max_perangkat   = getValue('max_perangkat');
-    const max_laptop      = getValue('max_laptop');
-    const max_smartphone  = getValue('max_smartphone');
-
-    // ===== FITUR =====
-    const tv_4k     = getValue('tv_4k');
-    const streaming = getValue('streaming');
-    const gaming    = getValue('gaming');
-    const features  = getValue('features');
-
-    // ===== GAMBAR =====
-    const imageFile = document.getElementById('paket_image')?.files[0];
-
-    // ===== VALIDASI =====
-    if (!nama || sumatera === '' || jawa === '' || timur === '') {
-        alert('❌ Nama & harga sesudah diskon WAJIB diisi');
+    if (!nama || !sumatera || !jawa || !timur) {
+        alert('❌ Nama Paket & Harga wajib diisi!');
         return;
     }
 
-    if (
-        instalasi_sumatera === '' ||
-        instalasi_jawa === '' ||
-        instalasi_timur === ''
-    ) {
-        alert('❌ Biaya instalasi wajib diisi (boleh 0)');
-        return;
-    }
-
-    // ===== FORM DATA =====
+    // Gunakan FormData (bukan JSON) karena ada file upload
     const formData = new FormData();
-
-    // Utama
+    
+    // Basic Info
     formData.append('nama', nama);
-    formData.append('kecepatan', kecepatan);
-    formData.append('status', parseInt(status) || 1);
+    formData.append('kecepatan', document.getElementById('kecepatan')?.value || '');
+    formData.append('status', document.getElementById('status')?.value || '1');
 
-    // Harga
-    formData.append('sumatera', parseInt(sumatera) || 0);
-    formData.append('jawa', parseInt(jawa) || 0);
-    formData.append('timur', parseInt(timur) || 0);
+    // Harga Bulanan (setelah diskon)
+    formData.append('harga_sumatera', parseInt(sumatera) || 0);
+    formData.append('harga_jawa', parseInt(jawa) || 0);
+    formData.append('harga_timur', parseInt(timur) || 0);
 
-    formData.append('sumatera_before', parseInt(sumatera_before) || 0);
-    formData.append('jawa_before', parseInt(jawa_before) || 0);
-    formData.append('timur_before', parseInt(timur_before) || 0);
+    // Harga Sebelum Diskon (opsional)
+    formData.append('harga_sumatera_before', parseInt(document.getElementById('sumatera_before')?.value) || 0);
+    formData.append('harga_jawa_before', parseInt(document.getElementById('jawa_before')?.value) || 0);
+    formData.append('harga_timur_before', parseInt(document.getElementById('timur_before')?.value) || 0);
 
     // Instalasi
-    formData.append('instalasi_sumatera', parseInt(instalasi_sumatera) || 0);
-    formData.append('instalasi_jawa', parseInt(instalasi_jawa) || 0);
-    formData.append('instalasi_timur', parseInt(instalasi_timur) || 0);
+    formData.append('instalasi_sumatera', parseInt(document.getElementById('instalasi_sumatera')?.value) || 0);
+    formData.append('instalasi_jawa', parseInt(document.getElementById('instalasi_jawa')?.value) || 0);
+    formData.append('instalasi_timur', parseInt(document.getElementById('instalasi_timur')?.value) || 0);
 
-    formData.append('instalasi_sumatera_before', parseInt(instalasi_sumatera_before) || 0);
-    formData.append('instalasi_jawa_before', parseInt(instalasi_jawa_before) || 0);
-    formData.append('instalasi_timur_before', parseInt(instalasi_timur_before) || 0);
+    formData.append('instalasi_sumatera_before', parseInt(document.getElementById('instalasi_sumatera_before')?.value) || 0);
+    formData.append('instalasi_jawa_before', parseInt(document.getElementById('instalasi_jawa_before')?.value) || 0);
+    formData.append('instalasi_timur_before', parseInt(document.getElementById('instalasi_timur_before')?.value) || 0);
 
     // Perangkat
-    formData.append('max_perangkat', parseInt(max_perangkat) || 0);
-    formData.append('max_laptop', parseInt(max_laptop) || 0);
-    formData.append('max_smartphone', parseInt(max_smartphone) || 0);
+    formData.append('max_perangkat', parseInt(document.getElementById('max_perangkat')?.value) || 0);
+    formData.append('max_laptop', parseInt(document.getElementById('max_laptop')?.value) || 0);
+    formData.append('max_smartphone', parseInt(document.getElementById('max_smartphone')?.value) || 0);
 
     // Fitur
-    formData.append('tv_4k', tv_4k);
-    formData.append('streaming', streaming);
-    formData.append('gaming', gaming);
-    formData.append('features', features);
+    formData.append('tv_4k', document.getElementById('tv_4k')?.value || '');
+    formData.append('streaming', document.getElementById('streaming')?.value || '');
+    formData.append('gaming', document.getElementById('gaming')?.value || '');
+    formData.append('features', document.getElementById('features')?.value || '');
 
-    // Gambar
+    // Image
+    const imageFile = document.getElementById('paket_image')?.files[0];
     if (imageFile) {
         formData.append('image', imageFile);
     }
 
-    console.log('📤 Mengirim data paket (before & after)');
+    console.log('📤 Mengirim data...');
 
+    // Kirim ke api_paket.php
     fetch('api_paket.php', {
         method: 'POST',
         body: formData
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(res => {
+        console.log('📡 Status:', res.status);
+        return res.text();
+    })
+    .then(text => {
+        console.log('📦 Raw response:', text);
+        
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            console.error('❌ JSON Parse Error:', e);
+            console.error('Response:', text.substring(0, 500));
+            alert('❌ Server Error: Response bukan JSON.\n\nLihat console untuk detail.');
+            return;
+        }
+        
+        console.log('✅ Parsed data:', data);
+        
         if (data.success) {
-            alert('✅ Paket berhasil ditambahkan');
+            alert('✅ Paket berhasil ditambahkan!');
 
-            const modal = bootstrap.Modal.getInstance(
-                document.getElementById('modalTambahPaket')
-            );
+            // Tutup modal
+            const modalElement = document.getElementById('modalTambahPaket');
+            const modal = bootstrap.Modal.getInstance(modalElement);
             if (modal) modal.hide();
 
+            // Reset form
             document.getElementById('form-paket')?.reset();
-            removeImagePaket?.();
-            loadPaket?.();
-            loadDashboardStats?.();
+            
+            // Reload tabel TANPA refresh halaman
+            loadPaketTable();
+            loadDashboardStats();
         } else {
-            alert('❌ Gagal:\n' + data.message);
+            alert('❌ Gagal menambahkan paket:\n\n' + (data.message || 'Unknown error'));
         }
     })
     .catch(err => {
-        console.error(err);
-        alert('❌ Error server');
+        console.error('❌ Fetch Error:', err);
+        alert('❌ Terjadi kesalahan saat mengirim data.\n\nLihat console untuk detail.');
     });
 }
-
 
 function editPaket(id) {
     console.log('✏️ Edit paket ID:', id);
@@ -531,40 +516,92 @@ function editPaket(id) {
         
         console.log('📋 Data paket yang dipilih:', paket);
         
-        // Isi form edit - SESUAI dengan ID di HTML
+        // Isi form dengan data yang ada - LENGKAP
         const setValue = (fieldId, value) => {
             const el = document.getElementById(fieldId);
             if (el) {
-                el.value = value || '';
+                // Jika value adalah 0, tetap tampilkan sebagai '0', bukan kosong
+                el.value = (value !== null && value !== undefined) ? value : '';
+                console.log(`✅ ${fieldId} = ${el.value}`);
             } else {
                 console.warn(`⚠️ Element ${fieldId} tidak ditemukan`);
             }
         };
         
+        // ===== BASIC INFO =====
         setValue('edit_id', paket.id);
         setValue('edit_nama', paket.name);
         setValue('edit_kecepatan', paket.kecepatan);
+        setValue('edit_status', paket.status);
+        
+        // ===== HARGA BULANAN (BEFORE & AFTER) =====
+        setValue('edit_sumatera_before', paket.harga_sumatera_before || '');
         setValue('edit_sumatera', paket.harga_sumatera);
+        
+        setValue('edit_jawa_before', paket.harga_jawa_before || '');
         setValue('edit_jawa', paket.harga_jawa);
+        
+        setValue('edit_timur_before', paket.harga_timur_before || '');
         setValue('edit_timur', paket.harga_timur);
+        
+        // ===== BIAYA INSTALASI (BEFORE & AFTER) =====
+        setValue('edit_instalasi_sumatera_before', paket.instalasi_sumatera_before || '');
         setValue('edit_instalasi_sumatera', paket.instalasi_sumatera);
+        
+        setValue('edit_instalasi_jawa_before', paket.instalasi_jawa_before || '');
         setValue('edit_instalasi_jawa', paket.instalasi_jawa);
+        
+        setValue('edit_instalasi_timur_before', paket.instalasi_timur_before || '');
         setValue('edit_instalasi_timur', paket.instalasi_timur);
+        
+        // ===== PERANGKAT =====
         setValue('edit_max_perangkat', paket.max_perangkat);
         setValue('edit_max_laptop', paket.max_laptop);
         setValue('edit_max_smartphone', paket.max_smartphone);
+        
+        // ===== FITUR =====
         setValue('edit_tv_4k', paket.tv_4k);
         setValue('edit_streaming', paket.streaming);
         setValue('edit_gaming', paket.gaming);
         setValue('edit_features', paket.features);
-        setValue('edit_status', paket.status); // dari api_paket.php status = is_active
+        
+        console.log('✅ Semua form terisi dengan data lengkap');
+        
+        // Tampilkan gambar saat ini jika ada
+        if (paket.image_path) {
+            const currentImageContainer = document.getElementById('current-image-paket');
+            const currentImage = document.getElementById('current-img-paket');
+            
+            if (currentImageContainer && currentImage) {
+                currentImageContainer.style.display = 'block';
+                currentImage.src = paket.image_path;
+                console.log('🖼️ Gambar dimuat:', paket.image_path);
+            }
+        } else {
+            const currentImageContainer = document.getElementById('current-image-paket');
+            if (currentImageContainer) {
+                currentImageContainer.style.display = 'none';
+            }
+            console.log('⚠️ Tidak ada gambar');
+        }
+        
+        // Reset preview gambar baru
+        const editPreview = document.getElementById('edit-image-preview-paket');
+        if (editPreview) {
+            editPreview.style.display = 'none';
+        }
+        
+        const editImageInput = document.getElementById('edit_paket_image');
+        if (editImageInput) {
+            editImageInput.value = '';
+        }
         
         // Buka modal
         const modalElement = document.getElementById('modalEditPaket');
         if (modalElement) {
             const modal = new bootstrap.Modal(modalElement);
             modal.show();
-            console.log('✅ Modal edit dibuka');
+            console.log('✅ Modal edit dibuka dengan data lengkap');
         } else {
             console.error('❌ Modal modalEditPaket tidak ditemukan!');
             alert('Error: Modal edit tidak ditemukan!');
@@ -627,68 +664,93 @@ function updatePaket() {
         return;
     }
 
-    // ===== DATA KIRIM =====
-    const data = {
-        id: parseInt(id),
-        nama,
-        kecepatan,
+    // ✅ GUNAKAN FormData untuk UPDATE
+    const formData = new FormData();
+    
+    formData.append('action', 'update'); // ✅ TAMBAHKAN ACTION
+    formData.append('id', parseInt(id));
+    formData.append('nama', nama);
+    formData.append('kecepatan', kecepatan);
 
-        harga_sumatera_before: parseInt(sumatera_before) || null,
-        harga_sumatera: parseInt(sumatera) || 0,
+    formData.append('harga_sumatera_before', parseInt(sumatera_before) || 0);
+    formData.append('harga_sumatera', parseInt(sumatera) || 0);
 
-        harga_jawa_before: parseInt(jawa_before) || null,
-        harga_jawa: parseInt(jawa) || 0,
+    formData.append('harga_jawa_before', parseInt(jawa_before) || 0);
+    formData.append('harga_jawa', parseInt(jawa) || 0);
 
-        harga_timur_before: parseInt(timur_before) || null,
-        harga_timur: parseInt(timur) || 0,
+    formData.append('harga_timur_before', parseInt(timur_before) || 0);
+    formData.append('harga_timur', parseInt(timur) || 0);
 
-        instalasi_sumatera_before: parseInt(instalasi_sumatera_before) || null,
-        instalasi_sumatera: parseInt(instalasi_sumatera) || 0,
+    formData.append('instalasi_sumatera_before', parseInt(instalasi_sumatera_before) || 0);
+    formData.append('instalasi_sumatera', parseInt(instalasi_sumatera) || 0);
 
-        instalasi_jawa_before: parseInt(instalasi_jawa_before) || null,
-        instalasi_jawa: parseInt(instalasi_jawa) || 0,
+    formData.append('instalasi_jawa_before', parseInt(instalasi_jawa_before) || 0);
+    formData.append('instalasi_jawa', parseInt(instalasi_jawa) || 0);
 
-        instalasi_timur_before: parseInt(instalasi_timur_before) || null,
-        instalasi_timur: parseInt(instalasi_timur) || 0,
+    formData.append('instalasi_timur_before', parseInt(instalasi_timur_before) || 0);
+    formData.append('instalasi_timur', parseInt(instalasi_timur) || 0);
 
-        max_perangkat: parseInt(max_perangkat) || 0,
-        max_laptop: parseInt(max_laptop) || 0,
-        max_smartphone: parseInt(max_smartphone) || 0,
+    formData.append('max_perangkat', parseInt(max_perangkat) || 0);
+    formData.append('max_laptop', parseInt(max_laptop) || 0);
+    formData.append('max_smartphone', parseInt(max_smartphone) || 0);
 
-        tv_4k,
-        streaming,
-        gaming,
-        features,
-        status: parseInt(status) || 1
-    };
+    formData.append('tv_4k', tv_4k);
+    formData.append('streaming', streaming);
+    formData.append('gaming', gaming);
+    formData.append('features', features);
+    formData.append('status', parseInt(status) || 1);
 
-    console.log('📤 Data kirim:', data);
+    // Tambahkan gambar jika ada
+    const imageFile = document.getElementById('edit_paket_image')?.files[0];
+    if (imageFile) {
+        formData.append('image', imageFile);
+        console.log('📷 Image akan diupload:', imageFile.name);
+    }
 
-    // ===== FETCH =====
+    console.log('📤 Mengirim data update...');
+
+    // ✅ Kirim via POST dengan FormData
     fetch('api_paket.php', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        method: 'POST',
+        body: formData
     })
-    .then(res => res.json())
     .then(res => {
-        if (res.success) {
-            alert('✅ Paket berhasil diupdate');
+        console.log('📡 Response status:', res.status);
+        return res.text(); // Ubah ke text dulu untuk debug
+    })
+    .then(text => {
+        console.log('📦 Raw response:', text);
+        
+        // Parse JSON
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            console.error('❌ JSON Parse Error:', e);
+            console.error('Response:', text.substring(0, 500));
+            alert('❌ Server Error!\n\nResponse bukan JSON.\n\nLihat console untuk detail.');
+            throw new Error('Invalid JSON response');
+        }
+        
+        console.log('✅ Parsed data:', data);
+        
+        if (data.success) {
+            alert('✅ Paket berhasil diupdate!');
 
             const modal = bootstrap.Modal.getInstance(
                 document.getElementById('modalEditPaket')
             );
             if (modal) modal.hide();
 
-            loadPaket?.();
-            loadDashboardStats?.();
+            loadPaketTable();
+            loadDashboardStats();
         } else {
-            alert('❌ Gagal update:\n' + res.message);
+            alert('❌ Gagal update:\n' + (data.message || 'Unknown error'));
         }
     })
     .catch(err => {
-        console.error(err);
-        alert('❌ Error server');
+        console.error('❌ Fetch Error:', err);
+        alert('❌ Terjadi kesalahan saat mengirim data.\n\nLihat console untuk detail.');
     });
 }
 

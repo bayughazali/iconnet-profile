@@ -1,15 +1,16 @@
-// index.js - FIXED VERSION - Load Data dari Database untuk Homepage
+// index.js - FIXED VERSION - Button "Pesan Sekarang" Bisa Diklik
 
 // ==================== LOAD DATA SAAT HALAMAN DIMUAT ====================
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Index.php loaded, fetching data from database...');
     loadPaketFromDatabase();
-    setupLocationDropdown(); // ✅ TAMBAH INI
+    setupLocationDropdown();
+    setupModalPesanSekarang(); // ✅ TAMBAH INI
 });
 
 // ==================== GLOBAL VARIABLES ====================
 let paketData = [];
-let currentLocation = 'sumatera'; // ✅ GANTI dari 'sumatera-kalimantan' ke 'sumatera'
+let currentLocation = 'sumatera';
 
 // ==================== FORMAT RUPIAH ====================
 function formatRupiah(angka) {
@@ -17,7 +18,7 @@ function formatRupiah(angka) {
     return 'Rp. ' + parseInt(angka).toLocaleString('id-ID');
 }
 
-// ==================== SETUP LOCATION DROPDOWN - FIXED ====================
+// ==================== SETUP LOCATION DROPDOWN ====================
 function setupLocationDropdown() {
     console.log('🎯 Setting up location dropdown...');
     
@@ -133,7 +134,7 @@ function loadPaketFromDatabase() {
         });
 }
 
-// ==================== RENDER PAKET CARDS - FIXED ====================
+// ==================== RENDER PAKET CARDS ====================
 function renderPaketCards() {
     console.log('🎨 Starting to render paket cards...');
     console.log('🎨 Number of packages:', paketData.length);
@@ -188,12 +189,13 @@ function renderPaketCards() {
     }, 100);
 }
 
-// ==================== CREATE PACKAGE CARD ELEMENT - FIXED ====================
+// ==================== CREATE PACKAGE CARD ELEMENT ====================
+// ==================== CREATE PACKAGE CARD ELEMENT ====================
 function createPackageCardElement(paket) {
     const card = document.createElement('div');
     card.className = 'package-card';
 
-    // ✅ PENTING: Simpan data harga di dataset dengan nama yang benar
+    // Simpan data harga di dataset
     card.dataset.sumatera = paket.harga_sumatera || 0;
     card.dataset.jawa = paket.harga_jawa || 0;
     card.dataset.timur = paket.harga_timur || 0;
@@ -202,11 +204,17 @@ function createPackageCardElement(paket) {
     card.dataset.jawaBefore = paket.harga_jawa_before || 0;
     card.dataset.timurBefore = paket.harga_timur_before || 0;
 
-    console.log('🏷️ Card dataset created:', {
-        sumatera: card.dataset.sumatera,
-        jawa: card.dataset.jawa,
-        timur: card.dataset.timur
-    });
+    // ✅ TAMBAHAN: Simpan data instalasi
+    card.dataset.instalasiSumatera = paket.instalasi_sumatera || 0;
+    card.dataset.instalasiJawa = paket.instalasi_jawa || 0;
+    card.dataset.instalasiTimur = paket.instalasi_timur || 0;
+    
+    card.dataset.instalasiSumateraBefore = paket.instalasi_sumatera_before || 0;
+    card.dataset.instalasiJawaBefore = paket.instalasi_jawa_before || 0;
+    card.dataset.instalasiTimurBefore = paket.instalasi_timur_before || 0;
+
+    card.dataset.packageName = paket.name || '';
+    card.dataset.packageSpeed = paket.kecepatan || '';
 
     card.innerHTML = `
         <h4>${paket.name}</h4>
@@ -218,10 +226,12 @@ function createPackageCardElement(paket) {
             <p><i class="fas fa-network-wired"></i> ${paket.max_perangkat} Total Devices</p>
         </div>
 
-        <div class="package-price"></div>
-
         <small>Biaya Bulanan</small>
-
+        <div class="package-price"></div>
+      
+        <small>Biaya Instalasi</small>
+        <div class="package-installation-price mt-3"></div>
+        
         <button type="button" class="btn-pilih">
             Pesan Sekarang →
         </button>
@@ -232,7 +242,7 @@ function createPackageCardElement(paket) {
     return card;
 }
 
-// ==================== UPDATE PRICES BY LOCATION - FIXED ====================
+// ==================== UPDATE PRICES BY LOCATION ====================
 function updatePricesByLocation() {
     console.log('💰 Updating prices for location:', currentLocation);
     
@@ -242,29 +252,43 @@ function updatePricesByLocation() {
     cards.forEach((card, index) => {
         let before = 0;
         let after = 0;
+        let instalasiBefore = 0;
+        let instalasiAfter = 0;
 
-        // ✅ AMBIL DATA BERDASARKAN LOKASI YANG BENAR
         if (currentLocation === 'sumatera') {
             before = card.dataset.sumateraBefore || 0;
             after = card.dataset.sumatera || 0;
+            instalasiBefore = card.dataset.instalasiSumateraBefore || 0;
+            instalasiAfter = card.dataset.instalasiSumatera || 0;
         } 
         else if (currentLocation === 'jawa') {
             before = card.dataset.jawaBefore || 0;
             after = card.dataset.jawa || 0;
+            instalasiBefore = card.dataset.instalasiJawaBefore || 0;
+            instalasiAfter = card.dataset.instalasiJawa || 0;
         } 
         else if (currentLocation === 'timur') {
             before = card.dataset.timurBefore || 0;
             after = card.dataset.timur || 0;
+            instalasiBefore = card.dataset.instalasiTimurBefore || 0;
+            instalasiAfter = card.dataset.instalasiTimur || 0;
         }
 
-        console.log(`📦 Card ${index + 1} - Location: ${currentLocation}, Before: ${before}, After: ${after}`);
+        console.log(`📦 Card ${index + 1} - Location: ${currentLocation}, Before: ${before}, After: ${after}, Instalasi Before: ${instalasiBefore}, Instalasi After: ${instalasiAfter}`);
 
         const priceEl = card.querySelector('.package-price');
+        const installationPriceEl = card.querySelector('.package-installation-price');
+        
         if (priceEl) {
             priceEl.innerHTML = hargaView(before, after);
             console.log(`✅ Price updated for card ${index + 1}`);
         } else {
             console.error(`❌ Price element not found for card ${index + 1}`);
+        }
+
+        if (installationPriceEl) {
+            installationPriceEl.innerHTML = hargaView(instalasiBefore, instalasiAfter);
+            console.log(`✅ Installation price updated for card ${index + 1}`);
         }
     });
     
@@ -296,61 +320,217 @@ const hargaView = (before, after) => {
     `;
 };
 
-// ==================== MODAL PESAN SEKARANG ====================
-document.addEventListener('DOMContentLoaded', () => {
+// ==================== SETUP MODAL PESAN SEKARANG - FIXED ====================
+// ==================== SETUP MODAL PESAN SEKARANG - COMPLETE DETAIL ====================
+function setupModalPesanSekarang() {
+    console.log('🎯 Setting up detailed modal...');
+    
     const modal = document.getElementById('modalPesan');
+    
+    // Modal elements
     const modalNama = document.getElementById('modalNama');
     const modalKecepatan = document.getElementById('modalKecepatan');
-    const modalHarga = document.getElementById('modalHarga');
+    const modalWilayah = document.getElementById('modalWilayah');
+    const modalHargaBefore = document.getElementById('modalHargaBefore');
+    const modalHargaAfter = document.getElementById('modalHargaAfter');
+    const modalDiskon = document.getElementById('modalDiskon');
+    const modalInstallBefore = document.getElementById('modalInstallBefore');
+    const modalInstallAfter = document.getElementById('modalInstallAfter');
+    const modalDiskonInstall = document.getElementById('modalDiskonInstall');
+    const modalTotal = document.getElementById('modalTotal');
+    
     const btnWhatsapp = document.getElementById('btnWhatsapp');
+    const modalClose = document.querySelector('.modal-close');
+    const btnCancel = document.querySelector('.btn-cancel');
 
-    document.addEventListener('click', e => {
+    if (!modal) {
+        console.error('❌ Modal not found!');
+        return;
+    }
+
+    // ✅ EVENT DELEGATION - Click handler for "Pesan Sekarang" buttons
+    document.addEventListener('click', function(e) {
         const btn = e.target.closest('.btn-pilih');
+        
         if (!btn) return;
+        
+        console.log('🖱️ "Pesan Sekarang" clicked!');
+        e.preventDefault();
+        e.stopPropagation();
 
         const card = btn.closest('.package-card');
-        if (!card) return;
-
-        const nama = card.querySelector('h4')?.textContent || '';
-        const kecepatan = card.querySelector('.package-specs p')?.textContent || '';
-
-        let before = 0;
-        let after = 0;
-
-        if (currentLocation === 'sumatera') {
-            before = card.dataset.sumateraBefore;
-            after = card.dataset.sumatera;
-        } else if (currentLocation === 'jawa') {
-            before = card.dataset.jawaBefore;
-            after = card.dataset.jawa;
-        } else if (currentLocation === 'timur') {
-            before = card.dataset.timurBefore;
-            after = card.dataset.timur;
+        if (!card) {
+            console.error('❌ Package card not found!');
+            return;
         }
 
-        modalNama.textContent = nama;
-        modalKecepatan.textContent = kecepatan;
-        modalHarga.textContent = formatRupiah(after);
+        // Get package data
+        const nama = card.dataset.packageName || card.querySelector('h4')?.textContent || '';
+        const kecepatan = card.dataset.packageSpeed || '';
 
-        btnWhatsapp.dataset.text =
-`Halo, saya ingin pesan paket ${nama}
-${kecepatan}
-Harga: ~${formatRupiah(before)}~
-Menjadi ${formatRupiah(after)}`;
+        // Get prices based on location
+        let hargaBefore = 0;
+        let hargaAfter = 0;
+        let installBefore = 0;
+        let installAfter = 0;
+        let wilayahText = '';
 
+        if (currentLocation === 'sumatera') {
+            hargaBefore = parseInt(card.dataset.sumateraBefore) || 0;
+            hargaAfter = parseInt(card.dataset.sumatera) || 0;
+            installBefore = parseInt(card.dataset.instalasiSumateraBefore) || 0;
+            installAfter = parseInt(card.dataset.instalasiSumatera) || 0;
+            wilayahText = 'Sumatera & Kalimantan';
+        } else if (currentLocation === 'jawa') {
+            hargaBefore = parseInt(card.dataset.jawaBefore) || 0;
+            hargaAfter = parseInt(card.dataset.jawa) || 0;
+            installBefore = parseInt(card.dataset.instalasiJawaBefore) || 0;
+            installAfter = parseInt(card.dataset.instalasiJawa) || 0;
+            wilayahText = 'Jawa & Bali';
+        } else if (currentLocation === 'timur') {
+            hargaBefore = parseInt(card.dataset.timurBefore) || 0;
+            hargaAfter = parseInt(card.dataset.timur) || 0;
+            installBefore = parseInt(card.dataset.instalasiTimurBefore) || 0;
+            installAfter = parseInt(card.dataset.instalasiTimur) || 0;
+            wilayahText = 'Indonesia Timur';
+        }
+
+        // Calculate discounts
+        const diskonBulanan = hargaBefore - hargaAfter;
+        const diskonInstalasi = installBefore - installAfter;
+        const totalBiaya = hargaAfter + installAfter;
+
+        console.log('📝 Modal data:', {
+            nama,
+            kecepatan,
+            wilayahText,
+            hargaBefore,
+            hargaAfter,
+            diskonBulanan,
+            installBefore,
+            installAfter,
+            diskonInstalasi,
+            totalBiaya
+        });
+
+        // Update modal content
+        if (modalNama) modalNama.textContent = nama;
+        if (modalKecepatan) modalKecepatan.textContent = kecepatan;
+        if (modalWilayah) modalWilayah.textContent = wilayahText;
+        
+        if (modalHargaBefore) {
+            modalHargaBefore.textContent = formatRupiah(hargaBefore);
+            modalHargaBefore.style.display = hargaBefore > hargaAfter ? 'inline' : 'none';
+        }
+        
+        if (modalHargaAfter) modalHargaAfter.textContent = formatRupiah(hargaAfter);
+        
+        if (modalDiskon) {
+            modalDiskon.textContent = diskonBulanan > 0 ? `Hemat ${formatRupiah(diskonBulanan)}` : 'Harga Terbaik';
+        }
+        
+        if (modalInstallBefore) {
+            modalInstallBefore.textContent = formatRupiah(installBefore);
+            modalInstallBefore.style.display = installBefore > installAfter ? 'inline' : 'none';
+        }
+        
+        if (modalInstallAfter) modalInstallAfter.textContent = formatRupiah(installAfter);
+        
+        if (modalDiskonInstall) {
+            modalDiskonInstall.textContent = diskonInstalasi > 0 ? `Hemat ${formatRupiah(diskonInstalasi)}` : 'Harga Terbaik';
+        }
+        
+        if (modalTotal) modalTotal.textContent = formatRupiah(totalBiaya);
+
+        // Hide arrows if no discount
+        const arrows = modal.querySelectorAll('.price-arrow');
+        arrows[0].style.display = hargaBefore > hargaAfter ? 'inline' : 'none';
+        arrows[1].style.display = installBefore > installAfter ? 'inline' : 'none';
+
+        // Prepare WhatsApp message - DETAILED FORMAT
+        if (btnWhatsapp) {
+            let waMessage = `🌐 *PEMESANAN PAKET ICONNET*\n\n`;
+            waMessage += `📦 *Detail Paket:*\n`;
+            waMessage += `• Paket: ${nama}\n`;
+            waMessage += `• Kecepatan: ${kecepatan}\n`;
+            waMessage += `• Wilayah: ${wilayahText}\n\n`;
+            
+            waMessage += `💰 *Rincian Biaya:*\n`;
+            
+            // Biaya Bulanan
+            if (hargaBefore > hargaAfter) {
+                waMessage += `• Biaya Bulanan: ~${formatRupiah(hargaBefore)}~ → *${formatRupiah(hargaAfter)}*\n`;
+                waMessage += `  ✅ Hemat ${formatRupiah(diskonBulanan)}\n\n`;
+            } else {
+                waMessage += `• Biaya Bulanan: *${formatRupiah(hargaAfter)}*\n\n`;
+            }
+            
+            // Biaya Instalasi
+            if (installBefore > installAfter) {
+                waMessage += `• Biaya Instalasi: ~${formatRupiah(installBefore)}~ → *${formatRupiah(installAfter)}*\n`;
+                waMessage += `  ✅ Hemat ${formatRupiah(diskonInstalasi)}\n\n`;
+            } else {
+                waMessage += `• Biaya Instalasi: *${formatRupiah(installAfter)}*\n\n`;
+            }
+            
+            waMessage += `💵 *TOTAL BIAYA: ${formatRupiah(totalBiaya)}*\n\n`;
+            waMessage += `📋 Masa kontrak: 12 bulan\n`;
+            waMessage += `✨ Harga sudah termasuk PPN 11%\n\n`;
+            waMessage += `Saya ingin melakukan pemesanan. Mohon informasi lebih lanjut. Terima kasih! 🙏`;
+            
+            btnWhatsapp.dataset.text = waMessage;
+        }
+
+        // Show modal
         modal.classList.add('show');
+        document.body.style.overflow = 'hidden'; // Prevent background scroll
+        console.log('✅ Modal shown with complete details');
     });
 
-    document.querySelector('.modal-close')?.addEventListener('click', () => {
+    // Close modal function
+    function closeModal() {
         modal.classList.remove('show');
+        document.body.style.overflow = ''; // Restore scroll
+        console.log('❌ Modal closed');
+    }
+
+    // Close button
+    if (modalClose) {
+        modalClose.addEventListener('click', closeModal);
+    }
+
+    // Cancel button
+    if (btnCancel) {
+        btnCancel.addEventListener('click', closeModal);
+    }
+
+    // WhatsApp button
+    if (btnWhatsapp) {
+        btnWhatsapp.addEventListener('click', function() {
+            const nomorWA = '6289502434324';
+            const text = encodeURIComponent(this.dataset.text || 'Halo, saya tertarik dengan ICONNET');
+            const url = `https://wa.me/${nomorWA}?text=${text}`;
+            console.log('📱 Opening WhatsApp with detailed message');
+            window.open(url, '_blank');
+        });
+    }
+
+    // Close when clicking outside modal
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
     });
 
-    btnWhatsapp?.addEventListener('click', () => {
-        const nomorWA = '6289502434324';
-        const text = encodeURIComponent(btnWhatsapp.dataset.text);
-        window.open(`https://wa.me/${nomorWA}?text=${text}`, '_blank');
+    // Close with ESC key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('show')) {
+            closeModal();
+        }
     });
-});
+
+    console.log('✅ Detailed modal setup complete');
+}
 
 // ==================== SHOW ERROR MESSAGE ====================
 function showErrorMessage(errorMsg) {

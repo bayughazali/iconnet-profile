@@ -356,8 +356,9 @@ if ($action === 'get_paket_public') {
 }
 
 // Get Active Berita untuk Homepage
+// Get Active Berita untuk Homepage
 if ($action === 'get_berita_public') {
-    $sql = "SELECT * FROM berita WHERE is_active = 1 ORDER BY id DESC LIMIT 3";
+    $sql = "SELECT * FROM berita WHERE is_active = 1 ORDER BY date DESC, id DESC";
     $result = $conn->query($sql);
     
     $data = [];

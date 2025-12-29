@@ -1115,7 +1115,208 @@ html {
     color: #00a8cc;
     cursor: pointer;
 }
+/* ========== MODAL DETAIL STYLING (SAMA DENGAN INDEX.PHP) ========== */
+.detail-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+}
 
+.detail-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.detail-card-header i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.detail-card-header h4 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-label i {
+    color: var(--primary-color);
+}
+
+.detail-value {
+    font-weight: 700;
+    color: var(--text-dark);
+    font-size: 1.05rem;
+}
+
+.pricing-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 2px solid var(--primary-light);
+}
+
+.price-section {
+    margin-bottom: 20px;
+}
+
+.price-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #6c757d;
+    margin-bottom: 12px;
+}
+
+.price-display {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.price-before,
+.price-before-install {
+    text-decoration: line-through;
+    color: #9ca3af;
+    font-size: 1.1rem;
+}
+
+.price-arrow {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.price-after,
+.price-after-install {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary-color);
+}
+
+.price-badge {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.install-badge {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.divider-line {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+    margin: 20px 0;
+}
+
+.total-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    margin: 20px 0;
+}
+
+.total-label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.total-value {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.price-note {
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 15px 0 0 0;
+}
+
+.info-box {
+    display: flex;
+    gap: 15px;
+    padding: 20px;
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+    border-radius: 12px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.info-box i {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+.info-box strong {
+    display: block;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+}
+
+.info-box p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.95rem;
+}
+
+.feature-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 15px 0;
+}
+
+.feature-badge {
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+    color: var(--text-dark);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 1px solid var(--primary-light);
+}
    </style>
 </head>
 <body>
@@ -1844,6 +2045,93 @@ function renderPaketCard(p) {
     `;
 }
 
+// function showProductDetailFromDB(paketId) {
+//     const paket = allPaket.find(p => p.id == paketId);
+
+//     if (!paket) {
+//         alert("Data paket tidak ditemukan");
+//         return;
+//     }
+
+//     document.getElementById("detailModalTitle").innerText = paket.name;
+// document.getElementById("productDetailBody").innerHTML = `
+
+// <!-- INFORMASI PAKET -->
+// <div class="info-grid">
+
+//     <div class="info-card">
+//         <i class="bi bi-speedometer2"></i>
+//         <div>
+//             <div class="label">Kecepatan</div>
+//             <div class="value">${paket.kecepatan}</div>
+//         </div>
+//     </div>
+
+//     <div class="info-card">
+//         <i class="bi bi-router"></i>
+//         <div>
+//             <div class="label">Total Perangkat</div>
+//             <div class="value">${paket.max_perangkat}</div>
+//         </div>
+//     </div>
+
+//     <div class="info-card">
+//         <i class="bi bi-laptop"></i>
+//         <div>
+//             <div class="label">Laptop</div>
+//             <div class="value">${paket.max_laptop}</div>
+//         </div>
+//     </div>
+
+//     <div class="info-card">
+//         <i class="bi bi-phone"></i>
+//         <div>
+//             <div class="label">Smartphone</div>
+//             <div class="value">${paket.max_smartphone}</div>
+//         </div>
+//     </div>
+
+// </div>
+
+// <hr class="my-4">
+
+// <!-- HARGA & INSTALASI (TETAP PUNYAMU) -->
+// <div class="price-box" style="background:#d1e7dd;border:1px solid #badbcc;">
+//     <div class="label">Harga / Bulan</div>
+//     <div class="price">Rp ${formatRupiah(getHargaByRegion(paket))}</div>
+// </div>
+
+// <div class="price-box installation-box">
+//     <div class="label">Biaya Instalasi</div>
+//     <div class="price">Rp ${formatRupiah(getInstalasiByRegion(paket))}</div>
+// </div>
+
+// <hr class="my-4">
+
+// <!-- FITUR TAMBAHAN -->
+// <h6 class="mb-3">Fitur Tambahan</h6>
+// <div class="feature-badges">
+//     ${
+//         paket.features
+//         ? paket.features.split(",").map(f => `
+//             <span class="feature-badge">✓ ${f.trim()}</span>
+//         `).join("")
+//         : `<span class="text-muted">Tidak ada fitur tambahan</span>`
+//     }
+// </div>
+
+// <div class="text-end mt-4">
+//     <button class="btn btn-success"
+//         onclick='redirectToWhatsApp(${JSON.stringify(paket)})'>
+//         <i class="fab fa-whatsapp"></i> Pesan Sekarang
+//     </button>
+// </div>
+// `;
+
+//     new bootstrap.Modal(
+//         document.getElementById("productDetailModal")
+//     ).show();
+// }
 function showProductDetailFromDB(paketId) {
     const paket = allPaket.find(p => p.id == paketId);
 
@@ -1852,86 +2140,166 @@ function showProductDetailFromDB(paketId) {
         return;
     }
 
+    // Get prices based on region
+    const hargaBefore = getHargaBeforeByRegion(paket);
+    const hargaAfter = getHargaByRegion(paket);
+    const installBefore = getInstalasiBeforeByRegion(paket);
+    const installAfter = getInstalasiByRegion(paket);
+    const wilayah = getRegionLabel();
+
+    // Calculate discounts
+    const diskonBulanan = hargaBefore - hargaAfter;
+    const diskonInstalasi = installBefore - installAfter;
+    const totalBiaya = hargaAfter + installAfter;
+
+    // Update modal title
     document.getElementById("detailModalTitle").innerText = paket.name;
-document.getElementById("productDetailBody").innerHTML = `
 
-<!-- INFORMASI PAKET -->
-<div class="info-grid">
-
-    <div class="info-card">
-        <i class="bi bi-speedometer2"></i>
-        <div>
-            <div class="label">Kecepatan</div>
-            <div class="value">${paket.kecepatan}</div>
+    // Update modal body with detailed format (sama seperti index.php)
+    document.getElementById("productDetailBody").innerHTML = `
+        <!-- Package Info Card -->
+        <div class="detail-card">
+            <div class="detail-card-header">
+                <i class="fas fa-box"></i>
+                <h4>Informasi Paket</h4>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">
+                    <i class="fas fa-tag"></i> Nama Paket
+                </span>
+                <span class="detail-value">${paket.name}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">
+                    <i class="fas fa-wifi"></i> Kecepatan
+                </span>
+                <span class="detail-value">${paket.kecepatan}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">
+                    <i class="fas fa-map-marker-alt"></i> Wilayah Pemasangan
+                </span>
+                <span class="detail-value">${wilayah}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">
+                    <i class="fas fa-laptop"></i> Support Laptop
+                </span>
+                <span class="detail-value">${paket.max_laptop} Unit</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">
+                    <i class="fas fa-mobile-alt"></i> Support Smartphone
+                </span>
+                <span class="detail-value">${paket.max_smartphone} Unit</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">
+                    <i class="fas fa-network-wired"></i> Total Perangkat
+                </span>
+                <span class="detail-value">${paket.max_perangkat} Unit</span>
+            </div>
         </div>
-    </div>
 
-    <div class="info-card">
-        <i class="bi bi-router"></i>
-        <div>
-            <div class="label">Total Perangkat</div>
-            <div class="value">${paket.max_perangkat}</div>
+        <!-- Pricing Card -->
+        <div class="detail-card pricing-card mt-4">
+            <div class="detail-card-header">
+                <i class="fas fa-money-bill-wave"></i>
+                <h4>Rincian Harga</h4>
+            </div>
+            
+            <!-- Biaya Bulanan -->
+            <div class="price-section">
+                <div class="price-label">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Biaya Bulanan</span>
+                </div>
+                <div class="price-display">
+                    ${hargaBefore > hargaAfter ? `<span class="price-before">Rp ${formatRupiah(hargaBefore)}</span>` : ''}
+                    ${hargaBefore > hargaAfter ? `<span class="price-arrow">→</span>` : ''}
+                    <span class="price-after">Rp ${formatRupiah(hargaAfter)}</span>
+                </div>
+                ${diskonBulanan > 0 ? `
+                <div class="price-badge">
+                    <i class="fas fa-percent"></i>
+                    <span>Hemat Rp ${formatRupiah(diskonBulanan)}</span>
+                </div>
+                ` : ''}
+            </div>
+
+            <div class="divider-line"></div>
+
+            <!-- Biaya Instalasi -->
+            <div class="price-section">
+                <div class="price-label">
+                    <i class="fas fa-tools"></i>
+                    <span>Biaya Instalasi</span>
+                </div>
+                <div class="price-display">
+                    ${installBefore > installAfter ? `<span class="price-before-install">Rp ${formatRupiah(installBefore)}</span>` : ''}
+                    ${installBefore > installAfter ? `<span class="price-arrow">→</span>` : ''}
+                    <span class="price-after-install">Rp ${formatRupiah(installAfter)}</span>
+                </div>
+                ${diskonInstalasi > 0 ? `
+                <div class="price-badge install-badge">
+                    <i class="fas fa-percent"></i>
+                    <span>Hemat Rp ${formatRupiah(diskonInstalasi)}</span>
+                </div>
+                ` : ''}
+            </div>
+
+            <div class="divider-line"></div>
+
+            <!-- Total -->
+            <div class="total-section">
+                <span class="total-label">Total Biaya</span>
+                <span class="total-value">Rp ${formatRupiah(totalBiaya)}</span>
+            </div>
+
+            <p class="price-note">
+                <i class="fas fa-info-circle"></i>
+                *Harga sudah termasuk PPN 11%
+            </p>
         </div>
-    </div>
 
-    <div class="info-card">
-        <i class="bi bi-laptop"></i>
-        <div>
-            <div class="label">Laptop</div>
-            <div class="value">${paket.max_laptop}</div>
+        <!-- Fitur Tambahan -->
+        ${paket.features ? `
+        <div class="detail-card mt-4">
+            <div class="detail-card-header">
+                <i class="fas fa-star"></i>
+                <h4>Fitur Tambahan</h4>
+            </div>
+            <div class="feature-badges">
+                ${paket.features.split(",").map(f => `
+                    <span class="feature-badge">✓ ${f.trim()}</span>
+                `).join("")}
+            </div>
         </div>
-    </div>
+        ` : ''}
 
-    <div class="info-card">
-        <i class="bi bi-phone"></i>
-        <div>
-            <div class="label">Smartphone</div>
-            <div class="value">${paket.max_smartphone}</div>
+        <!-- Additional Info -->
+        <div class="info-box mt-4">
+            <i class="fas fa-check-circle"></i>
+            <div>
+                <strong>Masa Kontrak: 12 Bulan</strong>
+                <p>Dapatkan layanan internet stabil dengan garansi kualitas terbaik</p>
+            </div>
         </div>
-    </div>
 
-</div>
-
-<hr class="my-4">
-
-<!-- HARGA & INSTALASI (TETAP PUNYAMU) -->
-<div class="price-box" style="background:#d1e7dd;border:1px solid #badbcc;">
-    <div class="label">Harga / Bulan</div>
-    <div class="price">Rp ${formatRupiah(getHargaByRegion(paket))}</div>
-</div>
-
-<div class="price-box installation-box">
-    <div class="label">Biaya Instalasi</div>
-    <div class="price">Rp ${formatRupiah(getInstalasiByRegion(paket))}</div>
-</div>
-
-<hr class="my-4">
-
-<!-- FITUR TAMBAHAN -->
-<h6 class="mb-3">Fitur Tambahan</h6>
-<div class="feature-badges">
-    ${
-        paket.features
-        ? paket.features.split(",").map(f => `
-            <span class="feature-badge">✓ ${f.trim()}</span>
-        `).join("")
-        : `<span class="text-muted">Tidak ada fitur tambahan</span>`
-    }
-</div>
-
-<div class="text-end mt-4">
-    <button class="btn btn-success"
-        onclick='redirectToWhatsApp(${JSON.stringify(paket)})'>
-        <i class="fab fa-whatsapp"></i> Pesan Sekarang
-    </button>
-</div>
-`;
+        <!-- Action Button -->
+        <div class="text-center mt-4">
+            <button class="btn-wa-highlight px-5 py-3"
+                onclick='redirectToWhatsApp(${JSON.stringify(paket)})'>
+                <i class="fab fa-whatsapp"></i>
+                Pesan via WhatsApp
+            </button>
+        </div>
+    `;
 
     new bootstrap.Modal(
         document.getElementById("productDetailModal")
     ).show();
 }
-
 function formatRupiah(angka) {
     return new Intl.NumberFormat('id-ID').format(angka);
 }
@@ -1946,30 +2314,65 @@ function redirectToWhatsApp(paket) {
     const laptops = parseInt(document.getElementById("laptop-count").value) || 0;
     const smartphones = parseInt(document.getElementById("device-count").value) || 0;
 
-    const harga = getHargaByRegion(paket);
+    // Get prices based on region
+    const hargaBefore = getHargaBeforeByRegion(paket);
+    const hargaAfter = getHargaByRegion(paket);
+    const installBefore = getInstalasiBeforeByRegion(paket);
+    const installAfter = getInstalasiByRegion(paket);
     const wilayah = getRegionLabel();
 
-    const phoneNumber = "6289502434324"; // GANTI
+    // Calculate discounts
+    const diskonBulanan = hargaBefore - hargaAfter;
+    const diskonInstalasi = installBefore - installAfter;
+    const totalBiaya = hargaAfter + installAfter;
 
-    const message = `
-Halo Admin ICONNET 👋
+    const phoneNumber = "6289502434324";
 
-Saya tertarik berlangganan paket internet ICONNET dengan detail berikut:
+    // ✅ FORMAT SAMA DENGAN INDEX.PHP
+    let waMessage = `🌐 *PEMESANAN PAKET ICONNET*\n\n`;
+    waMessage += `📦 *Detail Paket:*\n`;
+    waMessage += `• Paket: ${paket.name}\n`;
+    waMessage += `• Kecepatan: ${paket.kecepatan}\n`;
+    waMessage += `• Wilayah: ${wilayah}\n\n`;
+    
+    waMessage += `💰 *Rincian Biaya:*\n`;
+    
+    // Biaya Bulanan
+    if (hargaBefore > hargaAfter) {
+        waMessage += `• Biaya Bulanan: ~Rp ${formatRupiah(hargaBefore)}~ → *Rp ${formatRupiah(hargaAfter)}*\n`;
+        waMessage += `  ✅ Hemat Rp ${formatRupiah(diskonBulanan)}\n\n`;
+    } else {
+        waMessage += `• Biaya Bulanan: *Rp ${formatRupiah(hargaAfter)}*\n\n`;
+    }
+    
+    // Biaya Instalasi
+    if (installBefore > installAfter) {
+        waMessage += `• Biaya Instalasi: ~Rp ${formatRupiah(installBefore)}~ → *Rp ${formatRupiah(installAfter)}*\n`;
+        waMessage += `  ✅ Hemat Rp ${formatRupiah(diskonInstalasi)}\n\n`;
+    } else {
+        waMessage += `• Biaya Instalasi: *Rp ${formatRupiah(installAfter)}*\n\n`;
+    }
+    
+    waMessage += `💵 *TOTAL BIAYA: Rp ${formatRupiah(totalBiaya)}*\n\n`;
+    waMessage += `📋 Masa kontrak: 12 bulan\n`;
+    waMessage += `✨ Harga sudah termasuk PPN 11%\n\n`;
+    waMessage += `Saya ingin melakukan pemesanan. Mohon informasi lebih lanjut. Terima kasih! 🙏`;
 
-📦 Paket : ${paket.name}
-⚡ Kecepatan : ${paket.kecepatan}
-📍 Wilayah Pemasangan : ${wilayah}
-💰 Harga / Bulan : Rp ${formatRupiah(harga)}
-📶 Kebutuhan Perangkat :
-- Laptop : ${laptops} unit
-- Smartphone : ${smartphones} unit
-
-Mohon informasi lebih lanjut terkait proses pemasangan.
-Terima kasih 🙏
-    `;
-
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message.trim())}`;
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(waMessage.trim())}`;
     window.open(url, "_blank");
+}
+
+// ✅ HELPER FUNCTIONS - Untuk mendapatkan harga "before"
+function getHargaBeforeByRegion(paket) {
+    if (selectedRegion === "sumatera") return paket.harga_sumatera_before || paket.harga_sumatera;
+    if (selectedRegion === "timur") return paket.harga_timur_before || paket.harga_timur;
+    return paket.harga_jawa_before || paket.harga_jawa;
+}
+
+function getInstalasiBeforeByRegion(paket) {
+    if (selectedRegion === "sumatera") return paket.instalasi_sumatera_before || paket.instalasi_sumatera;
+    if (selectedRegion === "timur") return paket.instalasi_timur_before || paket.instalasi_timur;
+    return paket.instalasi_jawa_before || paket.instalasi_jawa;
 }
 
 </script>
@@ -2185,28 +2588,85 @@ if (addon.category === "iconplay" && addon.layanan_tersedia) {
         });
 }
 
+// function redirectAddonToWhatsApp() {
+//     if (!selectedAddon) return;
+
+//     const phone = "6289502434324";
+
+//     const message = `
+// Halo Admin ICONNET 👋
+
+// Saya tertarik dengan Add-on berikut:
+
+// 📦 Add-on : ${selectedAddon.name}
+// 💰 Harga : Rp ${formatRupiah(selectedAddon.price)}
+// 🛠 Biaya Instalasi : Rp ${formatRupiah(selectedAddon.installation_fee)}
+
+// Mohon info pemasangan lebih lanjut.
+// Terima kasih 🙏
+//     `;
+
+//     window.open(
+//         `https://wa.me/${phone}?text=${encodeURIComponent(message)}`,
+//         "_blank"
+//     );
+// }
 function redirectAddonToWhatsApp() {
-    if (!selectedAddon) return;
+    if (!selectedAddon) {
+        alert("Data add-on tidak valid");
+        return;
+    }
 
-    const phone = "6289502434324";
+    const phoneNumber = "6289502434324";
+    const wilayah = getRegionLabel();
 
-    const message = `
-Halo Admin ICONNET 👋
+    // Get prices (with fallback to regular price if no "before" price)
+    const priceBefore = selectedAddon.price_before || selectedAddon.price;
+    const priceAfter = selectedAddon.price;
+    const installBefore = selectedAddon.installation_fee_before || selectedAddon.installation_fee || 0;
+    const installAfter = selectedAddon.installation_fee || 0;
 
-Saya tertarik dengan Add-on berikut:
+    // Calculate discounts
+    const diskonHarga = priceBefore - priceAfter;
+    const diskonInstalasi = installBefore - installAfter;
+    const totalBiaya = priceAfter + installAfter;
 
-📦 Add-on : ${selectedAddon.name}
-💰 Harga : Rp ${formatRupiah(selectedAddon.price)}
-🛠 Biaya Instalasi : Rp ${formatRupiah(selectedAddon.installation_fee)}
+    // ✅ FORMAT LENGKAP SEPERTI INDEX
+    let waMessage = `🌐 *PEMESANAN ADD-ON ICONNET*\n\n`;
+    waMessage += `📦 *Detail Add-on:*\n`;
+    waMessage += `• Produk: ${selectedAddon.name}\n`;
+    waMessage += `• Kategori: ${selectedAddon.category === 'wifi_extender' ? 'WiFi Extender' : 'ICONPLAY'}\n`;
+    
+    if (selectedAddon.description) {
+        waMessage += `• Deskripsi: ${selectedAddon.description}\n`;
+    }
+    
+    waMessage += `• Wilayah: ${wilayah}\n\n`;
+    
+    waMessage += `💰 *Rincian Biaya:*\n`;
+    
+    // Harga Add-on
+    if (priceBefore > priceAfter) {
+        waMessage += `• Harga Add-on: ~Rp ${formatRupiah(priceBefore)}~ → *Rp ${formatRupiah(priceAfter)}*\n`;
+        waMessage += `  ✅ Hemat Rp ${formatRupiah(diskonHarga)}\n\n`;
+    } else {
+        waMessage += `• Harga Add-on: *Rp ${formatRupiah(priceAfter)}*\n\n`;
+    }
+    
+    // Biaya Instalasi
+    if (installBefore > installAfter) {
+        waMessage += `• Biaya Instalasi: ~Rp ${formatRupiah(installBefore)}~ → *Rp ${formatRupiah(installAfter)}*\n`;
+        waMessage += `  ✅ Hemat Rp ${formatRupiah(diskonInstalasi)}\n\n`;
+    } else {
+        waMessage += `• Biaya Instalasi: *Rp ${formatRupiah(installAfter)}*\n\n`;
+    }
+    
+    waMessage += `💵 *TOTAL BIAYA: Rp ${formatRupiah(totalBiaya)}*\n\n`;
+    waMessage += `✨ Harga sudah termasuk PPN 11%\n\n`;
+    waMessage += `Saya ingin melakukan pemesanan. Mohon informasi lebih lanjut. Terima kasih! 🙏`;
 
-Mohon info pemasangan lebih lanjut.
-Terima kasih 🙏
-    `;
-
-    window.open(
-        `https://wa.me/${phone}?text=${encodeURIComponent(message)}`,
-        "_blank"
-    );
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(waMessage.trim())}`;
+    window.open(url, "_blank");
 }
 </script>
 <!--  -->
