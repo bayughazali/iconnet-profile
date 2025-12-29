@@ -2,6 +2,12 @@
 // api.php - REST API untuk CRUD Operations
 require_once 'config.php';
 
+// ✅ TAMBAHAN BARU: Anti-cache headers untuk data real-time
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+header('Expires: 0');
+
 // Hanya izinkan request dari admin yang sudah login (kecuali get public data)
 $public_actions = ['get_paket_public', 'get_berita_public', 'get_faq_public', 'get_slider_public', 'get_promo_public', 'get_promo_by_id', 'get_promo_by_region'];
 $action = isset($_GET['action']) ? $_GET['action'] : '';
@@ -371,13 +377,18 @@ if ($action === 'get_berita_public') {
 
 // Get Active FAQ untuk Homepage
 if ($action === 'get_faq_public') {
-    $sql = "SELECT * FROM faq WHERE is_active = 1 ORDER BY id ASC LIMIT 5";
+    $sql = "SELECT * FROM faq WHERE is_active = 1 ORDER BY id DESC";
     $result = $conn->query($sql);
     
     $data = [];
     while ($row = $result->fetch_assoc()) {
         $data[] = $row;
     }
+    
+    // ✅ DEBUG: Log query dan hasil
+    error_log("FAQ Query: " . $sql);
+    error_log("FAQ Count: " . count($data));
+    error_log("FAQ Data: " . json_encode($data));
     
     json_response(true, 'FAQ loaded', $data);
 }

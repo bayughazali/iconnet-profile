@@ -144,7 +144,9 @@ function showNewsError(message) {
 async function loadFAQ() {
     try {
         console.log('❓ Fetching FAQ from API...');
-        const response = await fetch('api.php?action=get_faq_public');
+        // ✅ TAMBAHAN: timestamp untuk prevent cache
+        const timestamp = new Date().getTime();
+        const response = await fetch(`api.php?action=get_faq_public&_t=${timestamp}`);
         const result = await response.json();
         
         console.log('📦 FAQ API Response:', result);
@@ -182,11 +184,11 @@ async function loadFAQ() {
         // Clear container
         faqContainer.innerHTML = '';
         
-        // Render FAQ (maksimal 5)
-        const faqsToShow = faqs.slice(0, 5);
-        console.log(`✅ Rendering ${faqsToShow.length} FAQ items`);
-        
-        faqsToShow.forEach((item, index) => {
+// Render FAQ (SEMUA data aktif)
+const faqsToShow = faqs; // ✅ UBAH: tidak pakai slice, tampilkan semua
+console.log(`✅ Rendering ${faqsToShow.length} FAQ items`);
+
+faqsToShow.forEach((item, index) => {
             console.log(`❓ FAQ ${index + 1}:`, item.question);
             
             const isFirst = index === 0; // FAQ pertama otomatis terbuka

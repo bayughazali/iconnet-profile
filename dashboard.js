@@ -1071,6 +1071,13 @@ function addFaq() {
             bootstrap.Modal.getInstance(document.getElementById('addFaqModal')).hide();
             loadFaqTable();
             loadDashboardStats();
+            
+            // ✅ TAMBAHAN: Clear cache untuk FAQ public
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => caches.delete(name));
+                });
+            }
         }
     })
     .catch(error => {
