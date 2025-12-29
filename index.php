@@ -1,3 +1,4 @@
+index.php
 <?php
 $paket = [];
 
@@ -164,9 +165,7 @@ if (!is_array($paket)) {
                     <div class="subscription-card">
                         <h2 class="mb-4">Cara Berlangganan</h2>
                         <p>Enjoy the large 200+ of unrealistic templates perfect slice of sensibilities.</p>
-                        <button class="btn-detail mt-3" data-bs-toggle="modal" data-bs-target="#modalVideo">
-                            LIHAT DETAIL →
-                        </button>
+                        <button class="btn-detail mt-3">LIHAT DETAIL →</button>
                     </div>
                 </div>
 
@@ -178,32 +177,6 @@ if (!is_array($paket)) {
         </div>
     </section>
 
-<!-- Modal Video Cara Berlangganan -->
-<div class="modal fade" id="modalVideo" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-
-            <div class="modal-header border-0">
-                <h5 class="modal-title fw-bold">Cara Berlangganan ICONNET</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-                <div class="ratio ratio-16x9">
-                    <iframe
-                        src="https://www.youtube.com/embed/VIDEO_ID_KAMU"
-                        title="YouTube video player"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
-                    </iframe>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-    
     <!-- Mascot Section -->
     <section class="mascot-section">
         <div class="container">
@@ -223,34 +196,6 @@ if (!is_array($paket)) {
 
             </div>
         </div>
-
-        <!-- Modal Syarat & Ketentuan -->
-        <div class="modal fade" id="modalSyarat" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title fw-bold">Syarat & Ketentuan</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <div class="modal-body">
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                            Cum fuga exercitationem, voluptatem minima dolore quas
-                            repellendus deserunt officiis doloremque.
-                        </p>
-
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                            Repudiandae, quaerat? Amet aliquid neque officiis.
-                        </p>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
 
         <!-- Service Icons Section -->
         <div class="row mt-5">
@@ -353,115 +298,58 @@ if (!is_array($paket)) {
         </div>
     </section>
 
-    <section class="news-section">
-        <div class="container-fluid px-5">
-
-            <!-- Header -->
-            <div class="section-header text-center">
-                <span class="news-badge">BERITA TERKINI</span>
-                <h2>Update Info ICONNET</h2>
-                <p>Informasi terbaru seputar layanan, promo, dan aktivitas ICONNET</p>
-            </div>
-
-            <!-- News Grid -->
-            <div class="row g-4">
-
-                <div class="col-lg-4 col-md-6">
-                    <article class="news-card h-100">
-                        <div class="news-image">
-                            <img src="image/pakkomang.png">
-                        </div>
-                        <div class="news-content">
-                            <span class="news-date">27 November 2025</span>
-                            <h5 class="news-title">ICONNET Capai 100+ Pelanggan Baru</h5>
-                            <p class="news-desc">ICONNET terus memperluas jangkauan layanan.</p>
-                            <a href="#" class="news-link">Baca Selengkapnya →</a>
-                        </div>
-                    </article>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <article class="news-card h-100">
-                        <div class="news-image">
-                            <img src="https://via.placeholder.com/600x400">
-                        </div>
-                        <div class="news-content">
-                            <span class="news-date">25 November 2025</span>
-                            <h5 class="news-title">Promo Akhir Tahun ICONNET</h5>
-                            <p class="news-desc">Promo menarik akhir tahun ICONNET.</p>
-                            <a href="#" class="news-link">Baca Selengkapnya →</a>
-                        </div>
-                    </article>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <article class="news-card h-100">
-                        <div class="news-image">
-                            <img src="https://via.placeholder.com/600x400">
-                        </div>
-                        <div class="news-content">
-                            <span class="news-date">20 November 2025</span>
-                            <h5 class="news-title">Perluasan Jaringan ICONNET</h5>
-                            <p class="news-desc">ICONNET memperluas jaringan nasional.</p>
-                            <a href="#" class="news-link">Baca Selengkapnya →</a>
-                        </div>
-                    </article>
-                </div>
-
-            </div>
-
+<section class="news-section" id="berita">
+    <div class="container-fluid px-5">
+        <!-- Header -->
+        <div class="section-header text-center">
+            <span class="news-badge">BERITA TERKINI</span>
+            <h2>Update Info ICONNET</h2>
+            <p>Informasi terbaru seputar layanan, promo, dan aktivitas ICONNET</p>
         </div>
-    </section>
 
-
-
+        <!-- News Carousel -->
+        <div class="row g-4" id="newsContainer">
+            <!-- Carousel akan diisi oleh load_news_faq.js -->
+            <div class="col-12 text-center">
+                <p class="text-muted">
+                    <i class="fas fa-spinner fa-spin me-2"></i>
+                    Memuat berita...
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
 
     <!-- FAQ Section -->
-    <section class="faq-section">
-        <div class="container">
+<section class="faq-section">
+    <div class="container">
 
-            <div class="text-center mb-5">
-                <h2>Paling sering ditanyakan</h2>
+        <div class="text-center mb-5">
+            <h2>Paling sering ditanyakan</h2>
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-6">
+                <!-- FAQ Container - akan diisi oleh JavaScript -->
+                <div id="faqContainer">
+                    <div class="faq-item">
+                        <h5><i class="fas fa-spinner fa-spin me-2"></i>Memuat FAQ...</h5>
+                    </div>
+                </div>
             </div>
 
-            <div class="row">
-
-                <div class="col-lg-6">
-
-                    <div class="faq-item">
-                        <h5>What is Midana? <i class="fas fa-times float-end"></i></h5>
-                        <p class="mt-3">Midana is the world's largest software library...</p>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>How often do you update the library? <i class="fas fa-plus float-end"></i></h5>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>Can I get a free trial? <i class="fas fa-plus float-end"></i></h5>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>Do you have a monthly plan? <i class="fas fa-plus float-end"></i></h5>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>Any discount for students? <i class="fas fa-plus float-end"></i></h5>
-                    </div>
-
+            <div class="col-lg-6">
+                <div class="house-illustration text-center">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cellipse cx='200' cy='350' rx='150' ry='30' fill='%23C8E6F5' opacity='0.5'/%3E%3Cpath d='M 200 100 L 280 180 L 280 320 L 120 320 L 120 180 Z' fill='%23E8F4F8'/%3E%3Cpath d='M 150 100 L 200 100 L 200 50 L 150 50 Z' fill='%23A5D8E8'/%3E%3Crect x='160' y='220' width='40' height='100' fill='%238B7355'/%3E%3C/svg%3E"
+                        class="img-fluid">
                 </div>
-
-                <div class="col-lg-6">
-                    <div class="house-illustration text-center">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cellipse cx='200' cy='350' rx='150' ry='30' fill='%23C8E6F5' opacity='0.5'/%3E%3Cpath d='M 200 100 L 280 180 L 280 320 L 120 320 L 120 180 Z' fill='%23E8F4F8'/%3E%3Cpath d='M 150 100 L 200 100 L 200 50 L 150 50 Z' fill='%23A5D8E8'/%3E%3Crect x='160' y='220' width='40' height='100' fill='%238B7355'/%3E%3C/svg%3E"
-                            class="img-fluid">
-                    </div>
-                </div>
-
             </div>
 
         </div>
-    </section>
+
+    </div>
+</section>
 
     <!-- Footer -->
     <footer class="bg-dark text-white py-4">
@@ -536,16 +424,305 @@ if (!is_array($paket)) {
         });
     </script>
 </script>
+
+<!-- Modal Pesan Sekarang - Detail Lengkap -->
 <div id="modalPesan" class="modal">
-  <div class="modal-content">
+  <div class="modal-content-custom">
     <span class="modal-close">&times;</span>
-    <h3 id="modalNama"></h3>
-    <p id="modalKecepatan"></p>
-    <p id="modalHarga"></p>
-    <button id="btnWhatsapp" class="btn-wa">Pesan via WhatsApp</button>
+    
+    <!-- Header Modal -->
+    <div class="modal-header-custom">
+      <i class="fas fa-shopping-cart"></i>
+      <h2>Detail Pemesanan Paket</h2>
+    </div>
+    
+    <!-- Body Modal -->
+    <div class="modal-body-custom">
+      
+      <!-- Package Info Card -->
+      <div class="detail-card">
+        <div class="detail-card-header">
+          <i class="fas fa-box"></i>
+          <h4>Informasi Paket</h4>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">
+            <i class="fas fa-tag"></i> Nama Paket
+          </span>
+          <span class="detail-value" id="modalNama">-</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">
+            <i class="fas fa-wifi"></i> Kecepatan
+          </span>
+          <span class="detail-value" id="modalKecepatan">-</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">
+            <i class="fas fa-map-marker-alt"></i> Wilayah Pemasangan
+          </span>
+          <span class="detail-value" id="modalWilayah">-</span>
+        </div>
+      </div>
+
+      <!-- Pricing Card -->
+      <div class="detail-card pricing-card">
+        <div class="detail-card-header">
+          <i class="fas fa-money-bill-wave"></i>
+          <h4>Rincian Harga</h4>
+        </div>
+        
+        <!-- Biaya Bulanan -->
+        <div class="price-section">
+          <div class="price-label">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Biaya Bulanan</span>
+          </div>
+          <div class="price-display">
+            <span class="price-before" id="modalHargaBefore">Rp. 0</span>
+            <span class="price-arrow">→</span>
+            <span class="price-after" id="modalHargaAfter">Rp. 0</span>
+          </div>
+          <div class="price-badge">
+            <i class="fas fa-percent"></i>
+            <span id="modalDiskon">Hemat Rp. 0</span>
+          </div>
+        </div>
+
+        <div class="divider-line"></div>
+
+        <!-- Biaya Instalasi -->
+        <div class="price-section">
+          <div class="price-label">
+            <i class="fas fa-tools"></i>
+            <span>Biaya Instalasi</span>
+          </div>
+          <div class="price-display">
+            <span class="price-before-install" id="modalInstallBefore">Rp. 0</span>
+            <span class="price-arrow">→</span>
+            <span class="price-after-install" id="modalInstallAfter">Rp. 0</span>
+          </div>
+          <div class="price-badge install-badge">
+            <i class="fas fa-percent"></i>
+            <span id="modalDiskonInstall">Hemat Rp. 0</span>
+          </div>
+        </div>
+
+        <div class="divider-line"></div>
+
+        <!-- Total -->
+        <div class="total-section">
+          <span class="total-label">Total Biaya</span>
+          <span class="total-value" id="modalTotal">Rp. 0</span>
+        </div>
+
+        <p class="price-note">
+          <i class="fas fa-info-circle"></i>
+          *Harga sudah termasuk PPN 11%
+        </p>
+      </div>
+
+      <!-- Additional Info -->
+      <div class="info-box">
+        <i class="fas fa-check-circle"></i>
+        <div>
+          <strong>Masa Kontrak: 12 Bulan</strong>
+          <p>Dapatkan layanan internet stabil dengan garansi kualitas terbaik</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer Modal -->
+    <div class="modal-footer-custom">
+      <button id="btnWhatsapp" class="btn-wa">
+        <i class="fab fa-whatsapp"></i>
+        Pesan via WhatsApp
+      </button>
+      <button class="btn-cancel">
+        <i class="fas fa-times"></i>
+        Batal
+      </button>
+    </div>
+    
   </div>
 </div>
 
-</body>
+<!-- Modal Syarat & Ketentuan -->
+<!-- Modal Syarat & Ketentuan - Modern Light Theme -->
+<div class="modal fade" id="modalSyarat" tabindex="-1" aria-labelledby="modalSyaratLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      
+      <!-- Header -->
+      <div class="modal-header border-0">
+        <h3 class="modal-title" id="modalSyaratLabel">
+          <i class="fas fa-file-contract"></i>
+          Syarat & Ketentuan ICONNET
+        </h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <!-- Body -->
+      <div class="modal-body">
+        <div class="terms-content">
+          
+          <!-- Term 1 -->
+          <div class="term-section">
+            <h5>
+              <span class="term-number">1</span>
+              Definisi
+            </h5>
+            <p>Pasal ini menjelaskan istilah-istilah penting yang digunakan dalam layanan ICONNET, seperti pelanggan, layanan ICONNET, perangkat (modem/STB), gangguan, dan data pribadi, agar tidak terjadi perbedaan pemahaman antara pelanggan dan PLN Icon Plus.</p>
+          </div>
 
+          <!-- Term 2 -->
+          <div class="term-section">
+            <h5>
+              <span class="term-number">2</span>
+              Ruang Lingkup Layanan
+            </h5>
+            <p>ICONNET adalah layanan internet rumah untuk penggunaan pribadi (residential) dengan kecepatan "up to", hanya boleh digunakan oleh pelanggan sendiri dan tidak boleh diperjualbelikan atau disambungkan ke jaringan lain secara ilegal.</p>
+          </div>
+
+          <!-- Term 3 -->
+          <div class="term-section">
+            <h5>
+              <span class="term-number">3</span>
+              Jangka Waktu Berlangganan
+            </h5>
+            <p>Pelanggan wajib berlangganan minimal 12 bulan, dan layanan akan diperpanjang otomatis kecuali pelanggan mengajukan pemutusan paling lambat 30 hari sebelum berhenti.</p>
+          </div>
+
+          <!-- Term 4 -->
+          <div class="term-section">
+            <h5>
+              <span class="term-number">4</span>
+              Pembayaran
+            </h5>
+            <p>Pelanggan wajib membayar biaya instalasi dan biaya bulanan tepat waktu, dan jika berhenti sebelum masa 12 bulan berakhir, akan dikenakan denda pembatalan sebesar Rp1.000.000.</p>
+          </div>
+
+          <!-- Term 5 -->
+          <div class="term-section">
+            <h5>
+              <span class="term-number">5</span>
+              Hak dan Kewajiban PLN Icon Plus
+            </h5>
+            <p>PLN Icon Plus berhak melakukan instalasi, perawatan, dan pengambilan perangkat, serta tidak bertanggung jawab atas penyalahgunaan layanan oleh pelanggan, namun tetap menyediakan dukungan teknis 24 jam.</p>
+          </div>
+
+          <!-- Term 6 -->
+          <div class="term-section">
+            <h5>
+              <span class="term-number">6</span>
+              Hak dan Kewajiban Pelanggan
+            </h5>
+            <p>Pelanggan wajib membayar layanan, memberikan data yang valid, menjaga perangkat milik PLN Icon Plus, dan bertanggung jawab atas kerusakan atau kehilangan perangkat tersebut.</p>
+          </div>
+
+          <!-- Term 7 -->
+          <div class="term-section">
+            <h5>
+              <span class="term-number">7</span>
+              Pemutusan Layanan
+            </h5>
+            <p>Jika pelanggan menunggak pembayaran, layanan dapat diputus sementara, dan bila tidak dibayar hingga 90 hari, layanan akan diputus secara permanen tanpa perlu keputusan pengadilan.</p>
+          </div>
+
+          <!-- Term 8 -->
+          <div class="term-section">
+            <h5>
+              <span class="term-number">8</span>
+              Penyambungan Kembali & Perubahan Layanan
+            </h5>
+            <p>Layanan dapat disambungkan kembali setelah tunggakan dilunasi, sementara perubahan paket hanya bisa dilakukan jika memenuhi syarat dan secara teknis memungkinkan.</p>
+          </div>
+
+          <!-- Term 9 -->
+          <div class="term-section">
+            <h5>
+              <span class="term-number">9</span>
+              Keadaan Kahar (Force Majeure)
+            </h5>
+            <p>PLN Icon Plus dan pelanggan tidak bertanggung jawab atas gangguan layanan yang disebabkan oleh kejadian di luar kendali seperti bencana alam, kerusuhan, atau kebijakan pemerintah.</p>
+          </div>
+
+          <!-- Term 10 -->
+          <div class="term-section">
+            <h5>
+              <span class="term-number">10</span>
+              Kerahasiaan
+            </h5>
+            <p>Kedua belah pihak wajib menjaga kerahasiaan data dan informasi pelanggan, kecuali untuk kepentingan hukum atau instansi yang berwenang.</p>
+          </div>
+
+          <!-- Term 11 -->
+          <div class="term-section">
+            <h5>
+              <span class="term-number">11</span>
+              Hukum dan Penyelesaian Sengketa
+            </h5>
+            <p>Jika terjadi sengketa, akan diselesaikan terlebih dahulu secara musyawarah, dan jika gagal, melalui BPSK atau Pengadilan Negeri sesuai hukum Indonesia.</p>
+          </div>
+
+          <!-- Term 12 -->
+          <div class="term-section">
+            <h5>
+              <span class="term-number">12</span>
+              Larangan
+            </h5>
+            <p>Pelanggan dilarang menjual kembali layanan ICONNET, memindahkan perangkat, atau menggunakan layanan di luar alamat yang terdaftar.</p>
+          </div>
+
+          <!-- Term 13 -->
+          <div class="term-section">
+            <h5>
+              <span class="term-number">13</span>
+              Ketentuan yang Dipisahkan
+            </h5>
+            <p>Jika ada satu ketentuan yang dinyatakan tidak berlaku oleh hukum, ketentuan lainnya tetap sah dan mengikat.</p>
+          </div>
+
+          <!-- Term 14 -->
+          <div class="term-section">
+            <h5>
+              <span class="term-number">14</span>
+              Ketentuan Lain-lain
+            </h5>
+            <p>Pelanggan menyetujui seluruh syarat, termasuk pemrosesan data pribadi sesuai Undang-Undang Perlindungan Data Pribadi, serta bersedia dihubungi oleh PLN Icon Plus selama masa berlangganan.</p>
+          </div>
+
+        </div>
+      </div>
+      
+      <!-- Footer -->
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="fas fa-times"></i>
+          Tutup
+        </button>
+        <button type="button" class="btn btn-primary" id="btnMengerti">
+          <i class="fas fa-check"></i>
+          Lanjutkan
+        </button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript untuk Button Lanjutkan -->
+<script>
+document.getElementById('btnMengerti').addEventListener('click', function() {
+    const modal = bootstrap.Modal.getInstance(document.getElementById('modalSyarat'));
+    if (modal) modal.hide();
+    
+    setTimeout(() => {
+        window.location.href = 'product.php';
+    }, 300);
+});
+</script>
+</body>
+<!-- batas -->
 </html>
