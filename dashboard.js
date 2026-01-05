@@ -1204,14 +1204,31 @@ function loadBeritaTable() {
                 tbody.innerHTML = '';
                 
                 if (data.data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" class="text-center">Tidak ada data</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>';
                     return;
                 }
                 
-                data.data.forEach(berita => {
+                // ✅ URUTKAN BERDASARKAN TANGGAL TERBARU
+                const sortedBerita = data.data.sort((a, b) => {
+                    // Konversi tanggal ke timestamp untuk perbandingan
+                    const dateA = parseIndonesianDate(a.date);
+                    const dateB = parseIndonesianDate(b.date);
+                    return dateB - dateA; // Descending (terbaru dulu)
+                });
+                
+                sortedBerita.forEach(berita => {
+                    // Format gambar dengan fallback
+                    const imageUrl = berita.image_url || 'https://via.placeholder.com/80x60?text=No+Image';
+                    
                     tbody.innerHTML += `
                         <tr>
                             <td>${berita.title}</td>
+                            <td>
+                                <img src="${imageUrl}" 
+                                     style="width:80px;height:60px;object-fit:cover;border-radius:8px;" 
+                                     onerror="this.src='https://via.placeholder.com/80x60?text=No+Image'"
+                                     alt="${berita.title}">
+                            </td>
                             <td>${berita.date}</td>
                             <td><span class="badge-status ${berita.is_active ? 'badge-active' : 'badge-inactive'}">${berita.is_active ? 'Aktif' : 'Nonaktif'}</span></td>
                             <td>
@@ -1226,46 +1243,215 @@ function loadBeritaTable() {
         .catch(error => console.error('Error loading berita:', error));
 }
 
+// ✅ FUNGSI HELPER UNTUK PARSING TANGGAL INDONESIA
+function parseIndonesianDate(dateStr) {
+    // Jika format YYYY-MM-DD, langsung parse
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+        return new Date(dateStr);
+    }
+    
+    // Konversi dari format Indonesia "27 November 2024"
+    const monthMap = {
+        'Januari': 0, 'Februari': 1, 'Maret': 2, 'April': 3,
+        'Mei': 4, 'Juni': 5, 'Juli': 6, 'Agustus': 7,
+        'September': 8, 'Oktober': 9, 'November': 10, 'Desember': 11
+    };
+    
+    const parts = dateStr.split(' ');
+    if (parts.length === 3) {
+        const day = parseInt(parts[0]);
+        const month = monthMap[parts[1]] || 0;
+        const year = parseInt(parts[2]);
+        return new Date(year, month, day);
+    }
+    
+    // Fallback
+    return new Date(dateStr);
+}
+
 function editBerita(id) {
+    console.log('✏️ Edit berita ID:', id);
+    
     fetch(`${API_URL}?action=get_by_id&table=berita&id=${id}`)
         .then(response => response.json())
         .then(data => {
+            console.log('📦 Berita data received:', data);
+            
             if (data.success) {
                 const berita = data.data;
+                
+                // ===== ISI FORM DENGAN DATA =====
                 document.getElementById('edit-berita-id').value = berita.id;
                 document.getElementById('edit-berita-title').value = berita.title;
-                document.getElementById('edit-berita-date').value = berita.date;
                 document.getElementById('edit-berita-content').value = berita.content || '';
                 document.getElementById('edit-berita-status').value = berita.is_active ? 'true' : 'false';
                 
+                // ===== SET TANGGAL =====
+                // Konversi format tanggal dari "27 November 2024" ke "2024-11-27"
+                const dateStr = berita.date;
+                let dateISO = '';
+                
+                // Cek apakah format sudah YYYY-MM-DD
+                if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+                    dateISO = dateStr;
+                } else {
+                    // Konversi dari format Indonesia ke ISO
+                    const monthMap = {
+                        'Januari': '01', 'Februari': '02', 'Maret': '03', 'April': '04',
+                        'Mei': '05', 'Juni': '06', 'Juli': '07', 'Agustus': '08',
+                        'September': '09', 'Oktober': '10', 'November': '11', 'Desember': '12'
+                    };
+                    
+                    const parts = dateStr.split(' ');
+                    if (parts.length === 3) {
+                        const day = parts[0].padStart(2, '0');
+                        const month = monthMap[parts[1]] || '01';
+                        const year = parts[2];
+                        dateISO = `${year}-${month}-${day}`;
+                    }
+                }
+                
+                // Set date picker
+                const datePicker = document.getElementById('edit-berita-date-picker');
+                if (datePicker && dateISO) {
+                    datePicker.value = dateISO;
+                    console.log('✅ Date picker set to:', dateISO);
+                }
+                
+                // Set hidden date field
+                document.getElementById('edit-berita-date').value = berita.date;
+                console.log('✅ Hidden date field set to:', berita.date);
+                
+                // ===== TAMPILKAN GAMBAR SAAT INI =====
+                const currentImage = document.getElementById('edit-current-image');
+                const currentImagePreview = document.getElementById('edit-current-image-preview');
+                const uploadArea = document.getElementById('edit-upload-area');
+                
+                if (berita.image_url && berita.image_url.trim() !== '') {
+                    // Ada gambar, tampilkan
+                    if (currentImagePreview) {
+                        currentImagePreview.src = berita.image_url;
+                        currentImagePreview.onerror = function() {
+                            this.src = 'https://via.placeholder.com/400x300?text=Gambar+Tidak+Ditemukan';
+                        };
+                    }
+                    if (currentImage) currentImage.style.display = 'block';
+                    if (uploadArea) uploadArea.style.display = 'none';
+                    console.log('✅ Current image displayed:', berita.image_url);
+                } else {
+                    // Tidak ada gambar
+                    if (currentImage) currentImage.style.display = 'none';
+                    if (uploadArea) uploadArea.style.display = 'block';
+                    console.log('⚠️ No image found');
+                }
+                
+                // Reset preview gambar baru
+                const editImagePreview = document.getElementById('edit-image-preview');
+                const editFileInput = document.getElementById('edit-berita-image-file');
+                
+                if (editImagePreview) editImagePreview.style.display = 'none';
+                if (editFileInput) editFileInput.value = '';
+                
+                console.log('✅ All form fields filled with existing data');
+                
+                // Buka modal
                 const modal = new bootstrap.Modal(document.getElementById('editBeritaModal'));
                 modal.show();
+            } else {
+                alert('❌ Gagal memuat data berita: ' + (data.message || 'Unknown error'));
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('❌ Error loading berita:', error);
+            alert('❌ Terjadi kesalahan saat memuat data berita');
+        });
 }
 
 function saveBerita() {
-    const formData = new FormData();
-    formData.append('id', document.getElementById('edit-berita-id').value);
-    formData.append('title', document.getElementById('edit-berita-title').value);
-    formData.append('date', document.getElementById('edit-berita-date').value);
-    formData.append('content', document.getElementById('edit-berita-content').value);
-    formData.append('is_active', document.getElementById('edit-berita-status').value === 'true' ? 1 : 0);
+    console.log('💾 Saving berita changes...');
     
+    const id = document.getElementById('edit-berita-id').value;
+    const title = document.getElementById('edit-berita-title').value;
+    const dateHidden = document.getElementById('edit-berita-date').value;
+    const content = document.getElementById('edit-berita-content').value;
+    const status = document.getElementById('edit-berita-status').value === 'true' ? 1 : 0;
+    const imageInput = document.getElementById('edit-berita-image-file');
+    
+    console.log('📝 Data:', { id, title, dateHidden, hasNewImage: imageInput.files.length > 0 });
+    
+    if (!id || !title || !dateHidden) {
+        alert('❌ ID, Judul, dan Tanggal wajib diisi!');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('id', id);
+    formData.append('title', title);
+    formData.append('date', dateHidden);
+    formData.append('content', content);
+    formData.append('is_active', status);
+    
+    // ✅ KUNCI: Jika ada gambar baru yang diupload
+    if (imageInput.files.length > 0) {
+        const imageFile = imageInput.files[0];
+        console.log('🖼️ New image:', imageFile.name, imageFile.size, 'bytes');
+        
+        // Validasi ukuran file (max 5MB)
+        if (imageFile.size > 5 * 1024 * 1024) {
+            alert('❌ Ukuran file terlalu besar! Maksimal 5MB');
+            return;
+        }
+        
+        // Validasi tipe file
+        if (!imageFile.type.match('image.*')) {
+            alert('❌ File harus berupa gambar!');
+            return;
+        }
+        
+        formData.append('image', imageFile);
+    } else {
+        console.log('ℹ️ No new image uploaded, keeping existing image');
+    }
+    
+    // Kirim request
     fetch(`${API_URL}?action=update&table=berita`, {
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        showToast(data.message);
+    .then(res => {
+        console.log('📡 Response status:', res.status);
+        return res.text();
+    })
+    .then(text => {
+        console.log('📦 Raw response:', text.substring(0, 500));
+        
+        let data;
+        try {
+            data = JSON.parse(text);
+            console.log('✅ Parsed data:', data);
+        } catch (e) {
+            console.error('❌ JSON Parse Error:', e);
+            console.error('Full response:', text);
+            alert('❌ Server Error!\n\nResponse bukan JSON.\n\nKemungkinan:\n1. PHP Error\n2. Folder uploads/ tidak ada\n3. Permission denied\n\nCek console untuk detail!\n\n' + text.substring(0, 300));
+            throw new Error('Invalid JSON response');
+        }
+        
         if (data.success) {
-            bootstrap.Modal.getInstance(document.getElementById('editBeritaModal')).hide();
+            alert('✅ Berita berhasil diupdate!');
+            
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editBeritaModal'));
+            if (modal) modal.hide();
+            
             loadBeritaTable();
+            loadDashboardStats();
+        } else {
+            alert('❌ Gagal update berita:\n\n' + (data.message || 'Unknown error'));
         }
     })
-    .catch(error => console.error('Error:', error));
+    .catch(err => {
+        console.error('❌ Fetch Error:', err);
+        alert('❌ Terjadi kesalahan saat mengirim data.\n\nLihat console untuk detail.');
+    });
 }
 
 function deleteBerita(id) {
@@ -2342,5 +2528,56 @@ function deleteAddon(id) {
 document.addEventListener('DOMContentLoaded', function() {
     loadAddon();
 });
-
+// ==================== PREVIEW IMAGE EDIT BERITA ====================
+// ✅ KODE BARU - TAMBAHKAN DI AKHIR FILE dashboard.js
+document.addEventListener('DOMContentLoaded', function() {
+    const editBeritaImageInput = document.getElementById('edit-berita-image-file');
+    
+    if (editBeritaImageInput) {
+        console.log('✅ Edit berita image input found, adding event listener');
+        
+        editBeritaImageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) {
+                console.log('⚠️ No file selected');
+                return;
+            }
+            
+            console.log('📷 File selected:', file.name, file.size, 'bytes');
+            
+            // Validasi tipe file
+            if (!file.type.match('image.*')) {
+                alert('❌ File harus berupa gambar!');
+                e.target.value = '';
+                return;
+            }
+            
+            // Validasi ukuran file (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('❌ Ukuran file terlalu besar! Maksimal 5MB');
+                e.target.value = '';
+                return;
+            }
+            
+            // Preview gambar baru
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const previewImg = document.getElementById('edit-preview-img');
+                const imagePreview = document.getElementById('edit-image-preview');
+                const currentImage = document.getElementById('edit-current-image');
+                const uploadArea = document.getElementById('edit-upload-area');
+                
+                if (previewImg) previewImg.src = event.target.result;
+                if (imagePreview) imagePreview.style.display = 'block';
+                if (currentImage) currentImage.style.display = 'none';
+                if (uploadArea) uploadArea.style.display = 'none';
+                
+                console.log('✅ Preview gambar baru ditampilkan');
+            };
+            reader.readAsDataURL(file);
+        });
+    } else {
+        console.error('❌ Edit berita image input NOT found!');
+    }
+});
 

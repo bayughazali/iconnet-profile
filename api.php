@@ -298,13 +298,20 @@ if ($action === 'update' && $_SERVER['REQUEST_METHOD'] === 'POST') {
                     WHERE id = '$id'";
             break;
             
-        case 'berita':
-            $title = clean_input($_POST['title']);
-            $date = clean_input($_POST['date']);
-            $content = isset($_POST['content']) ? clean_input($_POST['content']) : '';
-            $image_url = isset($_POST['image_url']) ? clean_input($_POST['image_url']) : '';
-            $is_active = isset($_POST['is_active']) ? (int)$_POST['is_active'] : 0;
+case 'berita':
+    $title = clean_input($_POST['title']);
+    $date = clean_input($_POST['date']);
+    $content = isset($_POST['content']) ? clean_input($_POST['content']) : '';
+    $is_active = isset($_POST['is_active']) ? (int)$_POST['is_active'] : 0;
+    
+    // ✅ CEK: Apakah ada upload gambar baru?
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        // Upload gambar baru
+        $upload_result = upload_image($_FILES['image'], 'uploads/berita/');
+        if ($upload_result['success']) {
+            $image_url = $upload_result['path'];
             
+            // Update dengan gambar baru
             $sql = "UPDATE berita SET 
                     title = '$title',
                     date = '$date',
@@ -313,7 +320,20 @@ if ($action === 'update' && $_SERVER['REQUEST_METHOD'] === 'POST') {
                     is_active = $is_active,
                     updated_at = NOW()
                     WHERE id = '$id'";
-            break;
+        } else {
+            json_response(false, $upload_result['message']);
+        }
+    } else {
+        // ✅ KUNCI: Tidak ada gambar baru, JANGAN UPDATE image_url
+        $sql = "UPDATE berita SET 
+                title = '$title',
+                date = '$date',
+                content = '$content',
+                is_active = $is_active,
+                updated_at = NOW()
+                WHERE id = '$id'";
+    }
+    break;
             
         case 'faq':
             $question = clean_input($_POST['question']);

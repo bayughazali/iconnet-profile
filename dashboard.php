@@ -682,23 +682,24 @@
                         <i class="fas fa-plus me-2"></i>Tambah Berita
                     </button>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Judul</th>
-                                <th>Tanggal</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="berita-table-body">
-                            <tr>
-                                <td colspan="4" class="text-center">Loading...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Judul</th>
+                <th>Gambar</th>
+                <th>Tanggal</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody id="berita-table-body">
+            <tr>
+                <td colspan="5" class="text-center">Loading...</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
             </div>
         </div>
 
@@ -1900,76 +1901,121 @@ window.openPromoModal = handleOpenPromoModal;
     </div>
 
     <!-- Modal Edit Berita -->
-    <div class="modal fade" id="editBeritaModal" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-gradient-warning text-dark">
-                    <h5 class="modal-title"><i class="fas fa-edit me-2"></i>Edit Berita</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editBeritaForm">
-                        <input type="hidden" id="edit-berita-id">
-                        <div class="mb-3">
-                            <label class="form-label">Judul Berita</label>
-                            <input type="text" class="form-control" id="edit-berita-title" required>
-                        </div>
+    <!-- Modal Edit Berita - UPDATED VERSION -->
+<div class="modal fade" id="editBeritaModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-warning text-dark">
+                <h5 class="modal-title"><i class="fas fa-edit me-2"></i>Edit Berita</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editBeritaForm">
+                    <input type="hidden" id="edit-berita-id">
+                    <input type="hidden" id="remove-old-image" value="false">
+                    
+                    <!-- Judul Berita -->
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-newspaper me-2 text-primary"></i>Judul Berita
+                        </label>
+                        <input type="text" class="form-control" id="edit-berita-title" required>
+                    </div>
+                    
+                    <!-- Tanggal Publikasi -->
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-calendar me-2 text-primary"></i>Tanggal Publikasi
+                        </label>
+                        <input type="date" class="form-control" id="edit-berita-date-picker" required>
+                        <input type="hidden" id="edit-berita-date">
+                    </div>
+                    
+                    <!-- Upload Gambar Berita -->
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-image me-2 text-primary"></i>Gambar Berita
+                        </label>
                         
-                        <div class="mb-3">
-                            <label class="form-label">Tanggal Publikasi</label>
-                            <input type="date" class="form-control" id="edit-berita-date-picker" required>
-                            <input type="hidden" id="edit-berita-date">
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Upload Gambar Berita</label>
-                            <div class="current-image mb-3" id="edit-current-image" style="display: none;">
-                                <p class="text-muted small mb-2"><i class="fas fa-info-circle me-1"></i>Gambar saat ini:</p>
-                                <img id="edit-current-image-preview" src="" alt="Current" class="img-thumbnail" style="max-height: 200px;">
+                        <!-- Gambar Saat Ini -->
+                        <div class="current-image mb-3" id="edit-current-image" style="display: none;">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <p class="text-muted small mb-0">
+                                    <i class="fas fa-info-circle me-1"></i>Gambar saat ini:
+                                </p>
+                                <button type="button" class="btn btn-sm btn-outline-danger" 
+                                        onclick="removeCurrentImageBerita()" title="Hapus gambar lama">
+                                    <i class="fas fa-trash"></i> Hapus Gambar Lama
+                                </button>
                             </div>
-                            <div class="upload-area" id="edit-upload-area">
-                                <div class="upload-icon">
-                                    <i class="fas fa-cloud-upload-alt"></i>
-                                </div>
-                                <div class="upload-text">
-                                    <p class="mb-1"><strong>Klik untuk upload gambar baru</strong></p>
-                                    <p class="text-muted small mb-0">atau drag & drop file di sini</p>
-                                    <p class="text-muted small">PNG, JPG, WEBP (Max. 5MB)</p>
-                                </div>
-                                <input type="file" id="edit-berita-image-file" accept="image/*" style="display: none;">
-                            </div>
-                            <div id="edit-image-preview" class="mt-3" style="display: none;">
-                                <div class="preview-container">
-                                    <img id="edit-preview-img" src="" alt="Preview" class="img-thumbnail">
-                                    <button type="button" class="btn btn-sm btn-danger remove-image" onclick="removeEditImage()">
-                                        <i class="fas fa-times"></i> Hapus
-                                    </button>
-                                </div>
-                                <p class="text-muted small mt-2" id="edit-file-name"></p>
-                            </div>
+                            <img id="edit-current-image-preview" src="" alt="Current" 
+                                 class="img-thumbnail" style="max-width: 100%; max-height: 300px; border-radius: 12px;">
                         </div>
                         
-                        <div class="mb-3">
-                            <label class="form-label">Konten Berita</label>
-                            <textarea class="form-control" id="edit-berita-content" rows="6"></textarea>
+                        <!-- Upload Area untuk Gambar Baru -->
+                        <div class="upload-area" id="edit-upload-area" style="cursor: pointer;">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text">
+                                <p class="mb-1"><strong>Klik untuk upload gambar baru</strong></p>
+                                <p class="text-muted small mb-0">atau drag & drop file di sini</p>
+                                <p class="text-muted small">PNG, JPG, WEBP (Max. 5MB)</p>
+                            </div>
+                            <input type="file" id="edit-berita-image-file" accept="image/*" style="display: none;">
                         </div>
                         
-                        <div class="mb-3">
-                            <label class="form-label">Status</label>
-                            <select class="form-select" id="edit-berita-status">
-                                <option value="true">✓ Aktif (Tampil di Homepage)</option>
-                                <option value="false">✗ Nonaktif (Tersembunyi)</option>
-                            </select>
+                        <!-- Preview Gambar Baru -->
+                        <div id="edit-image-preview" class="mt-3" style="display: none;">
+                            <div class="preview-container">
+                                <img id="edit-preview-img" src="" alt="Preview" 
+                                     class="img-thumbnail" style="max-width: 100%; max-height: 300px; border-radius: 12px;">
+                                <button type="button" class="btn btn-sm btn-danger remove-image mt-2" 
+                                        onclick="removeEditImage()">
+                                    <i class="fas fa-times"></i> Hapus Preview
+                                </button>
+                            </div>
+                            <p class="text-muted small mt-2" id="edit-file-name"></p>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-warning" onclick="saveBerita()">Simpan Perubahan</button>
-                </div>
+                        
+                        <small class="text-muted d-block mt-2">
+                            <i class="fas fa-lightbulb me-1"></i>
+                            Kosongkan jika tidak ingin mengubah gambar
+                        </small>
+                    </div>
+                    
+                    <!-- Konten Berita -->
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-align-left me-2 text-primary"></i>Konten Berita
+                        </label>
+                        <textarea class="form-control" id="edit-berita-content" rows="6" 
+                                  placeholder="Tulis konten berita..."></textarea>
+                    </div>
+                    
+                    <!-- Status -->
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-toggle-on me-2 text-primary"></i>Status
+                        </label>
+                        <select class="form-select" id="edit-berita-status">
+                            <option value="true">✓ Aktif (Tampil di Homepage)</option>
+                            <option value="false">✗ Nonaktif (Tersembunyi)</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Batal
+                </button>
+                <button type="button" class="btn btn-warning" onclick="saveBerita()">
+                    <i class="fas fa-save me-2"></i>Simpan Perubahan
+                </button>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Modal Tambah FAQ -->
     <div class="modal fade" id="addFaqModal" tabindex="-1">
@@ -2172,6 +2218,29 @@ window.openPromoModal = handleOpenPromoModal;
             };
             reader.readAsDataURL(file);
         }
+
+        function removeCurrentImageBerita() {
+    // Tandai bahwa gambar lama dihapus
+    document.getElementById('remove-old-image').value = 'true';
+
+    // Sembunyikan preview gambar lama
+    const currentImage = document.getElementById('edit-current-image');
+    if (currentImage) currentImage.style.display = 'none';
+
+    // Reset file input (jaga-jaga)
+    const fileInput = document.getElementById('edit-berita-image-file');
+    if (fileInput) fileInput.value = '';
+
+    // Tampilkan upload area (choose file)
+    const uploadArea = document.getElementById('edit-upload-area');
+    if (uploadArea) uploadArea.style.display = 'block';
+
+    // Otomatis buka dialog pilih file
+    setTimeout(() => {
+        document.getElementById('edit-berita-image-file').click();
+    }, 300);
+}
+
     </script>
 
     <!-- Modal Tambah Promo -->
