@@ -848,6 +848,7 @@ window.openPromoModal = handleOpenPromoModal;
 
     <!-- MODALS TETAP SAMA SEPERTI SEBELUMNYA -->
    <!-- Modal Tambah Slider - FIXED VERSION -->
+    <!-- Modal Tambah Slider - CLEAN VERSION -->
 <div class="modal fade" id="addSliderModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -874,35 +875,21 @@ window.openPromoModal = handleOpenPromoModal;
                         <label class="form-label">
                             <i class="fas fa-image me-2 text-primary"></i>Upload Gambar Slider *
                         </label>
-                        
-                        <!-- Upload Area -->
-                        <div class="upload-area" id="add-slider-upload-area">
-                            <div class="upload-icon">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                            </div>
-                            <div class="upload-text">
-                                <p class="mb-1"><strong>Klik untuk upload gambar</strong></p>
-                                <p class="text-muted small mb-0">atau drag & drop file di sini</p>
-                                <p class="text-muted small">PNG, JPG, WEBP (Max. 5MB)</p>
-                            </div>
-                            <!-- ✅ ID YANG BENAR: add-slider-image-file -->
-                            <input type="file" id="add-slider-image-file" accept="image/*" 
-                                   style="display: none;" required>
-                        </div>
+                        <input type="file" class="form-control" id="add-slider-image" 
+                               accept="image/png, image/jpeg, image/jpg, image/webp" required>
+                        <small class="text-muted">Format: PNG, JPG, WEBP (Max. 2MB)</small>
                         
                         <!-- Preview -->
-                        <div id="slider-image-preview" class="mt-3" style="display: none;">
-                            <div class="preview-container">
-                                <img id="slider-preview-img" src="" alt="Preview" 
-                                     class="img-thumbnail">
-                                <button type="button" class="btn btn-sm btn-danger remove-image" 
-                                        onclick="removeSliderImage()">
-                                    <i class="fas fa-times"></i> Hapus
-                                </button>
-                            </div>
-                            <p class="text-muted small mt-2" id="slider-file-name"></p>
+                        <div id="preview-slider-container" class="mt-3" style="display: none;">
+                            <img id="preview-slider-image" src="" alt="Preview" 
+                                 class="img-thumbnail" style="max-width: 100%; max-height: 200px;">
+                            <button type="button" class="btn btn-sm btn-danger mt-2" 
+                                    onclick="clearSliderPreview()">
+                                <i class="fas fa-times"></i> Hapus Preview
+                            </button>
                         </div>
                     </div>
+
                     <!-- Status -->
                     <div class="mb-3">
                         <label class="form-label">
@@ -914,99 +901,19 @@ window.openPromoModal = handleOpenPromoModal;
                         </select>
                     </div>
                 </form>
-    <input type="file"
-       id="add-slider-image"
-       name="image"
-       class="form-control"
-       accept="image/png, image/jpeg, image/jpg"
-       required>
-    <img id="preview-slider-image"
-         style="display:none;max-width:100%;margin-top:10px;border-radius:8px;">
-</div>
-
-
-    <div class="mb-3">
-        <label class="form-label">Status</label>
-        <select class="form-select" id="add-slider-status">
-            <option value="1">Aktif</option>
-            <option value="0">Nonaktif</option>
-        </select>
-    </div>
-</form>
             </div>
             
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Batal
+                </button>
                 <button type="button" class="btn btn-primary" onclick="addSlider()">
                     <i class="fas fa-save me-2"></i>Simpan Slider
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary" onclick="addSlider()">
-                    Simpan
                 </button>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-function addSlider() {
-    const form = document.getElementById('addSliderForm');
-    const formData = new FormData();
-    
-    // Ambil nilai dari form
-    const name = document.getElementById('add-slider-name').value;
-    const status = document.getElementById('add-slider-status').value;
-    const imageFile = document.getElementById('add-slider-image').files[0];
-    
-    // Validasi
-    if (!name || !imageFile) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Nama dan gambar harus diisi!'
-        });
-        return;
-    }
-    
-    // Tambahkan data ke FormData
-    formData.append('name', name);
-    formData.append('status', status);
-    formData.append('image', imageFile);
-    
-    // Kirim via AJAX
-    fetch('slider_action.php?action=add', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: 'Slider berhasil ditambahkan',
-                timer: 1500
-            }).then(() => {
-                location.reload();
-            });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: data.message || 'Terjadi kesalahan'
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: 'Terjadi kesalahan saat mengirim data'
-        });
-    });
-}
-</script>
 
     <!-- Modal Edit Slider -->
     <div class="modal fade" id="editSliderModal" tabindex="-1">

@@ -376,31 +376,44 @@ function openSliderModal() {
 }
 
 function addSlider() {
-    console.log('🚀 addSlider() dipanggil');
+    console.log('🚀 addSlider() called');
     
     const name = document.getElementById('add-slider-name').value.trim();
     const status = document.getElementById('add-slider-status').value;
     const imageInput = document.getElementById('add-slider-image');
     const imageFile = imageInput.files[0];
 
+    // Validasi
     if (!name) {
-        alert('Nama slider wajib diisi');
+        alert('❌ Nama slider wajib diisi!');
         return;
     }
 
     if (!imageFile) {
-        alert('Gambar slider wajib dipilih');
+        alert('❌ Gambar slider wajib dipilih!');
+        return;
+    }
+
+    // Validasi ukuran file (max 2MB)
+    if (imageFile.size > 2 * 1024 * 1024) {
+        alert('❌ Ukuran file terlalu besar! Maksimal 2MB');
+        return;
+    }
+
+    // Validasi tipe file
+    if (!imageFile.type.match('image.*')) {
+        alert('❌ File harus berupa gambar!');
         return;
     }
 
     const formData = new FormData();
     formData.append('name', name);
-    formData.append('image', imageFile); // ✅ WAJIB
+    formData.append('image', imageFile);
     formData.append('is_active', status);
     
+    console.log('📤 Sending data...');
+
     // Kirim ke API
-
-
     fetch(`${API_URL}?action=insert&table=slider`, {
         method: 'POST',
         body: formData
@@ -410,7 +423,7 @@ function addSlider() {
         return response.text();
     })
     .then(text => {
-        console.log('📦 Raw response:', text);    
+        console.log('📦 Raw response:', text.substring(0, 500));
         
         let data;
         try {
@@ -432,8 +445,8 @@ function addSlider() {
             if (modal) modal.hide();
             
             // Reset form
-            document.getElementById('addSliderForm')?.reset();
-            removeSliderImage(); // ✅ Fungsi reset khusus slider
+            document.getElementById('addSliderForm').reset();
+            clearSliderPreview();
             
             // Reload data
             loadSliderTable();
@@ -442,16 +455,59 @@ function addSlider() {
             alert('❌ Gagal menambahkan slider:\n\n' + (data.message || 'Unknown error'));
         }
     })
-
     .catch(error => {
         console.error('❌ Fetch Error:', error);
         alert('❌ Terjadi kesalahan saat mengirim data.\n\nLihat console untuk detail.');
-        
-        
     });
-
-    
 }
+
+// Helper function untuk clear preview slider
+function clearSliderPreview() {
+    const previewContainer = document.getElementById('preview-slider-container');
+    const previewImage = document.getElementById('preview-slider-image');
+    const imageInput = document.getElementById('add-slider-image');
+    
+    if (previewContainer) previewContainer.style.display = 'none';
+    if (previewImage) previewImage.src = '';
+    if (imageInput) imageInput.value = '';
+}
+
+// Event listener untuk preview image saat dipilih
+document.addEventListener('DOMContentLoaded', function() {
+    const addSliderImage = document.getElementById('add-slider-image');
+    
+    if (addSliderImage) {
+        addSliderImage.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // Validasi tipe file
+            if (!file.type.match('image.*')) {
+                alert('❌ File harus berupa gambar!');
+                e.target.value = '';
+                return;
+            }
+            
+            // Validasi ukuran file (max 2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                alert('❌ Ukuran file terlalu besar! Maksimal 2MB');
+                e.target.value = '';
+                return;
+            }
+            
+            // Preview image
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const previewContainer = document.getElementById('preview-slider-container');
+                const previewImage = document.getElementById('preview-slider-image');
+                
+                if (previewImage) previewImage.src = event.target.result;
+                if (previewContainer) previewContainer.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+});
 
 function initSlider() {
     const slides = document.querySelectorAll('.slide');
