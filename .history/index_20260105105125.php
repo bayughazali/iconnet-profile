@@ -732,7 +732,7 @@ document.getElementById('btnMengerti').addEventListener('click', function() {
 document.addEventListener('DOMContentLoaded', loadHeroSlider);
 
 function loadHeroSlider() {
-   fetch('api.php?action=get&table=slider')
+    fetch('api.php?action=get&table=slider')
     .then(res => res.json())
     .then(res => {
         const slider = document.getElementById('heroSlider');
@@ -758,7 +758,9 @@ function loadHeroSlider() {
         });
 
         initSlider();
-    })
+    });
+
+        })
         .catch(err => console.error('Slider error:', err));
 }
 </script>

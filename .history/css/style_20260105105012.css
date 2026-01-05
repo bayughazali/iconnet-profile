@@ -2490,14 +2490,3 @@ footer .btn-outline-light:hover {
     }
 }
 
-@media (max-width: 768px) {
-    .hero-slider {
-        max-width: 100%;
-    }
-
-    .hero-slider-wrapper {
-        height: 240px;
-    }
-}
-
-

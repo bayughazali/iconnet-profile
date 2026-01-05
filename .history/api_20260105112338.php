@@ -247,17 +247,16 @@ if ($action === 'update' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     // Update berdasarkan tabel
     switch ($table) {
         case 'slider':
-            $id        = (int) ($_POST['id'] ?? 0);
-            $name      = trim($_POST['name'] ?? '');
-            $is_active = (int) ($_POST['is_active'] ?? 0);
-
+            $name = clean_input($_POST['name']);
+            $image_path = clean_input($_POST['image_path']);
+            $is_active = isset($_POST['is_active']) ? (int)$_POST['is_active'] : 0;
             
-           $sql = "UPDATE slider
-                SET name='$name',
-                    is_active=$is_active
-                    $image_sql,
-                    updated_at=NOW()
-                WHERE id=$id";
+            $sql = "UPDATE slider SET 
+                    name = '$name',
+                    image_path = '$image_path',
+                    is_active = $is_active,
+                    updated_at = NOW()
+                    WHERE id = '$id'";
             break;
             
         case 'paket':
@@ -483,27 +482,15 @@ if ($action === 'get_promo_by_region') {
 }
 
 $conn->close();
-
 if ($_GET['action'] === 'update' && $_GET['table'] === 'slider') {
 
-    // 1️⃣ Ambil POST
-    $id        = (int) ($_POST['id'] ?? 0);
-    $name      = trim($_POST['name'] ?? '');
-    $is_active = (int) ($_POST['is_active'] ?? 0);
+    $id = (int)$_POST['id'];
+    $name = clean_input($_POST['name']);
+    $is_active = (int)$_POST['is_active'];
 
-    if (!$id || $name === '') {
-        header('Content-Type: application/json');
-        echo json_encode([
-            'success' => false,
-            'message' => 'Data tidak lengkap'
-        ]);
-        exit;
-    }
+    $image_sql = "";
 
-    // 2️⃣ ⬇️ WAJIB ADA DI SINI (SEBELUM IF UPLOAD)
-    $image_sql = '';
-
-    // 3️⃣ Upload opsional
+    // jika upload gambar baru
     if (!empty($_FILES['image']['name'])) {
 
         $uploadDir = 'uploads/slider/';
@@ -516,6 +503,45 @@ if ($_GET['action'] === 'update' && $_GET['table'] === 'slider') {
         $path = $uploadDir . $filename;
 
         if (!move_uploaded_file($_FILES['image']['tmp_name'], $path)) {
+            json_response(false, 'Gagal upload gambar');
+        }
+
+        $image_sql = ", image_path='$path'";
+    }
+
+    $sql = "UPDATE slider 
+            SET name='$name', is_active=$is_active $image_sql, updated_at=NOW()
+            WHERE id=$id";
+
+    if ($conn->query($sql)) {
+        json_response(true, 'Slider diperbarui');
+    } else {
+        json_response(false, $conn->error);
+    }
+}
+
+if ($_GET['action'] === 'update' && $_GET['table'] === 'slider') {
+
+    $id        = (int) $_POST['id'];
+    $name      = trim($_POST['name']);
+    $is_active = (int) $_POST['is_active'];
+
+    $image_sql = '';
+
+    if (!empty($_FILES['image']['name'])) {
+
+        $uploadDir = 'uploads/slider/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+        $filename = 'slider_' . time() . '.' . $ext;
+        $path = $uploadDir . $filename;
+
+        if (!move_uploaded_file($_FILES['image']['tmp_name'], $path)) {
+
+            // ❌ GAGAL UPLOAD
             header('Content-Type: application/json');
             echo json_encode([
                 'success' => false,
@@ -527,8 +553,7 @@ if ($_GET['action'] === 'update' && $_GET['table'] === 'slider') {
         $image_sql = ", image_path='$path'";
     }
 
-    // 4️⃣ SQL (PASTI AMAN SEKARANG)
-    $sql = "UPDATE slider
+    $sql = "UPDATE slider 
             SET name='$name',
                 is_active=$is_active
                 $image_sql,
@@ -536,13 +561,18 @@ if ($_GET['action'] === 'update' && $_GET['table'] === 'slider') {
             WHERE id=$id";
 
     if ($conn->query($sql)) {
+
+        // ✅ SUKSES UPDATE (INI TEMPATNYA)
         header('Content-Type: application/json');
         echo json_encode([
             'success' => true,
-            'message' => 'Data berhasil diupdate'
+            'message' => 'Slider berhasil diperbarui'
         ]);
         exit;
+
     } else {
+
+        // ❌ GAGAL QUERY
         header('Content-Type: application/json');
         echo json_encode([
             'success' => false,
@@ -551,6 +581,5 @@ if ($_GET['action'] === 'update' && $_GET['table'] === 'slider') {
         exit;
     }
 }
-
 
 ?>

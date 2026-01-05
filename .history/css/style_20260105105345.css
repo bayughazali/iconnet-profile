@@ -2386,10 +2386,10 @@ footer .btn-outline-light:hover {
 /* ================= HERO SLIDER ================= */
 
 .hero-slider {
-    position: relative;
-    border-radius: 18px;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 25px 60px rgba(0,0,0,.25);
 }
 
 .hero-slider-wrapper {
@@ -2489,15 +2489,4 @@ footer .btn-outline-light:hover {
         height: 260px;
     }
 }
-
-@media (max-width: 768px) {
-    .hero-slider {
-        max-width: 100%;
-    }
-
-    .hero-slider-wrapper {
-        height: 240px;
-    }
-}
-
 
