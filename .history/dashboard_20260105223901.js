@@ -124,10 +124,10 @@ function loadDashboardStats() {
         .catch(error => console.error('Error loading stats:', error));
 }
 
-// ==================== SLIDER MANAGEMENT ====================
+// ==================== SLIDER MANAGEMENT - FIXED ====================
 
 function loadSliderTable() {
-    fetch(`${API_URL}?action=get_all&table=slider`)
+    fetch(${API_URL}?action=get_all&table=slider)
         .then(response => response.json())
         .then(data => {
             console.log('Sliders:', data);
@@ -160,8 +160,9 @@ function loadSliderTable() {
                 });
             }
         })
-        .catch(error => console.error('Error loading sliders:', error));
+       )   .catch(error => console.error('Error loading sliders:', error));
 }
+
 
 function deleteSlider(id) {
     if (confirm('⚠️ Apakah Anda yakin ingin menghapus slider ini?\n\nTindakan ini tidak dapat dibatalkan!')) {
@@ -211,70 +212,13 @@ function editSlider(slider) {
     }
 
     // Reset input file
-    const imageInput = document.getElementById('edit-slider-image');
-    imageInput.value = '';
-    
-    // Simpan path gambar lama untuk referensi
-    imageInput.dataset.oldImagePath = slider.image_path || '';
+    document.getElementById('edit-slider-image').value = '';
 
     // Buka modal
     new bootstrap.Modal(
         document.getElementById('editSliderModal')
     ).show();
 }
-
-// Event listener untuk preview gambar baru saat dipilih
-document.addEventListener('DOMContentLoaded', function() {
-    const editImageInput = document.getElementById('edit-slider-image');
-    
-    if (editImageInput) {
-        editImageInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            const preview = document.getElementById('edit-slider-preview');
-            
-            if (file) {
-                // Validasi tipe file
-                if (!file.type.match('image.*')) {
-                    alert('❌ File harus berupa gambar!');
-                    e.target.value = '';
-                    // Kembalikan ke gambar lama
-                    if (e.target.dataset.oldImagePath) {
-                        preview.src = e.target.dataset.oldImagePath;
-                        preview.style.display = 'block';
-                    }
-                    return;
-                }
-                
-                // Validasi ukuran file (max 2MB)
-                if (file.size > 2 * 1024 * 1024) {
-                    alert('❌ Ukuran file terlalu besar! Maksimal 2MB');
-                    e.target.value = '';
-                    // Kembalikan ke gambar lama
-                    if (e.target.dataset.oldImagePath) {
-                        preview.src = e.target.dataset.oldImagePath;
-                        preview.style.display = 'block';
-                    }
-                    return;
-                }
-                
-                // Preview gambar baru
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                    console.log('🖼️ New image previewed:', file.name);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                // Jika dibatalkan, kembalikan ke gambar lama
-                if (e.target.dataset.oldImagePath) {
-                    preview.src = e.target.dataset.oldImagePath;
-                    preview.style.display = 'block';
-                }
-            }
-        });
-    }
-})
 
 function saveSlider() {
     console.log('💾 Saving slider changes...');

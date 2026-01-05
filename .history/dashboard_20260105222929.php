@@ -903,6 +903,8 @@ window.openPromoModal = handleOpenPromoModal;
                             <p class="text-muted small mt-2" id="slider-file-name"></p>
                         </div>
                     </div>
+
+<<<<<<< Updated upstream
                     <!-- Status -->
                     <div class="mb-3">
                         <label class="form-label">
@@ -914,6 +916,7 @@ window.openPromoModal = handleOpenPromoModal;
                         </select>
                     </div>
                 </form>
+=======
     <input type="file"
        id="add-slider-image"
        name="image"
@@ -933,15 +936,19 @@ window.openPromoModal = handleOpenPromoModal;
         </select>
     </div>
 </form>
+>>>>>>> Stashed changes
             </div>
             
             <div class="modal-footer">
+<<<<<<< Updated upstream
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-primary" onclick="addSlider()">
                     <i class="fas fa-save me-2"></i>Simpan Slider
+=======
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-primary" onclick="addSlider()">
                     Simpan
+>>>>>>> Stashed changes
                 </button>
             </div>
         </div>
@@ -1008,53 +1015,61 @@ function addSlider() {
 }
 </script>
 
+
+
     <!-- Modal Edit Slider -->
-    <div class="modal fade" id="editSliderModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-gradient-warning text-dark">
-                    <h5 class="modal-title"><i class="fas fa-edit me-2"></i>Edit Slider</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editSliderForm" enctype="multipart/form-data">
-                        <input type="hidden" id="edit-slider-id" name="id">
-                        <div class="mb-3">
-                            <label class="form-label">Nama Slider</label>
-                            <input type="text" class="form-control" id="edit-slider-name" name="name" required>
+<div class="modal fade" id="editSliderModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Slider</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editSliderForm">
+                    <!-- Hidden ID -->
+                    <input type="hidden" id="edit-slider-id" name="id">
+                    
+                    <!-- Nama Slider -->
+                    <div class="mb-3">
+                        <label class="form-label">Nama Slider</label>
+                        <input type="text" class="form-control" id="edit-slider-name" name="name" required>
+                    </div>
+                    
+                    <!-- Gambar Saat Ini -->
+                    <div class="mb-3">
+                        <label class="form-label">Gambar Saat Ini</label>
+                        <div>
+                            <img id="edit-slider-preview" src="" style="max-width: 200px; display: none;">
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Path Gambar</label>
-                            <input type="file"
-                                class="form-control"
-                                id="edit-slider-image"
-                                accept="image/png,image/jpeg,image/jpg" name="image">
-
-                            <img id="edit-slider-preview"
-                                style="margin-top:10px;max-width:100%;border-radius:8px;">
-
-                            <small class="text-muted">
-                                Kosongkan jika tidak ingin mengganti gambar
-                            </small>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Status</label>
-                          <select id="edit-slider-status"
-                                    name="is_active"
-                                    class="form-select">
-                                <option value="1">Aktif</option>
-                                <option value="0">Nonaktif</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-warning" onclick="saveSlider()">Simpan Perubahan</button>
-                </div>
+                    </div>
+                    
+                    <!-- Upload Gambar Baru -->
+                    <div class="mb-3">
+                        <label class="form-label">Ganti Gambar (Opsional)</label>
+                        <input type="file" class="form-control" id="edit-slider-image" name="image" accept="image/*">
+                        <small class="text-muted">Kosongkan jika tidak ingin mengganti gambar</small>
+                    </div>
+                    
+                    <!-- Status -->
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" id="edit-slider-status" name="is_active">
+                            <option value="1">Aktif</option>
+                            <option value="0">Nonaktif</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" onclick="saveSlider()">
+                    💾 Simpan Perubahan
+                </button>
             </div>
         </div>
     </div>
+</div>
 
   <!-- Modal Tambah Paket -->
     <div class="modal fade" id="modalTambahPaket" tabindex="-1">

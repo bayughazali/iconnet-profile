@@ -903,6 +903,8 @@ window.openPromoModal = handleOpenPromoModal;
                             <p class="text-muted small mt-2" id="slider-file-name"></p>
                         </div>
                     </div>
+
+<<<<
                     <!-- Status -->
                     <div class="mb-3">
                         <label class="form-label">

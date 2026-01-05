@@ -903,6 +903,8 @@ window.openPromoModal = handleOpenPromoModal;
                             <p class="text-muted small mt-2" id="slider-file-name"></p>
                         </div>
                     </div>
+
+<<<<<<< Updated upstream
                     <!-- Status -->
                     <div class="mb-3">
                         <label class="form-label">
@@ -942,6 +944,7 @@ window.openPromoModal = handleOpenPromoModal;
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-primary" onclick="addSlider()">
                     Simpan
+>>>>>>> Stashed changes
                 </button>
             </div>
         </div>

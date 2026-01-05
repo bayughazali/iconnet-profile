@@ -148,12 +148,8 @@ function loadSliderTable() {
                             <td>${slider.name}</td>
                             <td><span class="badge-status ${slider.is_active ? 'badge-active' : 'badge-inactive'}">${slider.is_active ? 'Aktif' : 'Nonaktif'}</span></td>
                             <td>
-                                <button class="btn btn-sm btn-warning btn-action" onclick='editSlider(${JSON.stringify(slider)})' title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-sm btn-danger btn-action" onclick="deleteSlider(${slider.id})" title="Hapus">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                                <button class="btn btn-sm btn-warning btn-action" onclick='editSlider(${JSON.stringify(slider)})'><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-danger btn-action" onclick="deleteSlider(${slider.id})"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
                     `;
@@ -164,44 +160,36 @@ function loadSliderTable() {
 }
 
 function deleteSlider(id) {
-    if (confirm('⚠️ Apakah Anda yakin ingin menghapus slider ini?\n\nTindakan ini tidak dapat dibatalkan!')) {
-        console.log('🗑️ Deleting slider ID:', id);
-        
+    if (confirm('Hapus slider ini?')) {
         fetch(`${API_URL}?action=delete&table=slider&id=${id}`)
             .then(response => response.json())
             .then(data => {
-                console.log('📦 Response:', data);
-                
+                showToast(data.message);
                 if (data.success) {
-                    alert('✅ Slider berhasil dihapus!');
                     loadSliderTable();
                     loadDashboardStats();
-                } else {
-                    alert('❌ Gagal menghapus slider: ' + (data.message || 'Unknown error'));
                 }
             })
-            .catch(error => {
-                console.error('❌ Error:', error);
-                alert('❌ Terjadi kesalahan saat menghapus data');
-            });
+            .catch(error => console.error('Error:', error));
     }
 }
 
 function editSlider(slider) {
-    console.log('✏️ Edit slider:', slider);
 
-    // Safety check
+    console.log(slider); // 👈 TARUH DI SINI
+
+    // safety check
     if (!slider) {
         alert('Data slider tidak ditemukan');
         return;
     }
 
-    // Isi field
+    // isi field
     document.getElementById('edit-slider-id').value = slider.id || '';
     document.getElementById('edit-slider-name').value = slider.name || '';
     document.getElementById('edit-slider-status').value = slider.is_active ?? 1;
 
-    // Preview gambar lama
+    // preview gambar lama
     const preview = document.getElementById('edit-slider-preview');
     if (slider.image_path) {
         preview.src = slider.image_path;
@@ -210,161 +198,39 @@ function editSlider(slider) {
         preview.style.display = 'none';
     }
 
-    // Reset input file
-    const imageInput = document.getElementById('edit-slider-image');
-    imageInput.value = '';
-    
-    // Simpan path gambar lama untuk referensi
-    imageInput.dataset.oldImagePath = slider.image_path || '';
+    // reset input file
+    document.getElementById('edit-slider-image').value = '';
 
-    // Buka modal
+    // buka modal
     new bootstrap.Modal(
         document.getElementById('editSliderModal')
     ).show();
 }
 
-// Event listener untuk preview gambar baru saat dipilih
-document.addEventListener('DOMContentLoaded', function() {
-    const editImageInput = document.getElementById('edit-slider-image');
-    
-    if (editImageInput) {
-        editImageInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            const preview = document.getElementById('edit-slider-preview');
-            
-            if (file) {
-                // Validasi tipe file
-                if (!file.type.match('image.*')) {
-                    alert('❌ File harus berupa gambar!');
-                    e.target.value = '';
-                    // Kembalikan ke gambar lama
-                    if (e.target.dataset.oldImagePath) {
-                        preview.src = e.target.dataset.oldImagePath;
-                        preview.style.display = 'block';
-                    }
-                    return;
-                }
-                
-                // Validasi ukuran file (max 2MB)
-                if (file.size > 2 * 1024 * 1024) {
-                    alert('❌ Ukuran file terlalu besar! Maksimal 2MB');
-                    e.target.value = '';
-                    // Kembalikan ke gambar lama
-                    if (e.target.dataset.oldImagePath) {
-                        preview.src = e.target.dataset.oldImagePath;
-                        preview.style.display = 'block';
-                    }
-                    return;
-                }
-                
-                // Preview gambar baru
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                    console.log('🖼️ New image previewed:', file.name);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                // Jika dibatalkan, kembalikan ke gambar lama
-                if (e.target.dataset.oldImagePath) {
-                    preview.src = e.target.dataset.oldImagePath;
-                    preview.style.display = 'block';
-                }
-            }
-        });
-    }
-})
+
 
 function saveSlider() {
-    console.log('💾 Saving slider changes...');
-    
-    // Ambil data dari form secara manual
-    const id = document.getElementById('edit-slider-id').value;
-    const name = document.getElementById('edit-slider-name').value;
-    const status = document.getElementById('edit-slider-status').value;
-    const imageInput = document.getElementById('edit-slider-image');
-    
-    console.log('📝 Data:', { id, name, status, hasNewImage: imageInput.files.length > 0 });
-    
-    // Validasi
-    if (!id || !name) {
-        alert('❌ ID dan Nama slider wajib diisi!');
-        return;
-    }
-    
-    // Buat FormData
-    const formData = new FormData();
-    formData.append('id', id);
-    formData.append('name', name);
-    formData.append('is_active', status);
-    
-    // Jika ada gambar baru yang diupload
-    if (imageInput.files.length > 0) {
-        const imageFile = imageInput.files[0];
-        console.log('🖼️ New image:', imageFile.name, imageFile.size, 'bytes');
-        
-        // Validasi ukuran file (max 2MB)
-        if (imageFile.size > 2 * 1024 * 1024) {
-            alert('❌ Ukuran file terlalu besar! Maksimal 2MB');
-            return;
-        }
-        
-        // Validasi tipe file
-        if (!imageFile.type.match('image.*')) {
-            alert('❌ File harus berupa gambar!');
-            return;
-        }
-        
-        formData.append('image', imageFile);
-    } else {
-        console.log('ℹ️ No new image uploaded, keeping existing image');
-    }
-    
-    // Kirim request
-    fetch('api.php?action=update&table=slider', {
-        method: 'POST',
-        body: formData
+
+    const form = document.getElementById('editSliderForm');
+    const formData = new FormData(form);
+
+   fetch('api.php?action=update&table=slider', {
+    method: 'POST',
+    body: formData
     })
-    .then(res => {
-        console.log('📡 Response status:', res.status);
-        return res.text();
-    })
+    .then(res => res.text()) // ⬅️ BUKAN json
     .then(text => {
-        console.log('📦 Raw response:', text.substring(0, 500));
-        
-        // Coba parse JSON
-        let data;
-        try {
-            data = JSON.parse(text);
-            console.log('✅ Parsed data:', data);
-        } catch (e) {
-            console.error('❌ JSON Parse Error:', e);
-            console.error('Full response:', text);
-            alert('❌ Server Error!\n\nResponse bukan JSON.\n\nKemungkinan:\n1. PHP Error\n2. Folder uploads/ tidak ada\n3. Permission denied\n\nCek console untuk detail!\n\n' + text.substring(0, 300));
-            throw new Error('Invalid JSON response');
-        }
-        
-        // Proses hasil
-        if (data.success) {
-            alert('✅ Slider berhasil diupdate!');
-            
-            // Tutup modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('editSliderModal'));
-            if (modal) modal.hide();
-            
-            // Reload tabel
-            loadSliderTable();
-            loadDashboardStats();
-        } else {
-            alert('❌ Gagal update slider:\n\n' + (data.message || 'Unknown error'));
-        }
+        console.log(text);
+        alert(text);
     })
     .catch(err => {
-        console.error('❌ Fetch Error:', err);
-        alert('❌ Terjadi kesalahan saat mengirim data.\n\nLihat console untuk detail.');
+        console.error(err);
+        alert('Server error');
     });
+
 }
+
+
 
 function openSliderModal() {
     // Reset form
@@ -378,6 +244,45 @@ function openSliderModal() {
 function addSlider() {
     console.log('🚀 addSlider() dipanggil');
     
+    // Ambil nilai dari form dengan ID yang benar
+    const name = document.getElementById('add-slider-name')?.value.trim();
+    const imageFile = document.getElementById('add-slider-image-file')?.files[0]; // ✅ ID yang benar
+    const status = document.getElementById('add-slider-status')?.value;
+    
+    console.log('📝 Form values:', { name, hasImage: !!imageFile, status });
+    
+    // Validasi
+    if (!name) {
+        alert('❌ Nama slider wajib diisi!');
+        return;
+    }
+    
+    if (!imageFile) {
+        alert('❌ Gambar slider wajib diupload!');
+        return;
+    }
+    
+    // Validasi ukuran file (max 5MB)
+    if (imageFile.size > 5 * 1024 * 1024) {
+        alert('❌ Ukuran file terlalu besar! Maksimal 5MB');
+        return;
+    }
+    
+    // Validasi tipe file
+    if (!imageFile.type.match('image.*')) {
+        alert('❌ File harus berupa gambar!');
+        return;
+    }
+    
+    // Siapkan FormData
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('image', imageFile);
+    formData.append('is_active', status === '1' || status === 'true' ? 1 : 0);
+    
+    console.log('📤 Mengirim data slider...');
+    
+    // Kirim ke API
     const name = document.getElementById('add-slider-name').value.trim();
     const status = document.getElementById('add-slider-status').value;
     const imageInput = document.getElementById('add-slider-image');
@@ -397,21 +302,15 @@ function addSlider() {
     formData.append('name', name);
     formData.append('image', imageFile); // ✅ WAJIB
     formData.append('is_active', status);
-    
-    // Kirim ke API
-
 
     fetch(`${API_URL}?action=insert&table=slider`, {
         method: 'POST',
         body: formData
     })
-    .then(response => {
-        console.log('📡 Response status:', response.status);
-        return response.text();
-    })
+    .then(res => res.text())
     .then(text => {
-        console.log('📦 Raw response:', text);    
-        
+        console.log('RAW:', text);
+
         let data;
         try {
             data = JSON.parse(text);
@@ -442,16 +341,32 @@ function addSlider() {
             alert('❌ Gagal menambahkan slider:\n\n' + (data.message || 'Unknown error'));
         }
     })
-
     .catch(error => {
         console.error('❌ Fetch Error:', error);
         alert('❌ Terjadi kesalahan saat mengirim data.\n\nLihat console untuk detail.');
-        
-        
+            alert('Server error, cek console');
+            return;
+        }
+
+        if (data.success) {
+            alert('✅ Slider berhasil ditambahkan');
+            bootstrap.Modal.getInstance(
+                document.getElementById('addSliderModal')
+            ).hide();
+
+            document.getElementById('addSliderForm').reset();
+            loadSliderTable();
+            loadDashboardStats();
+        } else {
+            alert('❌ ' + data.message);
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert('Terjadi kesalahan');
+
     });
 
-    
-}
 
 function initSlider() {
     const slides = document.querySelectorAll('.slide');
@@ -472,6 +387,8 @@ function initSlider() {
         showSlide(index);
     }, 5000);
 }
+
+
 
 // ==================== PAKET MANAGEMENT ====================
 // ==================== DELETE PAKET - FINAL FIX ====================
@@ -519,9 +436,8 @@ function deletePaket(id) {
             
             console.log('✅ Tabel sudah di-refresh');
         } else {
-           console.error('❌ JSON Parse Error:', e);
-            console.error('Response:', text.substring(0, 500));
-            alert('❌ Server Error: Response bukan JSON.\n\nLihat console untuk detail.');
+            console.error('❌ Delete gagal:', data.message);
+            alert('❌ Gagal menghapus paket:\n\n' + (data.message || 'Unknown error'));
         }
     })
     .catch(error => {
@@ -2280,4 +2196,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadAddon();
 });
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes

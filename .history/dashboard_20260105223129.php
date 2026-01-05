@@ -903,6 +903,8 @@ window.openPromoModal = handleOpenPromoModal;
                             <p class="text-muted small mt-2" id="slider-file-name"></p>
                         </div>
                     </div>
+
+<<<<<<< Updated upstream
                     <!-- Status -->
                     <div class="mb-3">
                         <label class="form-label">
@@ -914,6 +916,7 @@ window.openPromoModal = handleOpenPromoModal;
                         </select>
                     </div>
                 </form>
+=======
     <input type="file"
        id="add-slider-image"
        name="image"
@@ -933,15 +936,19 @@ window.openPromoModal = handleOpenPromoModal;
         </select>
     </div>
 </form>
+>>>>>>> Stashed changes
             </div>
             
             <div class="modal-footer">
+<<<<<<< Updated upstream
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-primary" onclick="addSlider()">
                     <i class="fas fa-save me-2"></i>Simpan Slider
+=======
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-primary" onclick="addSlider()">
                     Simpan
+>>>>>>> Stashed changes
                 </button>
             </div>
         </div>
@@ -1007,6 +1014,8 @@ function addSlider() {
     });
 }
 </script>
+
+
 
     <!-- Modal Edit Slider -->
     <div class="modal fade" id="editSliderModal" tabindex="-1">
