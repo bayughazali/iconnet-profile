@@ -1367,9 +1367,9 @@ html {
     <button class="tab-btn" data-target="#wifi-extender">
         <i class="fas fa-signal me-2"></i>Wifi Extender
     </button>
-    <button class="tab-btn" data-target="#iconplay">
+    <!-- <button class="tab-btn" data-target="#iconplay">
         <i class="fas fa-play-circle me-2"></i>ICONPLAY
-    </button>
+    </button> -->
 </div>
         </div>
     </section>
@@ -1469,7 +1469,7 @@ html {
                 </div>
 
                 <div class="addon-category" id="iconplay">
-                    <h4 class="addon-category-title">ICONPLAY</h4>
+                    <!-- <h4 class="addon-category-title">ICONPLAY</h4> -->
                     <div class="row g-4" id="iconplayContainer">
                         <!-- DATA DARI DATABASE -->
                     </div>

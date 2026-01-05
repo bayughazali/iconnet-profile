@@ -224,40 +224,164 @@ function openSliderModal() {
 }
 
 function addSlider() {
-    const formData = new FormData();
-    formData.append('name', document.getElementById('add-slider-name').value);
-    formData.append('image_path', document.getElementById('add-slider-image').value);
-    formData.append('is_active', document.getElementById('add-slider-status').value === 'true' ? 1 : 0);
+    console.log('🚀 addSlider() dipanggil');
     
+    // Ambil nilai dari form dengan ID yang benar
+    const name = document.getElementById('add-slider-name')?.value.trim();
+    const imageFile = document.getElementById('add-slider-image-file')?.files[0]; // ✅ ID yang benar
+    const status = document.getElementById('add-slider-status')?.value;
+    
+    console.log('📝 Form values:', { name, hasImage: !!imageFile, status });
+    
+    // Validasi
+    if (!name) {
+        alert('❌ Nama slider wajib diisi!');
+        return;
+    }
+    
+    if (!imageFile) {
+        alert('❌ Gambar slider wajib diupload!');
+        return;
+    }
+    
+    // Validasi ukuran file (max 5MB)
+    if (imageFile.size > 5 * 1024 * 1024) {
+        alert('❌ Ukuran file terlalu besar! Maksimal 5MB');
+        return;
+    }
+    
+    // Validasi tipe file
+    if (!imageFile.type.match('image.*')) {
+        alert('❌ File harus berupa gambar!');
+        return;
+    }
+    
+    // Siapkan FormData
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('image', imageFile);
+    formData.append('is_active', status === '1' || status === 'true' ? 1 : 0);
+    
+    console.log('📤 Mengirim data slider...');
+    
+    // Kirim ke API
     fetch(`${API_URL}?action=insert&table=slider`, {
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        showToast(data.message);
+    .then(response => {
+        console.log('📡 Response status:', response.status);
+        return response.text();
+    })
+    .then(text => {
+        console.log('📦 Raw response:', text);
+        
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            console.error('❌ JSON Parse Error:', e);
+            console.error('Response:', text.substring(0, 500));
+            alert('❌ Server Error: Response bukan JSON.\n\nLihat console untuk detail.');
+            return;
+        }
+        
+        console.log('✅ Parsed data:', data);
+        
         if (data.success) {
-            bootstrap.Modal.getInstance(document.getElementById('addSliderModal')).hide();
+            alert('✅ Slider berhasil ditambahkan!');
+            
+            // Tutup modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addSliderModal'));
+            if (modal) modal.hide();
+            
+            // Reset form
+            document.getElementById('addSliderForm')?.reset();
+            removeSliderImage(); // ✅ Fungsi reset khusus slider
+            
+            // Reload data
             loadSliderTable();
             loadDashboardStats();
+        } else {
+            alert('❌ Gagal menambahkan slider:\n\n' + (data.message || 'Unknown error'));
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        showToast('Gagal menambahkan data', 'error');
+        console.error('❌ Fetch Error:', error);
+        alert('❌ Terjadi kesalahan saat mengirim data.\n\nLihat console untuk detail.');
     });
 }
 
 // ==================== PAKET MANAGEMENT ====================
+// ==================== DELETE PAKET - FINAL FIX ====================
+
+// ==================== DELETE PAKET - FINAL CLEAN VERSION ====================
+// Hapus semua function deletePaket() yang lama dan GANTI dengan ini saja
+
+// ==================== DELETE PAKET - FINAL CLEAN VERSION ====================
+// Hapus semua function deletePaket() yang lama dan GANTI dengan ini saja
+
+function deletePaket(id) {
+    if (!confirm('⚠️ Apakah Anda yakin ingin menghapus paket ini?\n\nTindakan ini tidak dapat dibatalkan!')) {
+        return;
+    }
+
+    console.log('🗑️ Deleting paket ID:', id);
+
+    fetch('api_paket.php', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: parseInt(id) })
+    })
+    .then(response => {
+        console.log('📡 Response status:', response.status);
+        return response.json();
+    })
+    .then(data => {
+        console.log('📦 Response data:', data);
+        
+        if (data.success) {
+            console.log('✅ Paket berhasil dihapus dari database');
+            alert('✅ Paket berhasil dihapus!');
+            
+            // ✅ PERBAIKAN UTAMA: Reload tabel paket
+            console.log('🔄 Reloading paket table...');
+            loadPaketTable();
+            
+            // Reload stats dashboard
+            if (typeof loadDashboardStats === 'function') {
+                console.log('🔄 Reloading dashboard stats...');
+                loadDashboardStats();
+            }
+            
+            console.log('✅ Tabel sudah di-refresh');
+        } else {
+            console.error('❌ Delete gagal:', data.message);
+            alert('❌ Gagal menghapus paket:\n\n' + (data.message || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('❌ Fetch Error:', error);
+        alert('❌ Terjadi kesalahan:\n\n' + error.message);
+    });
+}
+
+// ==================== LOAD PAKET TABLE - PASTIKAN FUNCTION INI ADA ====================
+
 function loadPaketTable() {
     console.log('📊 Loading paket table...');
     
     fetch('api_paket.php', {
         method: 'GET'
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('📡 GET Response status:', response.status);
+        return response.json();
+    })
     .then(paketList => {
-        console.log('📥 Paket data:', paketList);
+        console.log('📥 Paket data received:', paketList.length, 'items');
         
         const tbody = document.getElementById('paket-table-body');
         if (!tbody) {
@@ -265,13 +389,16 @@ function loadPaketTable() {
             return;
         }
         
+        // Kosongkan tabel dulu
+        tbody.innerHTML = '';
+        
         if (!paketList || paketList.length === 0) {
             tbody.innerHTML = '<tr><td colspan="6" class="text-center">Tidak ada data paket</td></tr>';
+            console.log('⚠️ Tidak ada data paket');
             return;
         }
         
-        tbody.innerHTML = '';
-        
+        // Render ulang semua paket
         paketList.forEach(paket => {
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -296,7 +423,7 @@ function loadPaketTable() {
             tbody.appendChild(row);
         });
         
-        console.log('✅ Tabel paket berhasil dimuat');
+        console.log('✅ Tabel paket berhasil dimuat dengan', paketList.length, 'items');
     })
     .catch(error => {
         console.error('❌ Error loading paket:', error);
@@ -331,20 +458,58 @@ function savePaket() {
     .catch(error => console.error('Error:', error));
 }
 
+// ==================== DELETE PAKET - FIXED VERSION ====================
+
 function deletePaket(id) {
-    if (confirm('Hapus paket ini?')) {
-        fetch(`${API_URL}?action=delete&table=paket&id=${id}`)
-            .then(response => response.json())
-            .then(data => {
-                showToast(data.message);
-                if (data.success) {
-                    loadPaketTable();
-                    loadDashboardStats();
-                }
-            })
-            .catch(error => console.error('Error:', error));
+    if (!confirm('⚠️ Apakah Anda yakin ingin menghapus paket ini?\n\nTindakan ini tidak dapat dibatalkan!')) {
+        return;
     }
+
+    console.log('🗑️ Deleting paket ID:', id);
+
+    // Kirim DELETE request
+    fetch('api_paket.php', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: parseInt(id) })
+    })
+    .then(response => {
+        console.log('📡 Response status:', response.status);
+        return response.json();
+    })
+    .then(data => {
+        console.log('📦 Response data:', data);
+        
+        if (data.success) {
+            console.log('✅ Paket berhasil dihapus dari database');
+            
+            // Tampilkan notifikasi
+            alert('✅ Paket berhasil dihapus!');
+            
+            // ✅ CRITICAL FIX: Paksa reload tabel paket
+            console.log('🔄 Reloading paket table...');
+            loadPaketTable();
+            
+            // Reload stats juga
+            if (typeof loadDashboardStats === 'function') {
+                console.log('🔄 Reloading dashboard stats...');
+                loadDashboardStats();
+            }
+            
+            console.log('✅ Tabel sudah di-refresh');
+        } else {
+            console.error('❌ Delete gagal:', data.message);
+            alert('❌ Gagal menghapus paket:\n\n' + (data.message || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('❌ Fetch Error:', error);
+        alert('❌ Terjadi kesalahan:\n\n' + error.message);
+    });
 }
+
 
 // ==================== PAKET MANAGEMENT - FULLY FIXED ====================
 
@@ -1952,3 +2117,5 @@ function deleteAddon(id) {
 document.addEventListener('DOMContentLoaded', function() {
     loadAddon();
 });
+
+

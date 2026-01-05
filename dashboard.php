@@ -847,8 +847,8 @@ window.openPromoModal = handleOpenPromoModal;
     </div> -->
 
     <!-- MODALS TETAP SAMA SEPERTI SEBELUMNYA -->
-    <!-- Modal Tambah Slider -->
-   <div class="modal fade" id="addSliderModal" tabindex="-1">
+   <!-- Modal Tambah Slider - FIXED VERSION -->
+<div class="modal fade" id="addSliderModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-gradient-primary text-white">
@@ -859,37 +859,69 @@ window.openPromoModal = handleOpenPromoModal;
             </div>
 
             <div class="modal-body">
-            <form id="addSliderForm" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label class="form-label">Nama Slider</label>
-        <input type="text" class="form-control" id="add-slider-name" required>
-    </div>
+                <form id="addSliderForm" enctype="multipart/form-data">
+                    <!-- Nama Slider -->
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-tag me-2 text-primary"></i>Nama Slider *
+                        </label>
+                        <input type="text" class="form-control" id="add-slider-name" 
+                               placeholder="Contoh: Promo Akhir Tahun" required>
+                    </div>
 
-    <div class="mb-3">
-    <label class="form-label">Gambar Slider</label>
+                    <!-- Upload Gambar -->
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-image me-2 text-primary"></i>Upload Gambar Slider *
+                        </label>
+                        
+                        <!-- Upload Area -->
+                        <div class="upload-area" id="add-slider-upload-area">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text">
+                                <p class="mb-1"><strong>Klik untuk upload gambar</strong></p>
+                                <p class="text-muted small mb-0">atau drag & drop file di sini</p>
+                                <p class="text-muted small">PNG, JPG, WEBP (Max. 5MB)</p>
+                            </div>
+                            <!-- ✅ ID YANG BENAR: add-slider-image-file -->
+                            <input type="file" id="add-slider-image-file" accept="image/*" 
+                                   style="display: none;" required>
+                        </div>
+                        
+                        <!-- Preview -->
+                        <div id="slider-image-preview" class="mt-3" style="display: none;">
+                            <div class="preview-container">
+                                <img id="slider-preview-img" src="" alt="Preview" 
+                                     class="img-thumbnail">
+                                <button type="button" class="btn btn-sm btn-danger remove-image" 
+                                        onclick="removeSliderImage()">
+                                    <i class="fas fa-times"></i> Hapus
+                                </button>
+                            </div>
+                            <p class="text-muted small mt-2" id="slider-file-name"></p>
+                        </div>
+                    </div>
 
-    <input type="file"
-       name="image"
-       class="form-control"
-       accept="image/png, image/jpeg, image/jpg"
-       required>
-    <img id="preview-slider-image"
-         style="display:none;max-width:100%;margin-top:10px;border-radius:8px;">
-</div>
-
-
-    <div class="mb-3">
-        <label class="form-label">Status</label>
-        <select class="form-select" id="add-slider-status">
-            <option value="1">Aktif</option>
-            <option value="0">Nonaktif</option>
-        </select>
-    </div>
-</form>
+                    <!-- Status -->
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-toggle-on me-2 text-primary"></i>Status
+                        </label>
+                        <select class="form-select" id="add-slider-status">
+                            <option value="1">✓ Aktif (Tampil di Homepage)</option>
+                            <option value="0">✗ Nonaktif (Tersembunyi)</option>
+                        </select>
+                    </div>
+                </form>
             </div>
+            
             <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button class="btn btn-primary" onclick="addSlider()">Simpan</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" onclick="addSlider()">
+                    <i class="fas fa-save me-2"></i>Simpan Slider
+                </button>
             </div>
         </div>
     </div>
