@@ -658,5 +658,3 @@ function handleSwipe() {
         }
     }
 }
-
-const slides = document.querySelectorAll('#heroSlider .slide');

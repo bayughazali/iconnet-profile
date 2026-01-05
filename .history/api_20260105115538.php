@@ -252,12 +252,12 @@ if ($action === 'update' && $_SERVER['REQUEST_METHOD'] === 'POST') {
             $is_active = (int) ($_POST['is_active'] ?? 0);
 
             
-           $sql = "UPDATE slider
-                SET name='$name',
-                    is_active=$is_active
-                    $image_sql,
-                    updated_at=NOW()
-                WHERE id=$id";
+            $sql = "UPDATE slider SET 
+                    name = '$name',
+                    image_path = '$image_path',
+                    is_active = $is_active,
+                    updated_at = NOW()
+                    WHERE id = '$id'";
             break;
             
         case 'paket':
@@ -486,7 +486,6 @@ $conn->close();
 
 if ($_GET['action'] === 'update' && $_GET['table'] === 'slider') {
 
-    // 1️⃣ Ambil POST
     $id        = (int) ($_POST['id'] ?? 0);
     $name      = trim($_POST['name'] ?? '');
     $is_active = (int) ($_POST['is_active'] ?? 0);
@@ -500,10 +499,8 @@ if ($_GET['action'] === 'update' && $_GET['table'] === 'slider') {
         exit;
     }
 
-    // 2️⃣ ⬇️ WAJIB ADA DI SINI (SEBELUM IF UPLOAD)
     $image_sql = '';
 
-    // 3️⃣ Upload opsional
     if (!empty($_FILES['image']['name'])) {
 
         $uploadDir = 'uploads/slider/';
@@ -527,7 +524,6 @@ if ($_GET['action'] === 'update' && $_GET['table'] === 'slider') {
         $image_sql = ", image_path='$path'";
     }
 
-    // 4️⃣ SQL (PASTI AMAN SEKARANG)
     $sql = "UPDATE slider
             SET name='$name',
                 is_active=$is_active
@@ -551,6 +547,8 @@ if ($_GET['action'] === 'update' && $_GET['table'] === 'slider') {
         exit;
     }
 }
+
+
 
 
 ?>

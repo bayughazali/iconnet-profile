@@ -758,7 +758,8 @@ function loadHeroSlider() {
         });
 
         initSlider();
-    })
+    });
+
         .catch(err => console.error('Slider error:', err));
 }
 </script>

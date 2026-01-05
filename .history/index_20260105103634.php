@@ -64,24 +64,18 @@ if (!is_array($paket)) {
 
 
     <!-- Hero Section dengan Slider -->
-   <section class="hero-section" style="margin-top:80px;">
-    <div class="container">
-        <div class="hero-slider">
+    <section class="hero-section" style="margin-top: 80px;">
+        <div class="container">
+            <div class="slider-container">
 
-            <div class="hero-slider-wrapper" id="heroSlider"></div>
+                <div class="slider-wrapper" id="heroSlider"></div>
 
-            <!-- arrows -->
-            <button class="hero-arrow prev" id="heroPrev">&#10094;</button>
-            <button class="hero-arrow next" id="heroNext">&#10095;</button>
+                <!-- Indicators -->
+                <div class="slider-indicators" id="sliderIndicators"></div>
 
-            <!-- indicators -->
-            <div class="hero-slider-indicators" id="sliderIndicators"></div>
-
+            </div>
         </div>
-    </div>
-</section>
-
-
+    </section>
 
 
     <!-- Features Section -->
@@ -732,145 +726,38 @@ document.getElementById('btnMengerti').addEventListener('click', function() {
 document.addEventListener('DOMContentLoaded', loadHeroSlider);
 
 function loadHeroSlider() {
-   fetch('api.php?action=get&table=slider')
-    .then(res => res.json())
-    .then(res => {
-        const slider = document.getElementById('heroSlider');
-        const indicators = document.getElementById('sliderIndicators');
+    fetch('api.php?action=get&table=slider')
+        .then(res => res.json())
+        .then(res => {
+            if (!res.success) return;
 
-        slider.innerHTML = '';
-        indicators.innerHTML = '';
+            const slider = document.getElementById('heroSlider');
+            const indicators = document.getElementById('sliderIndicators');
 
-        res.data.forEach(() => {
-            indicators.insertAdjacentHTML('beforeend',
-                `<span class="indicator"></span>`
-            );
-        });
+            slider.innerHTML = '';
+            indicators.innerHTML = '';
 
-        res.data.forEach(item => {
-            slider.insertAdjacentHTML('beforeend', `
-                <div class="slide">
+            res.data.forEach((item, index) => {
+
+                // SLIDE
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                slide.innerHTML = `
                     <div class="hero-card"
                          style="background-image:url('${item.image_path}')">
                     </div>
-                </div>
-            `);
-        });
+                `;
+                slider.appendChild(slide);
 
-        initSlider();
-    })
+                // INDICATOR
+                const dot = document.createElement('span');
+                dot.className = 'indicator' + (index === 0 ? ' active' : '');
+                indicators.appendChild(dot);
+            });
+
+            initSlider(); // ← fungsi slider kamu
+        })
         .catch(err => console.error('Slider error:', err));
-}
-</script>
-<script>
-let currentSlide = 0;
-let sliderInterval = null;
-
-function initSlider() {
-    const slides = document.querySelectorAll('#heroSlider .slide');
-    const indicators = document.querySelectorAll('#sliderIndicators .indicator');
-
-    if (slides.length === 0) return;
-
-    slides.forEach((s, i) => {
-        s.classList.toggle('active', i === 0);
-    });
-
-    indicators.forEach((d, i) => {
-        d.classList.toggle('active', i === 0);
-
-        // klik indikator
-        d.onclick = () => {
-            showSlide(i);
-            resetAutoSlide();
-        };
-    });
-
-    startAutoSlide();
-
-    function showSlide(index) {
-        slides.forEach((s, i) => {
-            s.classList.toggle('active', i === index);
-        });
-        indicators.forEach((d, i) => {
-            d.classList.toggle('active', i === index);
-        });
-        currentSlide = index;
-    }
-
-    function startAutoSlide() {
-        sliderInterval = setInterval(() => {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
-        }, 4000);
-    }
-
-    function resetAutoSlide() {
-        clearInterval(sliderInterval);
-        startAutoSlide();
-    }
-}
-</script>
-<script>
-let heroIndex = 0;
-let heroTimer = null;
-
-function initSlider() {
-    const slides = document.querySelectorAll('#heroSlider .slide');
-    const dots = document.querySelectorAll('#sliderIndicators .indicator');
-    const prev = document.getElementById('heroPrev');
-    const next = document.getElementById('heroNext');
-
-    if (!slides.length) return;
-
-    function showSlide(i) {
-        slides.forEach((s, idx) =>
-            s.classList.toggle('active', idx === i)
-        );
-        dots.forEach((d, idx) =>
-            d.classList.toggle('active', idx === i)
-        );
-        heroIndex = i;
-    }
-
-    function nextSlide() {
-        heroIndex = (heroIndex + 1) % slides.length;
-        showSlide(heroIndex);
-    }
-
-    function prevSlide() {
-        heroIndex = (heroIndex - 1 + slides.length) % slides.length;
-        showSlide(heroIndex);
-    }
-
-    function startAuto() {
-        heroTimer = setInterval(nextSlide, 5000);
-    }
-
-    function resetAuto() {
-        clearInterval(heroTimer);
-        startAuto();
-    }
-
-    dots.forEach((d, i) => {
-        d.onclick = () => {
-            showSlide(i);
-            resetAuto();
-        };
-    });
-
-    next.onclick = () => {
-        nextSlide();
-        resetAuto();
-    };
-
-    prev.onclick = () => {
-        prevSlide();
-        resetAuto();
-    };
-
-    showSlide(0);
-    startAuto();
 }
 </script>
 

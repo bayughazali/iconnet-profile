@@ -81,28 +81,6 @@ if ($action === 'get_by_id') {
     }
 }
 
-    // ================= GET SLIDER (LANDING PAGE) =================
-    if ($_GET['action'] === 'get' && $_GET['table'] === 'slider') {
-
-        $result = $conn->query(
-            "SELECT * FROM slider 
-            WHERE is_active = 1 
-            ORDER BY display_order ASC, created_at DESC"
-        );
-
-        $data = [];
-        while ($row = $result->fetch_assoc()) {
-            $data[] = $row;
-        }
-
-        echo json_encode([
-            'success' => true,
-            'data' => $data
-        ]);
-        exit;
-    }
-
-
 // ==================== INSERT DATA (TAMBAH DATA BARU) ====================
 if ($action === 'insert' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $table = clean_input($_GET['table']);
@@ -114,37 +92,14 @@ if ($action === 'insert' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Insert berdasarkan tabel
     switch ($table) {
-       case 'slider':
-    $name = isset($_POST['name']) ? clean_input($_POST['name']) : '';
-    $is_active = isset($_POST['is_active']) ? (int)$_POST['is_active'] : 1;
-
-    if (empty($name)) {
-        json_response(false, 'Nama slider wajib diisi');
-    }
-
-    // ===== UPLOAD GAMBAR =====
-    if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-        json_response(false, 'Gambar slider wajib diupload');
-    }
-
-    $uploadDir = 'uploads/slider/';
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-    }
-
-    $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-    $filename = 'slider_' . time() . '.' . $ext;
-    $image_path = $uploadDir . $filename;
-
-    if (!move_uploaded_file($_FILES['image']['tmp_name'], $image_path)) {
-        json_response(false, 'Gagal upload gambar slider');
-    }
-
-    // ===== INSERT DATABASE =====
-    $sql = "INSERT INTO slider (name, image_path, is_active, created_at, updated_at) 
-            VALUES ('$name', '$image_path', $is_active, NOW(), NOW())";
-    break;
-
+        case 'slider':
+            $name = clean_input($_POST['name']);
+            $image_path = clean_input($_POST['image_path']);
+            $is_active = isset($_POST['is_active']) ? (int)$_POST['is_active'] : 1;
+            
+            $sql = "INSERT INTO slider (name, image_path, is_active, created_at, updated_at) 
+                    VALUES ('$name', '$image_path', $is_active, NOW(), NOW())";
+            break;
             
         case 'paket':
             $id = clean_input($_POST['id']);
@@ -247,17 +202,16 @@ if ($action === 'update' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     // Update berdasarkan tabel
     switch ($table) {
         case 'slider':
-            $id        = (int) ($_POST['id'] ?? 0);
-            $name      = trim($_POST['name'] ?? '');
-            $is_active = (int) ($_POST['is_active'] ?? 0);
-
+            $name = clean_input($_POST['name']);
+            $image_path = clean_input($_POST['image_path']);
+            $is_active = isset($_POST['is_active']) ? (int)$_POST['is_active'] : 0;
             
-           $sql = "UPDATE slider
-                SET name='$name',
-                    is_active=$is_active
-                    $image_sql,
-                    updated_at=NOW()
-                WHERE id=$id";
+            $sql = "UPDATE slider SET 
+                    name = '$name',
+                    image_path = '$image_path',
+                    is_active = $is_active,
+                    updated_at = NOW()
+                    WHERE id = '$id'";
             break;
             
         case 'paket':
@@ -483,74 +437,4 @@ if ($action === 'get_promo_by_region') {
 }
 
 $conn->close();
-
-if ($_GET['action'] === 'update' && $_GET['table'] === 'slider') {
-
-    // 1️⃣ Ambil POST
-    $id        = (int) ($_POST['id'] ?? 0);
-    $name      = trim($_POST['name'] ?? '');
-    $is_active = (int) ($_POST['is_active'] ?? 0);
-
-    if (!$id || $name === '') {
-        header('Content-Type: application/json');
-        echo json_encode([
-            'success' => false,
-            'message' => 'Data tidak lengkap'
-        ]);
-        exit;
-    }
-
-    // 2️⃣ ⬇️ WAJIB ADA DI SINI (SEBELUM IF UPLOAD)
-    $image_sql = '';
-
-    // 3️⃣ Upload opsional
-    if (!empty($_FILES['image']['name'])) {
-
-        $uploadDir = 'uploads/slider/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
-
-        $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-        $filename = 'slider_' . time() . '.' . $ext;
-        $path = $uploadDir . $filename;
-
-        if (!move_uploaded_file($_FILES['image']['tmp_name'], $path)) {
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'message' => 'Gagal upload gambar'
-            ]);
-            exit;
-        }
-
-        $image_sql = ", image_path='$path'";
-    }
-
-    // 4️⃣ SQL (PASTI AMAN SEKARANG)
-    $sql = "UPDATE slider
-            SET name='$name',
-                is_active=$is_active
-                $image_sql,
-                updated_at=NOW()
-            WHERE id=$id";
-
-    if ($conn->query($sql)) {
-        header('Content-Type: application/json');
-        echo json_encode([
-            'success' => true,
-            'message' => 'Data berhasil diupdate'
-        ]);
-        exit;
-    } else {
-        header('Content-Type: application/json');
-        echo json_encode([
-            'success' => false,
-            'message' => $conn->error
-        ]);
-        exit;
-    }
-}
-
-
 ?>

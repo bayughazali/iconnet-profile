@@ -2386,16 +2386,15 @@ footer .btn-outline-light:hover {
 /* ================= HERO SLIDER ================= */
 
 .hero-slider {
-    position: relative;
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 25px 60px rgba(0,0,0,.25);
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
 }
 
 .hero-slider-wrapper {
-    position: relative;
     height: 420px;
 }
+
 
 /* slide */
 .hero-slider-wrapper .slide {
@@ -2484,12 +2483,6 @@ footer .btn-outline-light:hover {
 }
 
 /* responsive */
-@media (max-width: 768px) {
-    .hero-slider-wrapper {
-        height: 260px;
-    }
-}
-
 @media (max-width: 768px) {
     .hero-slider {
         max-width: 100%;
