@@ -199,7 +199,14 @@ function editSlider(slider) {
     // Isi field
     document.getElementById('edit-slider-id').value = slider.id || '';
     document.getElementById('edit-slider-name').value = slider.name || '';
-    document.getElementById('edit-slider-status').value = slider.is_active ?? 1;
+    
+    // ✅ PERBAIKAN: Set status sesuai data asli
+    const statusSelect = document.getElementById('edit-slider-status');
+    if (statusSelect) {
+        // Konversi boolean ke string "1" atau "0"
+        statusSelect.value = slider.is_active ? '1' : '0';
+        console.log('✅ Status set to:', statusSelect.value, '(', slider.is_active ? 'Aktif' : 'Nonaktif', ')');
+    }
 
     // Preview gambar lama
     const preview = document.getElementById('edit-slider-preview');

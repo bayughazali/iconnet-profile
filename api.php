@@ -251,13 +251,34 @@ if ($action === 'update' && $_SERVER['REQUEST_METHOD'] === 'POST') {
             $name      = trim($_POST['name'] ?? '');
             $is_active = (int) ($_POST['is_active'] ?? 0);
 
-            
-           $sql = "UPDATE slider
-                SET name='$name',
-                    is_active=$is_active
-                    $image_sql,
-                    updated_at=NOW()
-                WHERE id=$id";
+            // ✅ WAJIB: Inisialisasi $image_sql SEBELUM digunakan
+            $image_sql = '';
+
+            // Handle upload gambar baru (opsional)
+            if (!empty($_FILES['image']['name'])) {
+                $uploadDir = 'uploads/slider/';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+
+                $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+                $filename = 'slider_' . time() . '.' . $ext;
+                $path = $uploadDir . $filename;
+
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $path)) {
+                    $image_sql = ", image_path='$path'";
+                } else {
+                    json_response(false, 'Gagal upload gambar');
+                }
+            }
+
+            // SQL UPDATE
+            $sql = "UPDATE slider
+                    SET name='$name',
+                        is_active=$is_active
+                        $image_sql,
+                        updated_at=NOW()
+                    WHERE id=$id";
             break;
             
         case 'paket':

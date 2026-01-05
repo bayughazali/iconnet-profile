@@ -1,3 +1,19 @@
+<?php
+require_once 'config.php';
+
+// Ambil slider yang aktif
+$sliders = [];
+
+$query = "SELECT * FROM slider WHERE is_active = 1 ORDER BY id DESC";
+$result = mysqli_query($conn, $query);
+
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $sliders[] = $row;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -391,24 +407,21 @@ body {
     <i class="bi bi-arrow-left"></i> Kembali ke halaman sebelumnya
   </a>
 
-  <!-- SLIDER -->
+<!-- SLIDER -->
 <div class="slider-container">
   <div class="slider" id="slider">
 
-    <div class="slide" style="background-image: url('image/slide1.png');">
-      <div class="slide-content">
-      </div>
-    </div>
-
-    <div class="slide" style="background-image: url('image/slide2.png');">
-      <div class="slide-content">
-      </div>
-    </div>
-
-    <div class="slide" style="background-image: url('image/slide3.png');">
-      <div class="slide-content">
-      </div>
-    </div>
+    <?php if (count($sliders) === 0): ?>
+        <div class="slide" style="background:#eee;display:flex;align-items:center;justify-content:center;">
+            <h4>Tidak ada slider aktif</h4>
+        </div>
+    <?php else: ?>
+        <?php foreach ($sliders as $slider): ?>
+            <div class="slide" style="background-image: url('<?php echo $slider['image_path']; ?>');">
+                <div class="slide-content"></div>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
 
   </div>
 </div>
