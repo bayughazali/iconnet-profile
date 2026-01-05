@@ -1480,7 +1480,7 @@ html {
     <!-- FOOTER -->
     <footer class="bg-dark text-white py-4">
         <div class="container text-center">
-            <p class="mb-0">&copy; 2024 ICONNET. All rights reserved. | Made with ❤️ in Indonesia</p>
+            <p class="mb-0">&copy; 2026 ICONNET. All rights reserved. | Made with ❤️ in Indonesia</p>
         </div>
     </footer>
 
