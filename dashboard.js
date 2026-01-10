@@ -552,6 +552,17 @@ function deletePaket(id) {
 
     console.log('🗑️ Deleting paket ID:', id);
 
+    // ✅ STEP 1: Hapus row dari DOM dulu (instant visual feedback)
+    const deleteButton = document.querySelector(`button[onclick="deletePaket(${id})"]`);
+    const row = deleteButton ? deleteButton.closest('tr') : null;
+    
+    if (row) {
+        row.style.opacity = '0.3';
+        row.style.transition = 'opacity 0.3s';
+        console.log('🎯 Row found, marking for deletion...');
+    }
+
+    // ✅ STEP 2: Kirim DELETE request ke server
     fetch('api_paket.php', {
         method: 'DELETE',
         headers: {
@@ -568,28 +579,44 @@ function deletePaket(id) {
         
         if (data.success) {
             console.log('✅ Paket berhasil dihapus dari database');
-            alert('✅ Paket berhasil dihapus!');
             
-            // ✅ PERBAIKAN UTAMA: Reload tabel paket
-            console.log('🔄 Reloading paket table...');
-            loadPaketTable();
+            // ✅ STEP 3: Hapus row dari tabel (instant)
+            if (row) {
+                row.remove();
+                console.log('✅ Row removed from table instantly');
+            }
             
-            // Reload stats dashboard
+            // ✅ STEP 4: Reload tabel untuk sinkronisasi final
+            setTimeout(() => {
+                loadPaketTable();
+                console.log('✅ Table reloaded from server');
+            }, 300);
+            
+            // ✅ STEP 5: Update stats
             if (typeof loadDashboardStats === 'function') {
-                console.log('🔄 Reloading dashboard stats...');
                 loadDashboardStats();
             }
             
-            console.log('✅ Tabel sudah di-refresh');
+            alert('✅ Paket berhasil dihapus!');
+            
         } else {
-           console.error('❌ JSON Parse Error:', e);
-            console.error('Response:', text.substring(0, 500));
-            alert('❌ Server Error: Response bukan JSON.\n\nLihat console untuk detail.');
+            console.error('❌ Delete gagal:', data.message);
+            alert('❌ Gagal menghapus paket:\n\n' + (data.message || 'Unknown error'));
+            
+            // Restore row opacity jika gagal
+            if (row) {
+                row.style.opacity = '1';
+            }
         }
     })
     .catch(error => {
         console.error('❌ Fetch Error:', error);
         alert('❌ Terjadi kesalahan:\n\n' + error.message);
+        
+        // Restore row opacity jika error
+        if (row) {
+            row.style.opacity = '1';
+        }
     });
 }
 
@@ -692,7 +719,17 @@ function deletePaket(id) {
 
     console.log('🗑️ Deleting paket ID:', id);
 
-    // Kirim DELETE request
+    // ✅ STEP 1: Hapus row dari DOM dulu (instant visual feedback)
+    const deleteButton = document.querySelector(`button[onclick="deletePaket(${id})"]`);
+    const row = deleteButton ? deleteButton.closest('tr') : null;
+    
+    if (row) {
+        row.style.opacity = '0.3';
+        row.style.transition = 'opacity 0.3s';
+        console.log('🎯 Row found, marking for deletion...');
+    }
+
+    // ✅ STEP 2: Kirim DELETE request ke server
     fetch('api_paket.php', {
         method: 'DELETE',
         headers: {
@@ -710,31 +747,45 @@ function deletePaket(id) {
         if (data.success) {
             console.log('✅ Paket berhasil dihapus dari database');
             
-            // Tampilkan notifikasi
-            alert('✅ Paket berhasil dihapus!');
+            // ✅ STEP 3: Hapus row dari tabel (instant)
+            if (row) {
+                row.remove();
+                console.log('✅ Row removed from table instantly');
+            }
             
-            // ✅ CRITICAL FIX: Paksa reload tabel paket
-            console.log('🔄 Reloading paket table...');
-            loadPaketTable();
+            // ✅ STEP 4: Reload tabel untuk sinkronisasi final
+            setTimeout(() => {
+                loadPaketTable();
+                console.log('✅ Table reloaded from server');
+            }, 300);
             
-            // Reload stats juga
+            // ✅ STEP 5: Update stats
             if (typeof loadDashboardStats === 'function') {
-                console.log('🔄 Reloading dashboard stats...');
                 loadDashboardStats();
             }
             
-            console.log('✅ Tabel sudah di-refresh');
+            alert('✅ Paket berhasil dihapus!');
+            
         } else {
             console.error('❌ Delete gagal:', data.message);
             alert('❌ Gagal menghapus paket:\n\n' + (data.message || 'Unknown error'));
+            
+            // Restore row opacity jika gagal
+            if (row) {
+                row.style.opacity = '1';
+            }
         }
     })
     .catch(error => {
         console.error('❌ Fetch Error:', error);
         alert('❌ Terjadi kesalahan:\n\n' + error.message);
+        
+        // Restore row opacity jika error
+        if (row) {
+            row.style.opacity = '1';
+        }
     });
 }
-
 
 // ==================== PAKET MANAGEMENT - FULLY FIXED ====================
 
@@ -1149,48 +1200,75 @@ function deletePaket(id) {
         return;
     }
 
-    console.log('🗑️ Delete paket ID:', id);
+    console.log('🗑️ Deleting paket ID:', id);
 
+    // ✅ STEP 1: Hapus row dari DOM dulu (instant visual feedback)
+    const deleteButton = document.querySelector(`button[onclick="deletePaket(${id})"]`);
+    const row = deleteButton ? deleteButton.closest('tr') : null;
+    
+    if (row) {
+        row.style.opacity = '0.3';
+        row.style.transition = 'opacity 0.3s';
+        console.log('🎯 Row found, marking for deletion...');
+    }
+
+    // ✅ STEP 2: Kirim DELETE request ke server
     fetch('api_paket.php', {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({id: parseInt(id)})
+        body: JSON.stringify({ id: parseInt(id) })
     })
     .then(response => {
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-            return response.text().then(text => {
-                console.error('❌ Response bukan JSON:', text);
-                throw new Error('Server error');
-            });
-        }
+        console.log('📡 Response status:', response.status);
         return response.json();
     })
     .then(data => {
+        console.log('📦 Response data:', data);
+        
         if (data.success) {
-            alert('✅ Paket berhasil dihapus!');
+            console.log('✅ Paket berhasil dihapus dari database');
             
-            // Reload table (jika ada fungsi loadPaket)
-            if (typeof loadPaket === 'function') {
-                loadPaket();
+            // ✅ STEP 3: Hapus row dari tabel (instant)
+            if (row) {
+                row.remove();
+                console.log('✅ Row removed from table instantly');
             }
             
-            // Reload stats dashboard
+            // ✅ STEP 4: Reload tabel untuk sinkronisasi final
+            setTimeout(() => {
+                loadPaketTable();
+                console.log('✅ Table reloaded from server');
+            }, 300);
+            
+            // ✅ STEP 5: Update stats
             if (typeof loadDashboardStats === 'function') {
                 loadDashboardStats();
             }
+            
+            alert('✅ Paket berhasil dihapus!');
+            
         } else {
+            console.error('❌ Delete gagal:', data.message);
             alert('❌ Gagal menghapus paket:\n\n' + (data.message || 'Unknown error'));
+            
+            // Restore row opacity jika gagal
+            if (row) {
+                row.style.opacity = '1';
+            }
         }
     })
     .catch(error => {
-        console.error('❌ Error:', error);
+        console.error('❌ Fetch Error:', error);
         alert('❌ Terjadi kesalahan:\n\n' + error.message);
+        
+        // Restore row opacity jika error
+        if (row) {
+            row.style.opacity = '1';
+        }
     });
 }
-
 
 // ==================== BERITA MANAGEMENT ====================
 

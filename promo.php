@@ -386,7 +386,12 @@ body {
                     <a class="nav-link" href="product.php">Product & Add on</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php#cara">Cara Berlangganan</a>
+                    <a class="nav-link fw-bold" 
+                      href="https://wa.me/6281331830561?text=Halo,%20saya%20ingin%20berlangganan%20ICONNET.%20Bisa%20dibantu%20prosesnya?" 
+                      target="_blank" 
+                      rel="noopener noreferrer">
+                        berlangganan sekarang
+                    </a>
                 </li>
             </ul>
 

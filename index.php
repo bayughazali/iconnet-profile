@@ -53,8 +53,13 @@ if (!is_array($paket)) {
                         <a class="nav-link fw-bold" href="Product.php">Product & Add on</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold" href="#cara">Cara Berlangganan</a>
-                    </li>
+                    <a class="nav-link fw-bold" 
+                      href="https://wa.me/6281331830561?text=Halo,%20saya%20ingin%20berlangganan%20ICONNET.%20Bisa%20dibantu%20prosesnya?" 
+                      target="_blank" 
+                      rel="noopener noreferrer">
+                        berlangganan sekarang
+                    </a>
+                </li>
                 </ul>
                 <a href="promo.php" class="btn-promo">PROMO</a>
             </div>
@@ -161,46 +166,52 @@ if (!is_array($paket)) {
 
 
 
-    <!-- Subscription Section -->
-    <section class="subscription-section" id="cara">
-        <div class="container">
-            <div class="row align-items-center">
+   <!-- Subscription Section -->
+<section class="subscription-section" id="cara">
+    <div class="container">
+        <div class="row align-items-center">
 
-                <div class="col-lg-6 mb-4">
-                    <div class="subscription-card">
-                        <h2 class="mb-4">Cara Berlangganan</h2>
-                        <p>Enjoy the large 200+ of unrealistic templates perfect slice of sensibilities.</p>
-                        <button class="btn-detail mt-3">LIHAT DETAIL →</button>
-                    </div>
+            <div class="col-lg-6 mb-4">
+                <div class="subscription-card">
+                    <h2 class="mb-4">Berlangganan Sekarang</h2>
+                    <p>Dapatkan koneksi internet super cepat dan stabil untuk kebutuhan keluarga Anda. Proses berlangganan mudah, cukup hubungi kami via WhatsApp dan tim kami siap membantu!</p>
+                    <a href="https://wa.me/6281331830561?text=Halo,%20saya%20ingin%20berlangganan%20ICONNET.%20Bisa%20dibantu%20prosesnya?" 
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       class="btn-detail mt-3">
+                        <i class="fab fa-whatsapp me-2"></i>HUBUNGI KAMI →
+                    </a>
                 </div>
-
-                <div class="col-lg-6 mb-4">
-                    <img src="image/langganan.png" class="img-fluid rounded">
-                </div>
-
             </div>
-        </div>
-    </section>
 
-    <!-- Mascot Section -->
-    <section class="mascot-section">
-        <div class="container">
-            <div class="row align-items-center">
-
-                <div class="col-lg-6 mb-4">
-                    <img src="image/koni.png" class="img-fluid">
-                </div>
-                <div class="col-lg-6">
-                    <h2 class="mb-4">Syarat & Ketentuan</h2>
-                    <p>Get the best fixed chicken smeared with a lip smacking lemon chili flavor.</p>
-
-                    <button class="btn-detail mt-3" data-bs-toggle="modal" data-bs-target="#modalSyarat">
-                        Lihat Detail →
-                    </button>
-                </div>
-
+            <div class="col-lg-6 mb-4">
+                <img src="image/langganan.png" class="img-fluid rounded">
             </div>
+
         </div>
+    </div>
+</section>
+
+   <!-- Mascot Section -->
+<section class="mascot-section">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <div class="col-lg-6 mb-4">
+                <img src="image/koni.png" class="img-fluid">
+            </div>
+            <div class="col-lg-6">
+                <h2 class="mb-4">Syarat & Ketentuan</h2>
+                <p>Pastikan Anda memahami hak dan kewajiban sebagai pelanggan ICONNET. Baca syarat dan ketentuan kami agar proses berlangganan Anda lebih lancar dan bebas dari kendala di kemudian hari.</p>
+
+                <button class="btn-detail mt-3" data-bs-toggle="modal" data-bs-target="#modalSyarat">
+                    Lihat Detail →
+                </button>
+            </div>
+
+        </div>
+    </div>
+</section>
 
         <!-- Service Icons Section -->
         <div class="row mt-5">

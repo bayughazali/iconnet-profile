@@ -1342,8 +1342,13 @@ html {
                 <li class="nav-item">
                     <a class="nav-link active" href="product.php">Product & Add on</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php#cara">Cara Berlangganan</a>
+                 <li class="nav-item">
+                    <a class="nav-link fw-bold" 
+                      href="https://wa.me/6281331830561?text=Halo,%20saya%20ingin%20berlangganan%20ICONNET.%20Bisa%20dibantu%20prosesnya?" 
+                      target="_blank" 
+                      rel="noopener noreferrer">
+                        berlangganan sekarang
+                    </a>
                 </li>
             </ul>
             <a href="promo.php" class="btn-promo">PROMO</a>
@@ -2493,21 +2498,42 @@ function showAddonDetailFromDB(addonId) {
             selectedAddon = addon;
 
             let featureHTML = "";
+            let imageHTML = "";
+
+            // =============================
+            // TAMPILKAN GAMBAR JIKA ADA
+            // =============================
+            if (addon.image_path) {
+                imageHTML = `
+                    <div class="text-center mb-4">
+                        <img src="${addon.image_path}" 
+                             alt="${addon.name}" 
+                             class="img-fluid rounded"
+                             style="max-height: 300px; object-fit: contain;">
+                    </div>
+                `;
+            }
 
             // =============================
             // WIFI EXTENDER → FITUR
             // =============================
             if (addon.category === "wifi_extender") {
                 const fiturList = addon.fitur
-                    ? addon.fitur.split(",")
-                        .map(f => `<li>${f.trim()}</li>`)
+                    ? addon.fitur.split("\n")
+                        .filter(f => f.trim() !== "")
+                        .map(f => `<li><i class="fas fa-check-circle text-success me-2"></i>${f.trim()}</li>`)
                         .join("")
-                    : "<li>-</li>";
+                    : "<li class='text-muted'>Belum ada fitur yang ditambahkan</li>";
 
                 featureHTML = `
-                    <div class="addon-feature-box">
-                        <h6>Fitur WiFi Extender</h6>
-                        <ul>${fiturList}</ul>
+                    <div class="mt-4 p-3 bg-light rounded">
+                        <h6 class="mb-3">
+                            <i class="fas fa-list-ul me-2 text-primary"></i>
+                            Fitur WiFi Extender
+                        </h6>
+                        <ul class="list-unstyled mb-0">
+                            ${fiturList}
+                        </ul>
                     </div>
                 `;
             }
@@ -2515,76 +2541,138 @@ function showAddonDetailFromDB(addonId) {
             // =============================
             // ICONPLAY → LAYANAN
             // =============================
-if (addon.category === "iconplay" && addon.layanan_tersedia) {
+            if (addon.category === "iconplay" && addon.layanan_tersedia) {
+                try {
+                    const layananData = JSON.parse(addon.layanan_tersedia);
+                    let layananHTML = "";
 
-    const layananData = JSON.parse(addon.layanan_tersedia);
-    let layananHTML = "";
+                    Object.keys(layananData).forEach(kategori => {
+                        const logoHTML = layananData[kategori]
+                            .map(img => `
+                                <div class="channel-logo">
+                                    <img src="assets/img/channels/${img}" alt="${kategori}">
+                                </div>
+                            `)
+                            .join("");
 
-    Object.keys(layananData).forEach(kategori => {
+                        layananHTML += `
+                            <div class="channel-group">
+                                <div class="channel-header">
+                                    <h6>${kategori}</h6>
+                                    <span class="lihat-semua">Lihat Semua</span>
+                                </div>
+                                <div class="channel-list">
+                                    ${logoHTML}
+                                </div>
+                            </div>
+                        `;
+                    });
 
-        const logoHTML = layananData[kategori]
-            .map(img => `
-                <div class="channel-logo">
-                    <img src="assets/img/channels/${img}" alt="${kategori}">
-                </div>
-            `)
-            .join("");
+                    featureHTML = `
+                        <div class="mt-4">
+                            <h5 class="mb-3">
+                                <i class="fas fa-tv me-2 text-primary"></i>
+                                Layanan yang Tersedia
+                            </h5>
+                            ${layananHTML}
+                        </div>
+                    `;
+                } catch (e) {
+                    console.error("Error parsing layanan_tersedia:", e);
+                    featureHTML = `
+                        <div class="alert alert-warning mt-4">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Data layanan tidak dapat ditampilkan
+                        </div>
+                    `;
+                }
+            }
 
-        layananHTML += `
-            <div class="channel-group">
-                <div class="channel-header">
-                    <h6>${kategori}</h6>
-                    <span class="lihat-semua">Lihat Semua</span>
-                </div>
-                <div class="channel-list">
-                    ${logoHTML}
-                </div>
-            </div>
-        `;
-    });
-
-    featureHTML = `
-        <div class="addon-feature-box">
-            <h5 class="mb-3">Layanan yang Tersedia</h5>
-            ${layananHTML}
-        </div>
-    `;
-
-}console.log("LAYANAN:", addon.layanan_tersedia);
-
-            document.getElementById("addonDetailTitle").innerText =
-                addon.name;
+            // =============================
+            // SET MODAL TITLE & BODY
+            // =============================
+            document.getElementById("addonDetailTitle").innerText = addon.name;
 
             document.getElementById("addonDetailBody").innerHTML = `
-            ${addon.description ? `
-            <div class="addon-desc-box">
-                <p>${addon.description}</p>
-            </div>
-            ` : ''}
+                <!-- GAMBAR ADD-ON -->
+                ${imageHTML}
 
-                <div class="addon-price-box">
-                    <div class="label">Harga Add-on</div>
-                    <div class="price">
-                        Rp ${formatRupiah(addon.price)}
+                <!-- KATEGORI & STATUS -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded">
+                            <small class="text-muted d-block mb-1">Kategori</small>
+                            <strong class="text-capitalize">
+                                ${addon.category === 'wifi_extender' ? 'WiFi Extender' : 'ICONPLAY'}
+                            </strong>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded">
+                            <small class="text-muted d-block mb-1">Status</small>
+                            <span class="badge ${addon.is_active == 1 ? 'bg-success' : 'bg-secondary'}">
+                                ${addon.is_active == 1 ? 'Aktif' : 'Tidak Aktif'}
+                            </span>
+                        </div>
                     </div>
                 </div>
 
-<div class="price-box installation-box">
-    <div class="label">Biaya Instalasi</div>
-    <div class="price">
-        Rp ${formatRupiah(addon.installation_fee ?? 0)}
-    </div>
-</div>
+                <!-- DESKRIPSI -->
+                ${addon.description ? `
+                    <div class="p-3 bg-light rounded mb-3">
+                        <h6 class="mb-2">
+                            <i class="fas fa-info-circle me-2 text-primary"></i>
+                            Deskripsi
+                        </h6>
+                        <p class="mb-0">${addon.description}</p>
+                    </div>
+                ` : ''}
 
+                <!-- HARGA ADD-ON -->
+                <div class="p-3 rounded mb-3" style="background: linear-gradient(135deg, #008080, #2fb9b9); color: white;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <small class="d-block mb-1" style="opacity: 0.9;">Harga Add-on</small>
+                            <h4 class="mb-0 fw-bold">Rp ${formatRupiah(addon.price)}</h4>
+                        </div>
+                        <i class="fas fa-tag fa-2x" style="opacity: 0.3;"></i>
+                    </div>
+                </div>
+
+                <!-- BIAYA INSTALASI -->
+                <div class="p-3 rounded mb-3" style="background: #fff3cd; border: 2px solid #ffc107;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <small class="d-block mb-1 text-dark">Biaya Instalasi</small>
+                            <h5 class="mb-0 fw-bold text-dark">
+                                ${addon.installation_fee > 0 ? 'Rp ' + formatRupiah(addon.installation_fee) : 'GRATIS'}
+                            </h5>
+                        </div>
+                        <i class="fas fa-tools fa-2x text-warning" style="opacity: 0.5;"></i>
+                    </div>
+                </div>
+
+                <!-- FITUR / LAYANAN -->
                 ${featureHTML}
+
+                <!-- INFO TAMBAHAN -->
+                <div class="alert alert-info mt-4 mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <small>
+                        <strong>Catatan:</strong> 
+                        Harga sudah termasuk PPN 11%. 
+                        ${addon.installation_fee == 0 ? 'Gratis instalasi untuk add-on ini!' : ''}
+                    </small>
+                </div>
             `;
 
             new bootstrap.Modal(
                 document.getElementById("addonDetailModal")
             ).show();
         })
-        .catch(() => {
-            alert("Gagal memuat detail add-on");
+        .catch((error) => {
+            console.error("Error loading addon detail:", error);
+            alert("Gagal memuat detail add-on. Silakan coba lagi.");
         });
 }
 
