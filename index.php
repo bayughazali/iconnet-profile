@@ -1,4 +1,3 @@
-index.php
 <?php
 $paket = [];
 
@@ -57,7 +56,7 @@ if (!is_array($paket)) {
                       href="https://wa.me/6281331830561?text=Halo,%20saya%20ingin%20berlangganan%20ICONNET.%20Bisa%20dibantu%20prosesnya?" 
                       target="_blank" 
                       rel="noopener noreferrer">
-                        berlangganan sekarang
+                        Berlangganan Sekarang
                     </a>
                 </li>
                 </ul>
@@ -66,7 +65,6 @@ if (!is_array($paket)) {
 
         </div>
     </nav>
-
 
     <!-- Hero Section dengan Slider -->
    <section class="hero-section" style="margin-top:80px;">
@@ -85,12 +83,7 @@ if (!is_array($paket)) {
         </div>
     </div>
 </section>
-
-
-
-
-    <!-- Features Section -->
-    <!-- ========================================
+<!-- ========================================
  PRICING SECTION - FIXED
 ======================================== -->
 <section class="pricing-section" id="product">
@@ -133,15 +126,12 @@ if (!is_array($paket)) {
       </a>
     </div>
     <!-- ✅ AKHIR TAMBAHAN -->
-
   </div>
 </div>
 
       <!-- KANAN: PROMO / PACKAGE -->
       <div class="pricing-right">
-
         <div id="packageCarousel" class="carousel slide" data-bs-ride="false">
-
           <div class="carousel-inner">
             <!-- Data akan diisi oleh JavaScript -->
           </div>
@@ -154,18 +144,11 @@ if (!is_array($paket)) {
           <button class="carousel-control-next" type="button" data-bs-target="#packageCarousel" data-bs-slide="next">
             <i class="fas fa-chevron-right carousel-control-icon"></i>
           </button>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
 </section>
-
-
-
    <!-- Subscription Section -->
 <section class="subscription-section" id="cara">
     <div class="container">
@@ -198,17 +181,23 @@ if (!is_array($paket)) {
         <div class="row align-items-center">
 
             <div class="col-lg-6 mb-4">
-                <img src="image/koni.png" class="img-fluid">
+                <img src="image/koni.png" class="img-fluid mascot-float reveal">
             </div>
             <div class="col-lg-6">
-                <h2 class="mb-4">Syarat & Ketentuan</h2>
-                <p>Pastikan Anda memahami hak dan kewajiban sebagai pelanggan ICONNET. Baca syarat dan ketentuan kami agar proses berlangganan Anda lebih lancar dan bebas dari kendala di kemudian hari.</p>
+    <div class="glass-card reveal">
+        <span class="section-badge">Informasi Penting</span>
+        <h2 class="mb-4">Syarat & Ketentuan</h2>
+        <p>
+            Pastikan Anda memahami hak dan kewajiban sebagai pelanggan ICONNET. 
+            Baca syarat dan ketentuan kami agar proses berlangganan Anda lebih lancar 
+            dan bebas dari kendala di kemudian hari.
+        </p>
 
-                <button class="btn-detail mt-3" data-bs-toggle="modal" data-bs-target="#modalSyarat">
-                    Lihat Detail →
-                </button>
-            </div>
-
+        <button class="btn-detail mt-3" data-bs-toggle="modal" data-bs-target="#modalSyarat">
+            Lihat Detail →
+        </button>
+    </div>
+</div>
         </div>
     </div>
 </section>
@@ -284,30 +273,48 @@ if (!is_array($paket)) {
 
     <!-- App Section -->
     <section class="app-section">
+      <div class="app-decor decor-1">
+    <i class="fas fa-bolt"></i>
+</div>
+<div class="app-decor decor-2">
+    <i class="fas fa-wifi"></i>
+</div>
+<div class="app-decor decor-3">
+    <i class="fas fa-mobile-alt"></i>
+</div>
+<div class="app-dots"></div>
         <div class="container">
             <div class="row align-items-center">
 
                 <div class="col-lg-6 mb-4 text-center text-lg-start">
-                    <img src="image/hpIconnet2.png" alt="PLN Mobile App" class="img-fluid app-phone">
+                   <img src="image/hpIconnet2.png" alt="PLN Mobile App"
+     class="img-fluid app-phone reveal">
                 </div>
 
 
                 <div class="col-lg-6">
-                    <h2>Unduh PLN Mobile, semua layanan listrik jadi lebih mudah!</h2>
+                    <h2>
+    Unduh <span>MyICON+</span>, semua layanan listrik jadi lebih mudah!
+</h2>
+<ul class="app-features">
+    <li><i class="fas fa-check-circle"></i> Bayar listrik & internet lebih cepat</li>
+    <li><i class="fas fa-check-circle"></i> Pantau tagihan real-time</li>
+    <li><i class="fas fa-check-circle"></i> Layanan ICONNET dalam satu aplikasi</li>
+</ul>
                     <div class="app-badge mt-4 d-flex align-items-center flex-wrap gap-3">
-
-                        <a href="https://play.google.com/store/apps/details?id=com.icon.pln123" target="_blank"
+                        <a href="https://play.google.com/store/apps/details?id=id.co.iconpln.icrm.customer&pcampaignid=web_share" target="_blank"
                             rel="noopener noreferrer" class="store-link">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/200px-Google_Play_Store_badge_EN.svg.png"
                                 alt="Get it on Google Play" class="img-fluid store-icon">
                         </a>
 
 
-                        <a href="https://apps.apple.com/id/app/pln-mobile/id1299581030?l=id" target="_blank"
+                        <a href="https://apps.apple.com/id/app/myicon/id1662266337?l=id" target="_blank"
                             rel="noopener noreferrer" class="store-link">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Download_on_the_App_Store_Badge.svg/200px-Download_on_the_App_Store_Badge.svg.png"
                                 alt="Download on the App Store" class="img-fluid store-icon">
                         </a>
+                      
                     </div>
                 </div>
             </div>
@@ -356,10 +363,9 @@ if (!is_array($paket)) {
             </div>
 
             <div class="col-lg-6">
-                <div class="house-illustration text-center">
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cellipse cx='200' cy='350' rx='150' ry='30' fill='%23C8E6F5' opacity='0.5'/%3E%3Cpath d='M 200 100 L 280 180 L 280 320 L 120 320 L 120 180 Z' fill='%23E8F4F8'/%3E%3Cpath d='M 150 100 L 200 100 L 200 50 L 150 50 Z' fill='%23A5D8E8'/%3E%3Crect x='160' y='220' width='40' height='100' fill='%238B7355'/%3E%3C/svg%3E"
-                        class="img-fluid">
-                </div>
+<div class="house-illustration text-center">
+    <img src="image/faq.png" alt="Ilustrasi FAQ" class="img-fluid">
+</div>
             </div>
 
         </div>
@@ -564,7 +570,6 @@ if (!is_array($paket)) {
   </div>
 </div>
 
-<!-- Modal Syarat & Ketentuan -->
 <!-- Modal Syarat & Ketentuan - Modern Light Theme -->
 <div class="modal fade" id="modalSyarat" tabindex="-1" aria-labelledby="modalSyaratLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
@@ -883,6 +888,25 @@ function initSlider() {
     showSlide(0);
     startAuto();
 }
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const reveals = document.querySelectorAll(".reveal");
+
+    const observer = new IntersectionObserver(
+        entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("active");
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.2 }
+    );
+
+    reveals.forEach(el => observer.observe(el));
+});
 </script>
 
 </body>

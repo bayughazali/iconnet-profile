@@ -390,7 +390,7 @@ body {
                       href="https://wa.me/6281331830561?text=Halo,%20saya%20ingin%20berlangganan%20ICONNET.%20Bisa%20dibantu%20prosesnya?" 
                       target="_blank" 
                       rel="noopener noreferrer">
-                        berlangganan sekarang
+                        Berlangganan Sekarang
                     </a>
                 </li>
             </ul>
@@ -402,9 +402,6 @@ body {
     </div>
   </nav>
 </header>
-
-
-
 
 <div class="container mt-3">
 

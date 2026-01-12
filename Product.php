@@ -1347,7 +1347,7 @@ html {
                       href="https://wa.me/6281331830561?text=Halo,%20saya%20ingin%20berlangganan%20ICONNET.%20Bisa%20dibantu%20prosesnya?" 
                       target="_blank" 
                       rel="noopener noreferrer">
-                        berlangganan sekarang
+                        Berlangganan Sekarang
                     </a>
                 </li>
             </ul>
@@ -2758,5 +2758,14 @@ function redirectAddonToWhatsApp() {
 }
 </script>
 <!--  -->
+<script> // ini script dibawah untuk tidak menampilkan iconplay
+document.addEventListener("DOMContentLoaded", () => {
+    const iconplaySection = document.getElementById("iconplay");
+    if (iconplaySection) {
+        iconplaySection.style.display = "none";
+    }
+});
+</script>
+
 </body>
 </html>
