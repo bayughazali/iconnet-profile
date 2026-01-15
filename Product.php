@@ -1955,39 +1955,39 @@ function renderFilteredPaket() {
     let hasHebat = false;
     let hasRegular = false;
 
-allPaket.forEach(p => {
-    const isHebat = String(p.name).toLowerCase().includes("hebat");
-    
-    // ✅ FILTER 1: Status publikasi wilayah
-   // Ganti baris pengecekan status di dalam loop renderFilteredPaket menjadi:
-    const isGlobalActive = (parseInt(p.is_active) === 1 || parseInt(p.status) === 1);
-    const statusKey = 'status_' + selectedRegion;
-    const isActiveInRegion = parseInt(p[statusKey]) === 1;
+    allPaket.forEach(p => {
+        const isHebat = String(p.name).toLowerCase().includes("hebat");
         
-        // ⛔ SKIP jika tidak aktif di wilayah atau tidak aktif global
-       if (isGlobalActive && isActiveInRegion) {
-        const cardHTML = renderPaketCard(p);
-            console.log(`❌ Paket "${p.name}" SKIP: Region=${isActiveInRegion}, Global=${isGlobalActive}`);
-            return;
+        // ✅ 1. CEK STATUS GLOBAL & WILAYAH
+        const isGlobalActive = (parseInt(p.is_active) === 1 || parseInt(p.status) === 1);
+        const statusKey = 'status_' + selectedRegion;
+        const isActiveInRegion = parseInt(p[statusKey]) === 1;
+        
+        // ⛔ LOGIKA DIPERBAIKI: 
+        // Jika TIDAK aktif secara global ATAU TIDAK aktif di wilayah, maka SKIP (jangan tampilkan)
+        if (!isGlobalActive || !isActiveInRegion) {
+            console.log(`❌ Paket "${p.name}" DISEMBUNYIKAN: Global=${isGlobalActive}, Region=${isActiveInRegion}`);
+            return; // Berhenti di sini untuk paket ini
         }
         
-        console.log(`✅ ${isHebat ? '🎁' : '📦'} ${p.name} - aktif di ${selectedRegion}`);
+        console.log(`✅ ${isHebat ? '🎁' : '📦'} ${p.name} - Aktif & Melewati Filter Status`);
 
-        // === FILTER PERANGKAT ===
+        // === 2. FILTER PERANGKAT ===
         const maxPerangkat = p.max_perangkat || 99;
         const maxLaptop = p.max_laptop || 99;
         const maxSmartphone = p.max_smartphone || 99;
         
-        const sesuaiFilter =
+        const sesuaiFilterPerangkat =
             totalDevice <= maxPerangkat &&
             laptop <= maxLaptop &&
             hp <= maxSmartphone;
 
-        console.log(`   Filter: ${sesuaiFilter ? '✅' : '❌'} (Device: ${totalDevice}/${maxPerangkat}, Laptop: ${laptop}/${maxLaptop}, HP: ${hp}/${maxSmartphone})`);
+        if (!sesuaiFilterPerangkat) {
+            console.log(`   Filter Perangkat: ❌ (${p.name})`);
+            return;
+        }
 
-        if (!sesuaiFilter) return;
-
-        // ✅ RENDER JIKA SESUAI
+        // ✅ 3. RENDER JIKA LOLOS SEMUA FILTER
         const cardHTML = renderPaketCard(p);
 
         if (isHebat) {
@@ -1999,17 +1999,17 @@ allPaket.forEach(p => {
         }
     });
 
-    // Banner HEBAT
+    // Kontrol Tampilan Banner HEBAT
     if (hasHebat) {
         banner.classList.remove("d-none");
     } else {
         banner.classList.add("d-none");
     }
 
-    // Jika tidak ada paket sama sekali
+    // Jika tidak ada paket sama sekali setelah difilter
     if (!hasHebat && !hasRegular) {
         regularContainer.innerHTML = `
-            <div class="alert alert-warning text-center">
+            <div class="alert alert-warning text-center w-100">
                 <i class="fas fa-exclamation-triangle me-2"></i>
                 Tidak ada paket yang tersedia untuk wilayah <strong>${getRegionLabel()}</strong> dengan jumlah perangkat yang Anda pilih.
             </div>
