@@ -290,7 +290,7 @@ if (!is_array($paket)) {
             <div class="row align-items-center">
 
                 <div class="col-lg-6 mb-4 text-center text-lg-start">
-                   <img src="image/hpIconnet2.png" alt="PLN Mobile App"
+                   <img src="image/HP.png" alt="PLN Mobile App"
      class="img-fluid app-phone reveal">
                 </div>
 
