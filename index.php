@@ -107,11 +107,14 @@ if (!is_array($paket)) {
         <i class="fas fa-chevron-down dropdown-icon"></i>
       </button>
 
-      <div class="location-options-list" style="display: none;">
-        <div class="location-item">Sumatera & Kalimantan</div>
-        <div class="location-item">Jawa & Bali</div>
-        <div class="location-item">Indonesia Timur</div>
-      </div>
+<div class="location-options-list" style="display: none;">
+  <div class="location-item">Sumatera & Kalimantan</div>
+  <div class="location-item">Jawa & Bali</div>
+  <div class="location-item">Indonesia Timur</div>
+  <div class="location-item">NTT</div>
+  <div class="location-item">Batam</div>
+  <div class="location-item">Natuna</div>
+</div>
     </div>
 
     <!-- ✅ TAMBAHAN BARU: Text & Button Bandingkan -->

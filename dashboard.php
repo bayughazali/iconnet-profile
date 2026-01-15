@@ -485,6 +485,35 @@
         td button {
             display: inline-block !important;
         }
+        /* ===== REGION BLOCK STYLING ===== */
+.region-block {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    transition: all 0.3s ease;
+}
+
+.region-block:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.region-inputs {
+    transition: opacity 0.3s ease;
+}
+
+.form-check-input:checked {
+    background-color: #20b2aa;
+    border-color: #20b2aa;
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.25rem rgba(32, 178, 170, 0.25);
+}
+
+/* Disabled input styling */
+input:disabled {
+    background-color: #e9ecef !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
+}
     </style>
 </head>
 <body>
@@ -655,11 +684,14 @@
                 <thead>
                     <tr>
                         <th>Nama Paket</th>
-                        <th>Harga Sumatera</th>
-                        <th>Harga Jawa</th>
-                        <th>Harga Timur</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
+<th>Harga Sumatera</th>
+<th>Harga Jawa</th>
+<th>Harga Timur</th>
+<th>Harga NTT</th>
+<th>Harga Batam</th>
+<th>Harga Natuna</th>
+<th>Status</th>
+<th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="paket-table-body">
@@ -815,37 +847,6 @@ window.openPromoModal = handleOpenPromoModal;
                     </div>
                 </div>
             </div>
-        <!-- TRANSAKSI PAGE
-        <div id="page-transaksi" class="page-section">
-            <div class="content-card">
-                <h4><i class="fas fa-file-invoice"></i>Daftar Transaksi</h4>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nama Pelanggan</th>
-                                <th>Paket</th>
-                                <th>Tanggal</th>
-                                <th>Jumlah</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>#001</td>
-                                <td>Budi Santoso</td>
-                                <td>ICONNET 50</td>
-                                <td>12 Des 2024</td>
-                                <td>Rp 319.000</td>
-                                <td><span class="badge-status badge-active">Aktif</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div> -->
 
     <!-- MODALS TETAP SAMA SEPERTI SEBELUMNYA -->
    <!-- Modal Tambah Slider - FIXED VERSION -->
@@ -1036,165 +1037,421 @@ window.openPromoModal = handleOpenPromoModal;
     </div>
 </div>
 
-<!-- Harga Regional -->
+<!-- ===== HARGA BULANAN & INSTALASI - COMBINED PER REGION ===== -->
 <div class="card mb-3">
     <div class="card-header bg-light">
         <strong>
             <i class="fas fa-money-bill-wave me-2"></i>
-            Harga Berlangganan per Bulan
+            Harga Berlangganan & Instalasi per Wilayah
         </strong>
     </div>
-
     <div class="card-body">
 
-        <!-- SUMATERA -->
-        <div class="row mb-3">
-            <div class="col-12">
-                <h6 class="text-primary mb-3">
+        <!-- ===== SUMATERA ===== -->
+        <div class="region-block border rounded p-3 mb-4" id="region-sumatera">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="text-primary mb-0">
                     <i class="fas fa-map-marker-alt me-2"></i>Sumatera & Kalimantan
                 </h6>
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label>Harga Sebelum Diskon</label>
-                <div class="input-group">
-                    <span class="input-group-text">Rp</span>
-                    <input type="number" class="form-control" id="sumatera_before">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="status_sumatera" value="1" checked 
+                           onchange="toggleRegionInputs('sumatera', this.checked)">
+                    <label class="form-check-label" for="status_sumatera">
+                        <strong>Aktifkan Wilayah</strong>
+                    </label>
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
-                <label class="fw-bold">Harga Sesudah Diskon *</label>
-                <div class="input-group">
-                    <span class="input-group-text">Rp</span>
-                    <input type="number" class="form-control" id="sumatera" required>
+            <div class="region-inputs">
+                <!-- Harga Bulanan -->
+                <div class="row mb-3">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-calendar-alt me-1"></i>HARGA BERLANGGANAN PER BULAN
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Harga Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-sumatera" 
+                                   id="sumatera_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Harga Terkini *</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-sumatera" 
+                                   id="sumatera" placeholder="0" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Biaya Instalasi -->
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-tools me-1"></i>BIAYA INSTALASI
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Instalasi Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-sumatera" 
+                                   id="instalasi_sumatera_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Instalasi Terkini</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-sumatera" 
+                                   id="instalasi_sumatera" placeholder="0">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <hr>
+        <hr class="my-4">
 
-        <!-- JAWA -->
-        <div class="row mb-3">
-            <div class="col-12">
-                <h6 class="text-primary mb-3">
+        <!-- ===== JAWA ===== -->
+        <div class="region-block border rounded p-3 mb-4" id="region-jawa">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="text-primary mb-0">
                     <i class="fas fa-map-marker-alt me-2"></i>Jawa & Bali
                 </h6>
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label>Harga Sebelum Diskon</label>
-                <div class="input-group">
-                    <span class="input-group-text">Rp</span>
-                    <input type="number" class="form-control" id="jawa_before">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="status_jawa" value="1" checked 
+                           onchange="toggleRegionInputs('jawa', this.checked)">
+                    <label class="form-check-label" for="status_jawa">
+                        <strong>Aktifkan Wilayah</strong>
+                    </label>
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
-                <label class="fw-bold">Harga Sesudah Diskon *</label>
-                <div class="input-group">
-                    <span class="input-group-text">Rp</span>
-                    <input type="number" class="form-control" id="jawa" required>
+            <div class="region-inputs">
+                <div class="row mb-3">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-calendar-alt me-1"></i>HARGA BERLANGGANAN PER BULAN
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Harga Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-jawa" 
+                                   id="jawa_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Harga Terkini *</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-jawa" 
+                                   id="jawa" placeholder="0" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-tools me-1"></i>BIAYA INSTALASI
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Instalasi Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-jawa" 
+                                   id="instalasi_jawa_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Instalasi Terkini</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-jawa" 
+                                   id="instalasi_jawa" placeholder="0">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <hr>
+        <hr class="my-4">
 
-        <!-- TIMUR -->
-        <div class="row mb-3">
-            <div class="col-12">
-                <h6 class="text-primary mb-3">
+        <!-- ===== TIMUR ===== -->
+        <div class="region-block border rounded p-3 mb-4" id="region-timur">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="text-primary mb-0">
                     <i class="fas fa-map-marker-alt me-2"></i>Indonesia Timur
                 </h6>
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label>Harga Sebelum Diskon</label>
-                <div class="input-group">
-                    <span class="input-group-text">Rp</span>
-                    <input type="number" class="form-control" id="timur_before">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="status_timur" value="1" checked 
+                           onchange="toggleRegionInputs('timur', this.checked)">
+                    <label class="form-check-label" for="status_timur">
+                        <strong>Aktifkan Wilayah</strong>
+                    </label>
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
-                <label class="fw-bold">Harga Sesudah Diskon *</label>
-                <div class="input-group">
-                    <span class="input-group-text">Rp</span>
-                    <input type="number" class="form-control" id="timur" required>
+            <div class="region-inputs">
+                <div class="row mb-3">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-calendar-alt me-1"></i>HARGA BERLANGGANAN PER BULAN
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Harga Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-timur" 
+                                   id="timur_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Harga Terkini *</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-timur" 
+                                   id="timur" placeholder="0" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-tools me-1"></i>BIAYA INSTALASI
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Instalasi Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-timur" 
+                                   id="instalasi_timur_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Instalasi Terkini</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-timur" 
+                                   id="instalasi_timur" placeholder="0">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-    </div> <!-- ✅ TUTUP card-body -->
-</div> <!-- ✅ TUTUP card -->
+        <hr class="my-4">
 
-                        <!-- Biaya Instalasi - TANPA DEFAULT VALUE -->
-<div class="card mb-3">
-    <div class="card-header bg-light">
-        <strong><i class="fas fa-tools me-2"></i>Biaya Instalasi</strong>
-    </div>
-
-    <div class="card-body">
-
-        <!-- SUMATERA -->
-        <div class="row mb-3">
-            <div class="col-12">
-                <h6 class="text-primary mb-3">
-                    <i class="fas fa-map-marker-alt me-2"></i>Sumatera & Kalimantan
+        <!-- ===== NTT ===== -->
+        <div class="region-block border rounded p-3 mb-4" id="region-ntt">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="text-primary mb-0">
+                    <i class="fas fa-map-marker-alt me-2"></i>NTT
                 </h6>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="status_ntt" value="1" checked 
+                           onchange="toggleRegionInputs('ntt', this.checked)">
+                    <label class="form-check-label" for="status_ntt">
+                        <strong>Aktifkan Wilayah</strong>
+                    </label>
+                </div>
             </div>
 
-            <div class="col-md-6 mb-3">
-                <label>Instalasi Sebelum Diskon</label>
-                <input type="number" class="form-control" id="instalasi_sumatera_before">
-            </div>
+            <div class="region-inputs">
+                <div class="row mb-3">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-calendar-alt me-1"></i>HARGA BERLANGGANAN PER BULAN
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Harga Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-ntt" 
+                                   id="ntt_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Harga Terkini *</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-ntt" 
+                                   id="ntt" placeholder="0" required>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="col-md-6 mb-3">
-                <label class="fw-bold">Instalasi Sesudah Diskon</label>
-                <input type="number" class="form-control" id="instalasi_sumatera">
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-tools me-1"></i>BIAYA INSTALASI
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Instalasi Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-ntt" 
+                                   id="instalasi_ntt_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Instalasi Terkini</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-ntt" 
+                                   id="instalasi_ntt" placeholder="0">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <hr>
+        <hr class="my-4">
 
-        <!-- JAWA -->
-        <div class="row mb-3">
-            <div class="col-12">
-                <h6 class="text-primary mb-3">
-                    <i class="fas fa-map-marker-alt me-2"></i>Jawa & Bali
+        <!-- ===== BATAM ===== -->
+        <div class="region-block border rounded p-3 mb-4" id="region-batam">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="text-primary mb-0">
+                    <i class="fas fa-map-marker-alt me-2"></i>Batam
                 </h6>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="status_batam" value="1" checked 
+                           onchange="toggleRegionInputs('batam', this.checked)">
+                    <label class="form-check-label" for="status_batam">
+                        <strong>Aktifkan Wilayah</strong>
+                    </label>
+                </div>
             </div>
 
-            <div class="col-md-6 mb-3">
-                <label>Instalasi Sebelum Diskon</label>
-                <input type="number" class="form-control" id="instalasi_jawa_before">
-            </div>
+            <div class="region-inputs">
+                <div class="row mb-3">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-calendar-alt me-1"></i>HARGA BERLANGGANAN PER BULAN
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Harga Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-batam" 
+                                   id="batam_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Harga Terkini *</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-batam" 
+                                   id="batam" placeholder="0" required>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="col-md-6 mb-3">
-                <label class="fw-bold">Instalasi Sesudah Diskon</label>
-                <input type="number" class="form-control" id="instalasi_jawa">
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-tools me-1"></i>BIAYA INSTALASI
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Instalasi Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-batam" 
+                                   id="instalasi_batam_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Instalasi Terkini</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-batam" 
+                                   id="instalasi_batam" placeholder="0">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <hr>
+        <hr class="my-4">
 
-        <!-- TIMUR -->
-        <div class="row mb-3">
-            <div class="col-12">
-                <h6 class="text-primary mb-3">
-                    <i class="fas fa-map-marker-alt me-2"></i>Indonesia Timur
+        <!-- ===== NATUNA ===== -->
+        <div class="region-block border rounded p-3 mb-4" id="region-natuna">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="text-primary mb-0">
+                    <i class="fas fa-map-marker-alt me-2"></i>Natuna
                 </h6>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="status_natuna" value="1" checked 
+                           onchange="toggleRegionInputs('natuna', this.checked)">
+                    <label class="form-check-label" for="status_natuna">
+                        <strong>Aktifkan Wilayah</strong>
+                    </label>
+                </div>
             </div>
 
-            <div class="col-md-6 mb-3">
-                <label>Instalasi Sebelum Diskon</label>
-                <input type="number" class="form-control" id="instalasi_timur_before">
-            </div>
+            <div class="region-inputs">
+                <div class="row mb-3">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-calendar-alt me-1"></i>HARGA BERLANGGANAN PER BULAN
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Harga Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-natuna" 
+                                   id="natuna_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Harga Terkini *</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-natuna" 
+                                   id="natuna" placeholder="0" required>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="col-md-6 mb-3">
-                <label class="fw-bold">Instalasi Sesudah Diskon</label>
-                <input type="number" class="form-control" id="instalasi_timur">
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-tools me-1"></i>BIAYA INSTALASI
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Instalasi Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-natuna" 
+                                   id="instalasi_natuna_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Instalasi Terkini</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control region-input-natuna" 
+                                   id="instalasi_natuna" placeholder="0">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1274,6 +1531,8 @@ window.openPromoModal = handleOpenPromoModal;
             <div class="modal-body">
                 <form id="form-edit-paket">
                     <input type="hidden" id="edit_id">
+
+                    
                     
                     <!-- Informasi Dasar -->
                     <div class="card mb-3">
@@ -1333,172 +1592,429 @@ window.openPromoModal = handleOpenPromoModal;
                         </div>
                     </div>
 
-                    <!-- ===== HARGA BULANAN - LAYOUT DIPERBAIKI ===== -->
-                    <div class="card mb-3">
-                        <div class="card-header bg-light">
-                            <strong><i class="fas fa-money-bill-wave me-2"></i>Harga Berlangganan per Bulan</strong>
-                        </div>
-                        <div class="card-body">
-                            
-                            <!-- SUMATERA -->
-                            <div class="row mb-3">
-                                <div class="col-12">
-                                    <h6 class="text-primary mb-3">
-                                        <i class="fas fa-map-marker-alt me-2"></i>Sumatera & Kalimantan
-                                    </h6>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Harga Sebelum Diskon</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">Rp</span>
-                                        <input type="number" class="form-control" id="edit_sumatera_before" placeholder="0">
-                                    </div>
-                                    <small class="text-muted">Kosongkan jika tidak ada diskon</small>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">Harga Sesudah Diskon *</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">Rp</span>
-                                        <input type="number" class="form-control" id="edit_sumatera" required>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <hr>
+<!-- ===== HARGA BULANAN & INSTALASI - COMBINED PER REGION (EDIT) ===== -->
+<div class="card mb-3">
+    <div class="card-header bg-light">
+        <strong>
+            <i class="fas fa-money-bill-wave me-2"></i>
+            Harga Berlangganan & Instalasi per Wilayah
+        </strong>
+    </div>
+    <div class="card-body">
 
-                            <!-- JAWA -->
-                            <div class="row mb-3">
-                                <div class="col-12">
-                                    <h6 class="text-primary mb-3">
-                                        <i class="fas fa-map-marker-alt me-2"></i>Jawa & Bali
-                                    </h6>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Harga Sebelum Diskon</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">Rp</span>
-                                        <input type="number" class="form-control" id="edit_jawa_before" placeholder="0">
-                                    </div>
-                                    <small class="text-muted">Kosongkan jika tidak ada diskon</small>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">Harga Sesudah Diskon *</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">Rp</span>
-                                        <input type="number" class="form-control" id="edit_jawa" required>
-                                    </div>
-                                </div>
-                            </div>
+        <!-- SUMATERA -->
+        <div class="region-block border rounded p-3 mb-4" id="edit-region-sumatera">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="text-primary mb-0">
+                    <i class="fas fa-map-marker-alt me-2"></i>Sumatera & Kalimantan
+                </h6>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="edit_status_sumatera" value="1" 
+                           onchange="toggleRegionInputs('sumatera', this.checked, 'edit')">
+                    <label class="form-check-label" for="edit_status_sumatera">
+                        <strong>Aktifkan Wilayah</strong>
+                    </label>
+                </div>
+            </div>
 
-                            <hr>
-
-                            <!-- TIMUR -->
-                            <div class="row mb-3">
-                                <div class="col-12">
-                                    <h6 class="text-primary mb-3">
-                                        <i class="fas fa-map-marker-alt me-2"></i>Indonesia Timur
-                                    </h6>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Harga Sebelum Diskon</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">Rp</span>
-                                        <input type="number" class="form-control" id="edit_timur_before" placeholder="0">
-                                    </div>
-                                    <small class="text-muted">Kosongkan jika tidak ada diskon</small>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">Harga Sesudah Diskon *</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">Rp</span>
-                                        <input type="number" class="form-control" id="edit_timur" required>
-                                    </div>
-                                </div>
-                            </div>
+            <div class="region-inputs">
+                <div class="row mb-3">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-calendar-alt me-1"></i>HARGA BERLANGGANAN PER BULAN
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Harga Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-sumatera" 
+                                   id="edit_sumatera_before" placeholder="0">
                         </div>
                     </div>
-
-                    <!-- ===== BIAYA INSTALASI - LAYOUT DIPERBAIKI ===== -->
-                    <div class="card mb-3">
-                        <div class="card-header bg-light">
-                            <strong><i class="fas fa-tools me-2"></i>Biaya Instalasi</strong>
-                        </div>
-                        <div class="card-body">
-                            
-                            <!-- SUMATERA -->
-                            <div class="row mb-3">
-                                <div class="col-12">
-                                    <h6 class="text-primary mb-3">
-                                        <i class="fas fa-map-marker-alt me-2"></i>Sumatera & Kalimantan
-                                    </h6>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Instalasi Sebelum Diskon</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">Rp</span>
-                                        <input type="number" class="form-control" id="edit_instalasi_sumatera_before" placeholder="0">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">Instalasi Sesudah Diskon</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">Rp</span>
-                                        <input type="number" class="form-control" id="edit_instalasi_sumatera" placeholder="0">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <hr>
-
-                            <!-- JAWA -->
-                            <div class="row mb-3">
-                                <div class="col-12">
-                                    <h6 class="text-primary mb-3">
-                                        <i class="fas fa-map-marker-alt me-2"></i>Jawa & Bali
-                                    </h6>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Instalasi Sebelum Diskon</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">Rp</span>
-                                        <input type="number" class="form-control" id="edit_instalasi_jawa_before" placeholder="0">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">Instalasi Sesudah Diskon</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">Rp</span>
-                                        <input type="number" class="form-control" id="edit_instalasi_jawa" placeholder="0">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <hr>
-
-                            <!-- TIMUR -->
-                            <div class="row mb-3">
-                                <div class="col-12">
-                                    <h6 class="text-primary mb-3">
-                                        <i class="fas fa-map-marker-alt me-2"></i>Indonesia Timur
-                                    </h6>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Instalasi Sebelum Diskon</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">Rp</span>
-                                        <input type="number" class="form-control" id="edit_instalasi_timur_before" placeholder="0">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">Instalasi Sesudah Diskon</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">Rp</span>
-                                        <input type="number" class="form-control" id="edit_instalasi_timur" placeholder="0">
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Harga Terkini *</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-sumatera" 
+                                   id="edit_sumatera" placeholder="0" required>
                         </div>
                     </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-tools me-1"></i>BIAYA INSTALASI
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Instalasi Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-sumatera" 
+                                   id="edit_instalasi_sumatera_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Instalasi Terkini</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-sumatera" 
+                                   id="edit_instalasi_sumatera" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- JAWA -->
+        <div class="region-block border rounded p-3 mb-4" id="edit-region-sumatera">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="text-primary mb-0">
+                    <i class="fas fa-map-marker-alt me-2"></i>Jawa & Bali
+                </h6>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="edit_status_jawa" value="1" 
+                           onchange="toggleRegionInputs('jawa', this.checked, 'edit')">
+                    <label class="form-check-label" for="edit_status_jawa">
+                        <strong>Aktifkan Wilayah</strong>
+                    </label>
+                </div>
+            </div>
+
+            <div class="region-inputs">
+                <div class="row mb-3">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-calendar-alt me-1"></i>HARGA BERLANGGANAN PER BULAN
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Harga Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-jawa" 
+                                   id="edit_jawa_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Harga Terkini *</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-jawa" 
+                                   id="edit_jawa" placeholder="0" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-tools me-1"></i>BIAYA INSTALASI
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Instalasi Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-jawa" 
+                                   id="edit_instalasi_jawa_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Instalasi Terkini</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-jawa" 
+                                   id="edit_instalasi_jawa" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- TIMUR -->
+        <div class="region-block border rounded p-3 mb-4" id="edit-region-timur">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="text-primary mb-0">
+                    <i class="fas fa-map-marker-alt me-2"></i>Indonesia Timur
+                </h6>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="edit_status_timur" value="1" 
+                           onchange="toggleRegionInputs('timur', this.checked, 'edit')">
+                    <label class="form-check-label" for="edit_status_timur">
+                        <strong>Aktifkan Wilayah</strong>
+                    </label>
+                </div>
+            </div>
+
+            <div class="region-inputs">
+                <div class="row mb-3">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-calendar-alt me-1"></i>HARGA BERLANGGANAN PER BULAN
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Harga Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-timur" 
+                                   id="edit_timur_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Harga Terkini *</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-timur" 
+                                   id="edit_timur" placeholder="0" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-tools me-1"></i>BIAYA INSTALASI
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Instalasi Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-timur" 
+                                   id="edit_instalasi_timur_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Instalasi Terkini</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-timur" 
+                                   id="edit_instalasi_timur" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- NTT -->
+        <div class="region-block border rounded p-3 mb-4" id="edit-region-ntt">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="text-primary mb-0">
+                    <i class="fas fa-map-marker-alt me-2"></i>NTT
+                </h6>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="edit_status_ntt" value="1" 
+                           onchange="toggleRegionInputs('ntt', this.checked, 'edit')">
+                    <label class="form-check-label" for="edit_status_ntt">
+                        <strong>Aktifkan Wilayah</strong>
+                    </label>
+                </div>
+            </div>
+
+            <div class="region-inputs">
+                <div class="row mb-3">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-calendar-alt me-1"></i>HARGA BERLANGGANAN PER BULAN
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Harga Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-ntt" 
+                                   id="edit_ntt_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Harga Terkini *</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-ntt" 
+                                   id="edit_ntt" placeholder="0" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-tools me-1"></i>BIAYA INSTALASI
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Instalasi Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-ntt" 
+                                   id="edit_instalasi_ntt_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Instalasi Terkini</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-ntt" 
+                                   id="edit_instalasi_ntt" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- BATAM -->
+        <div class="region-block border rounded p-3 mb-4" id="edit-region-batam">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="text-primary mb-0">
+                    <i class="fas fa-map-marker-alt me-2"></i>Batam 
+                </h6>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="edit_status_batam" value="1" 
+                           onchange="toggleRegionInputs('batam', this.checked, 'edit')">
+                    <label class="form-check-label" for="edit_status_batam">
+                        <strong>Aktifkan Wilayah</strong>
+                    </label>
+                </div>
+            </div>
+
+            <div class="region-inputs">
+                <div class="row mb-3">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-calendar-alt me-1"></i>HARGA BERLANGGANAN PER BULAN
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Harga Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-batam" 
+                                   id="edit_batam_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Harga Terkini *</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-batam" 
+                                   id="edit_batam" placeholder="0" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-tools me-1"></i>BIAYA INSTALASI
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Instalasi Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-batam" 
+                                   id="edit_instalasi_batam_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Instalasi Terkini</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-batam" 
+                                   id="edit_instalasi_batam" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- NATUNA -->
+        <div class="region-block border rounded p-3 mb-4" id="edit-region-natuna">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="text-primary mb-0">
+                    <i class="fas fa-map-marker-alt me-2"></i>Natuna
+                </h6>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="edit_status_natuna" value="1" 
+                           onchange="toggleRegionInputs('natuna', this.checked, 'edit')">
+                    <label class="form-check-label" for="edit_status_natuna">
+                        <strong>Aktifkan Wilayah</strong>
+                    </label>
+                </div>
+            </div>
+
+            <div class="region-inputs">
+                <div class="row mb-3">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-calendar-alt me-1"></i>HARGA BERLANGGANAN PER BULAN
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Harga Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-natuna" 
+                                   id="edit_natuna_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Harga Terkini *</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-natuna" 
+                                   id="edit_natuna" placeholder="0" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <label class="form-label text-muted small">
+                            <i class="fas fa-tools me-1"></i>BIAYA INSTALASI
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small">Instalasi Sebelum Diskon</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-natuna" 
+                                   id="edit_instalasi_natuna_before" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label small fw-bold">Instalasi Terkini</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control edit-region-input-natuna" 
+                                   id="edit_instalasi_natuna" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Ulangi untuk JAWA, TIMUR, NTT, BATAM, NATUNA dengan prefix edit_ -->
+        <!-- (Sama seperti tambah, hanya ganti semua ID dengan edit_*) -->
+
+    </div>
+</div>
 
                     <!-- Perangkat Ideal -->
                     <div class="card mb-3">
@@ -2090,6 +2606,7 @@ window.openPromoModal = handleOpenPromoModal;
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="kelola_paket.js"></script>  <!-- ✅ HARUS SEBELUM dashboard.js -->
     <script src="dashboard.js"></script>
     <script>
         // Global functions for removing images
@@ -2292,6 +2809,9 @@ window.openPromoModal = handleOpenPromoModal;
                                         <option value="jawa">Jawa & Bali</option>
                                         <option value="sumatera">Sumatera & Kalimantan</option>
                                         <option value="timur">Indonesia Timur</option>
+<option value="ntt">NTT</option>
+<option value="batam">Batam</option>
+<option value="natuna">Natuna</option>
                                     </select>
                                 </div>
                                 
@@ -2423,6 +2943,9 @@ window.openPromoModal = handleOpenPromoModal;
                                         <option value="jawa">Jawa & Bali</option>
                                         <option value="sumatera">Sumatera & Kalimantan</option>
                                         <option value="timur">Indonesia Timur</option>
+<option value="ntt">NTT</option>
+<option value="batam">Batam</option>
+<option value="natuna">Natuna</option>
                                     </select>
                                 </div>
                                 

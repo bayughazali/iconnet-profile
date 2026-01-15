@@ -208,6 +208,12 @@ if ($action === 'insert' && $_SERVER['REQUEST_METHOD'] === 'POST') {
             if (empty($title) || empty($description) || empty($region) || empty($start_date) || empty($end_date)) {
                 json_response(false, 'Field wajib tidak boleh kosong!');
             }
+
+            // Validasi region
+$allowed_regions = ['all', 'jawa', 'sumatera', 'timur', 'ntt', 'batam', 'natuna'];
+if (!in_array($region, $allowed_regions)) {
+    json_response(false, 'Region tidak valid!');
+}
             
             // Handle upload gambar
             $image_path = '';
@@ -356,6 +362,12 @@ case 'berita':
             $start_date = clean_input($_POST['start_date']);
             $end_date = clean_input($_POST['end_date']);
             $is_active = isset($_POST['is_active']) ? (int)$_POST['is_active'] : 0;
+
+            // Validasi region
+$allowed_regions = ['all', 'jawa', 'sumatera', 'timur', 'ntt', 'batam', 'natuna'];
+if (!in_array($region, $allowed_regions)) {
+    json_response(false, 'Region tidak valid!');
+}
             
             // Cek apakah ada upload gambar baru
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {

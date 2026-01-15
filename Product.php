@@ -1422,6 +1422,9 @@ html {
         <option value="jawa">Jawa & Bali</option>
         <option value="sumatera">Sumatera & Kalimantan</option>
         <option value="timur">Indonesia Timur</option>
+        <option value="ntt">NTT</option>
+        <option value="batam">Batam</option>
+        <option value="natuna">Natuna</option>
     </select>
 </div>
 
@@ -1544,18 +1547,26 @@ function updateRegion() {
 function getHargaByRegion(paket) {
     if (selectedRegion === "sumatera") return paket.harga_sumatera;
     if (selectedRegion === "timur") return paket.harga_timur;
+    if (selectedRegion === "ntt") return paket.harga_ntt;
+    if (selectedRegion === "batam") return paket.harga_batam;
+    if (selectedRegion === "natuna") return paket.harga_natuna;
     return paket.harga_jawa;
 }
 
 function getInstalasiByRegion(paket) {
     if (selectedRegion === "sumatera") return paket.instalasi_sumatera;
     if (selectedRegion === "timur") return paket.instalasi_timur;
+    if (selectedRegion === "ntt") return paket.instalasi_ntt;
+    if (selectedRegion === "batam") return paket.instalasi_batam;
+    if (selectedRegion === "natuna") return paket.instalasi_natuna;
     return paket.instalasi_jawa;
 }
-
 function getRegionLabel() {
     if (selectedRegion === "sumatera") return "Sumatera & Kalimantan";
     if (selectedRegion === "timur") return "Indonesia Timur";
+    if (selectedRegion === "ntt") return "NTT";
+    if (selectedRegion === "batam") return "Batam";
+    if (selectedRegion === "natuna") return "Natuna";
     return "Jawa & Bali";
 }
 
@@ -1945,13 +1956,24 @@ function renderFilteredPaket() {
     let hasRegular = false;
 
 allPaket.forEach(p => {
-        console.log("🔄 Processing paket:", p.name); // DEBUG
+    const isHebat = String(p.name).toLowerCase().includes("hebat");
+    
+    // ✅ FILTER 1: Status publikasi wilayah
+    const statusKey = 'status_' + selectedRegion;
+    const isActiveInRegion = p[statusKey] == 1;
+    
+    // ✅ FILTER 2: Status paket global (PRIORITAS is_active)
+    const isGlobalActive = (p.is_active == 1) || (p.status == 1);
+        
+        // ⛔ SKIP jika tidak aktif di wilayah atau tidak aktif global
+        if (!isActiveInRegion || !isGlobalActive) {
+            console.log(`❌ Paket "${p.name}" SKIP: Region=${isActiveInRegion}, Global=${isGlobalActive}`);
+            return;
+        }
+        
+        console.log(`✅ ${isHebat ? '🎁' : '📦'} ${p.name} - aktif di ${selectedRegion}`);
 
-        // === DETEKSI HEBAT ===
-        const isHebat = String(p.name).toLowerCase().includes("hebat");
-        console.log(`   ${isHebat ? '🎁' : '📦'} ${p.name} - isHebat: ${isHebat}`);
-
-        // === FILTER PERANGKAT (dengan fallback) ===
+        // === FILTER PERANGKAT ===
         const maxPerangkat = p.max_perangkat || 99;
         const maxLaptop = p.max_laptop || 99;
         const maxSmartphone = p.max_smartphone || 99;
@@ -1965,7 +1987,7 @@ allPaket.forEach(p => {
 
         if (!sesuaiFilter) return;
 
-        // ✅ BARU RENDER JIKA SESUAI
+        // ✅ RENDER JIKA SESUAI
         const cardHTML = renderPaketCard(p);
 
         if (isHebat) {
@@ -1984,11 +2006,12 @@ allPaket.forEach(p => {
         banner.classList.add("d-none");
     }
 
-    // Jika benar-benar tidak ada paket
+    // Jika tidak ada paket sama sekali
     if (!hasHebat && !hasRegular) {
         regularContainer.innerHTML = `
             <div class="alert alert-warning text-center">
-                Tidak ada paket yang sesuai dengan jumlah perangkat Anda
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Tidak ada paket yang tersedia untuk wilayah <strong>${getRegionLabel()}</strong> dengan jumlah perangkat yang Anda pilih.
             </div>
         `;
     }
@@ -2000,7 +2023,18 @@ function getFilteredPackagesFromDB() {
     const totalDevice = hp + laptop;
 
     return allPaket.filter(p => {
-        // Pastikan field ada dan valid
+    // ✅ FILTER 1: Status publikasi wilayah
+    const statusKey = 'status_' + selectedRegion;
+    const isActiveInRegion = p[statusKey] == 1;
+    
+    if (!isActiveInRegion) return false;
+    
+    // ✅ FILTER 2: Status global paket (PRIORITAS is_active)
+    const isGlobalActive = (p.is_active == 1) || (p.status == 1);
+        
+        if (!isGlobalActive) return false;
+        
+        // ✅ FILTER 3: Jumlah perangkat
         const maxPerangkat = p.max_perangkat || 0;
         const maxLaptop = p.max_laptop || 0;
         const maxSmartphone = p.max_smartphone || 0;
@@ -2371,12 +2405,18 @@ function redirectToWhatsApp(paket) {
 function getHargaBeforeByRegion(paket) {
     if (selectedRegion === "sumatera") return paket.harga_sumatera_before || paket.harga_sumatera;
     if (selectedRegion === "timur") return paket.harga_timur_before || paket.harga_timur;
+    if (selectedRegion === "ntt") return paket.harga_ntt_before || paket.harga_ntt;
+    if (selectedRegion === "batam") return paket.harga_batam_before || paket.harga_batam;
+    if (selectedRegion === "natuna") return paket.harga_natuna_before || paket.harga_natuna;
     return paket.harga_jawa_before || paket.harga_jawa;
 }
 
 function getInstalasiBeforeByRegion(paket) {
     if (selectedRegion === "sumatera") return paket.instalasi_sumatera_before || paket.instalasi_sumatera;
     if (selectedRegion === "timur") return paket.instalasi_timur_before || paket.instalasi_timur;
+    if (selectedRegion === "ntt") return paket.instalasi_ntt_before || paket.instalasi_ntt;
+    if (selectedRegion === "batam") return paket.instalasi_batam_before || paket.instalasi_batam;
+    if (selectedRegion === "natuna") return paket.instalasi_natuna_before || paket.instalasi_natuna;
     return paket.instalasi_jawa_before || paket.instalasi_jawa;
 }
 

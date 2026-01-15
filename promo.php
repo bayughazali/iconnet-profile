@@ -432,15 +432,18 @@ body {
 <div class="filter-btns text-center mt-4">
     <button class="btn btn-primary filter-btn" data-filter="all"
             onclick="filterPromo('all')">Semua</button>
-
     <button class="btn btn-outline-primary filter-btn" data-filter="sumatera"
             onclick="filterPromo('sumatera')">Sumatera & Kalimantan</button>
-
     <button class="btn btn-outline-primary filter-btn" data-filter="jawa"
             onclick="filterPromo('jawa')">Jawa & Bali</button>
-
     <button class="btn btn-outline-primary filter-btn" data-filter="timur"
             onclick="filterPromo('timur')">Indonesia Timur</button>
+    <button class="btn btn-outline-primary filter-btn" data-filter="ntt"
+            onclick="filterPromo('ntt')">NTT</button>
+    <button class="btn btn-outline-primary filter-btn" data-filter="batam"
+            onclick="filterPromo('batam')">Batam</button>
+    <button class="btn btn-outline-primary filter-btn" data-filter="natuna"
+            onclick="filterPromo('natuna')">Natuna</button>
 </div>
 
   <!-- PROMO LIST -->
@@ -485,7 +488,6 @@ setInterval(nextSlide, 4000);
 
 /* FILTER SCRIPT */
 function filterPromo(region) {
-
     // 🔵 1. UPDATE WARNA BUTTON
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('btn-primary');
@@ -497,7 +499,7 @@ function filterPromo(region) {
         }
     });
 
-    // 🔵 2. LOGIKA FILTER PROMO (yang sudah kita buat sebelumnya)
+    // 🔵 2. LOGIKA FILTER PROMO
     document.querySelectorAll('.promo-item').forEach(item => {
         const itemRegion = item.dataset.region.toLowerCase();
 
