@@ -150,7 +150,8 @@ function addPaket() {
     
     formData.append('nama', nama);
     formData.append('kecepatan', document.getElementById('kecepatan')?.value || '');
-    formData.append('status', document.getElementById('status')?.value || '1');
+    // Cari di dalam fungsi addPaket(), pastikan barisnya seperti ini:
+    formData.append('status', document.getElementById('status').value);
 
     // Harga Bulanan - gunakan 0 jika kosong
     formData.append('harga_sumatera', parseInt(sumatera) || 0);
@@ -461,7 +462,9 @@ formData.append('tv_4k', getValue('edit_tv_4k'));
 formData.append('streaming', getValue('edit_streaming'));
 formData.append('gaming', getValue('edit_gaming'));
 formData.append('features', getValue('edit_features'));
-formData.append('is_active', parseInt(getValue('edit_status')) || 1);
+const statusGlobal = document.getElementById('edit_status').value;
+formData.append('status', statusGlobal); 
+formData.append('is_active', statusGlobal); // Kirim keduanya agar API menerima dengan pasti
 
 // ✅ PENTING: Status Publikasi per Region
 const regions = ['sumatera', 'jawa', 'timur', 'ntt', 'batam', 'natuna'];

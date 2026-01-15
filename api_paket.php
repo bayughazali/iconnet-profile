@@ -201,7 +201,8 @@ if ($method === 'GET') {
         $streaming = cleanString($_POST['streaming'] ?? '');
         $gaming = cleanString($_POST['gaming'] ?? '');
         $features = cleanString($_POST['features'] ?? '');
-        $status = toInt($_POST['status'] ?? 1);
+        // Cari baris ini di bagian POST:
+        $status = toInt($_POST['status'] ?? $_POST['is_active'] ?? 1);
         
         // ✅ STATUS PUBLIKASI PER WILAYAH
         $status_sumatera = toInt($_POST['status_sumatera'] ?? 1);

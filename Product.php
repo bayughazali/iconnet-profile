@@ -1959,14 +1959,14 @@ allPaket.forEach(p => {
     const isHebat = String(p.name).toLowerCase().includes("hebat");
     
     // ✅ FILTER 1: Status publikasi wilayah
+   // Ganti baris pengecekan status di dalam loop renderFilteredPaket menjadi:
+    const isGlobalActive = (parseInt(p.is_active) === 1 || parseInt(p.status) === 1);
     const statusKey = 'status_' + selectedRegion;
-    const isActiveInRegion = p[statusKey] == 1;
-    
-    // ✅ FILTER 2: Status paket global (PRIORITAS is_active)
-    const isGlobalActive = (p.is_active == 1) || (p.status == 1);
+    const isActiveInRegion = parseInt(p[statusKey]) === 1;
         
         // ⛔ SKIP jika tidak aktif di wilayah atau tidak aktif global
-        if (!isActiveInRegion || !isGlobalActive) {
+       if (isGlobalActive && isActiveInRegion) {
+        const cardHTML = renderPaketCard(p);
             console.log(`❌ Paket "${p.name}" SKIP: Region=${isActiveInRegion}, Global=${isGlobalActive}`);
             return;
         }

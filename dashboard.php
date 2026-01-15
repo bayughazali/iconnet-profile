@@ -684,14 +684,14 @@ input:disabled {
                 <thead>
                     <tr>
                         <th>Nama Paket</th>
-<th>Harga Sumatera</th>
-<th>Harga Jawa</th>
-<th>Harga Timur</th>
-<th>Harga NTT</th>
-<th>Harga Batam</th>
-<th>Harga Natuna</th>
-<th>Status</th>
-<th>Aksi</th>
+                        <th>Harga Sumatera</th>
+                        <th>Harga Jawa</th>
+                        <th>Harga Timur</th>
+                        <th>Harga NTT</th>
+                        <th>Harga Batam</th>
+                        <th>Harga Natuna</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="paket-table-body">
@@ -993,11 +993,12 @@ window.openPromoModal = handleOpenPromoModal;
                                 </div>
                                 
                                 <div class="mb-3">
-                                    <label class="form-label"><i class="fas fa-toggle-on me-2 text-primary"></i>Status</label>
+                                    <label class="form-label"><i class="fas fa-toggle-on me-2 text-primary"></i>Status Global *</label>
                                     <select class="form-select" id="status">
-                                        <option value="1">✓ Aktif</option>
-                                        <option value="0">✗ Nonaktif</option>
+                                        <option value="1">✓ Aktif (Tampil di Website)</option>
+                                        <option value="0">✗ Nonaktif (Sembunyikan dari Semua Wilayah)</option>
                                     </select>
+                                    <small class="text-muted">Jika dinonaktifkan, paket tidak akan muncul di wilayah manapun.</small>
                                 </div>
                             </div>
                         </div>
@@ -1551,12 +1552,12 @@ window.openPromoModal = handleOpenPromoModal;
                             </div>
                             
                             <div class="mb-3">
-                                <label class="form-label">Status</label>
-                                <select class="form-select" id="edit_status">
-                                    <option value="1">✓ Aktif</option>
-                                    <option value="0">✗ Nonaktif</option>
-                                </select>
-                            </div>
+                            <label class="form-label">Status Global</label>
+                            <select class="form-select" id="edit_status">
+                                <option value="1">✓ Aktif</option>
+                                <option value="0">✗ Nonaktif</option>
+                            </select>
+                        </div>
                         </div>
                     </div>
 
