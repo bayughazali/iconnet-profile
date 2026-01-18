@@ -381,7 +381,7 @@ if (!is_array($paket)) {
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6 text-center text-md-start">
-                    <p class="mb-0">&copy; 2024 ICONNET. All rights reserved.</p>
+                    <p class="mb-0">&copy; 2026 ICONNET. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
                     <a href="login.php" class="btn btn-outline-light btn-sm px-4">
