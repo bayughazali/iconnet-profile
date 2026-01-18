@@ -182,6 +182,13 @@ function renderPaketCards() {
         return;
     }
     
+    // ✅ URUTKAN BERDASARKAN display_order
+filteredPaket.sort((a, b) => {
+    const orderA = a.display_order || 999;
+    const orderB = b.display_order || 999;
+    return orderA - orderB;
+});
+
     // Group packages: 3 per slide
     const packagesPerSlide = 3;
     let slideCount = 0;

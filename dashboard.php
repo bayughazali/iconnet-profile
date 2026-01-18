@@ -514,6 +514,44 @@ input:disabled {
     cursor: not-allowed !important;
     opacity: 0.6;
 }
+/* ========== DRAG & DROP STYLING ========== */
+.sortable-ghost {
+    opacity: 0.4;
+    background: #e3f2fd;
+}
+
+.sortable-drag {
+    cursor: grabbing !important;
+    opacity: 0.8;
+}
+
+.drag-handle {
+    cursor: grab;
+    color: #6c757d;
+    transition: color 0.3s;
+}
+
+.drag-handle:hover {
+    color: var(--primary-color);
+    cursor: grab;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+#paket-table-body tr {
+    transition: background-color 0.3s;
+}
+
+#paket-table-body tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Icon drag di dalam cell */
+.drag-handle i {
+    font-size: 1.2rem;
+}
     </style>
 </head>
 <body>
@@ -683,6 +721,7 @@ input:disabled {
             <table class="table table-hover">
                 <thead>
                     <tr>
+                        <th style="width: 50px;">📍</th>  <!-- ✅ TAMBAHAN BARU -->
                         <th>Nama Paket</th>
                         <th>Harga Sumatera</th>
                         <th>Harga Jawa</th>
@@ -696,7 +735,7 @@ input:disabled {
                 </thead>
                 <tbody id="paket-table-body">
                     <tr>
-                        <td colspan="6" class="text-center">Loading...</td>
+                        <td colspan="10" class="text-center">Loading...</td>  <!-- ✅ 9 → 10 -->
                     </tr>
                 </tbody>
             </table>
@@ -2607,6 +2646,8 @@ window.openPromoModal = handleOpenPromoModal;
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <!-- SortableJS for Drag & Drop -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script src="kelola_paket.js"></script>  <!-- ✅ HARUS SEBELUM dashboard.js -->
     <script src="dashboard.js"></script>
     <script>

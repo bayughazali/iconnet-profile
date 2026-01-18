@@ -45,8 +45,8 @@ try {
     
 // ===== GET - LOAD DATA =====
 if ($method === 'GET') {
-    $sql = "SELECT 
-        id, name, image_path, kecepatan,
+$sql = "SELECT 
+    id, name, image_path, kecepatan, display_order,
         max_perangkat, max_laptop, max_smartphone,
         harga_sumatera_before, harga_sumatera,
         harga_jawa_before, harga_jawa,
@@ -63,8 +63,8 @@ if ($method === 'GET') {
             tv_4k, streaming, gaming, features, is_active,
             status_sumatera, status_jawa, status_timur, 
             status_ntt, status_batam, status_natuna
-        FROM paket 
-        ORDER BY id ASC";
+FROM paket 
+ORDER BY display_order ASC, id ASC";
         
         $result = $conn->query($sql);
         
@@ -124,6 +124,43 @@ if ($method === 'GET') {
         sendJSON($paket, 200);
     }
     
+    // ===== POST - UPDATE ORDER (DRAG & DROP) =====
+if ($method === 'POST') {
+    $rawInput = file_get_contents("php://input");
+    $data = json_decode($rawInput, true);
+    
+    if (isset($data['action']) && $data['action'] === 'update_order') {
+        if (!isset($data['order_data']) || !is_array($data['order_data'])) {
+            sendJSON(['success' => false, 'message' => 'Order data tidak valid'], 400);
+        }
+        
+        $conn->begin_transaction();
+        
+        try {
+            $stmt = $conn->prepare("UPDATE paket SET display_order = ? WHERE id = ?");
+            
+            foreach ($data['order_data'] as $item) {
+                $order = toInt($item['order']);
+                $id = toInt($item['id']);
+                
+                $stmt->bind_param("ii", $order, $id);
+                
+                if (!$stmt->execute()) {
+                    throw new Exception("Failed to update order for ID: $id");
+                }
+            }
+            
+            $stmt->close();
+            $conn->commit();
+            
+            sendJSON(['success' => true, 'message' => 'Urutan berhasil diupdate'], 200);
+            
+        } catch (Exception $e) {
+            $conn->rollback();
+            sendJSON(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+}
     // ===== POST - INSERT & UPDATE =====
     if ($method === 'POST') {
         $action = isset($_POST['action']) ? $_POST['action'] : 'insert';
@@ -335,9 +372,13 @@ else {
 $result = $conn->query("SELECT MAX(CAST(id AS UNSIGNED)) as max_id FROM paket");
 $row = $result->fetch_assoc();
 $newId = ($row['max_id'] ?? 0) + 1;
+// Get max display_order
+$orderResult = $conn->query("SELECT MAX(display_order) as max_order FROM paket");
+$orderRow = $orderResult->fetch_assoc();
+$newOrder = ($orderRow['max_order'] ?? 0) + 1;
     
-    $sql = "INSERT INTO paket (
-        id, name, image_path, kecepatan,
+$sql = "INSERT INTO paket (
+    id, name, image_path, kecepatan, display_order,
         max_perangkat, max_laptop, max_smartphone,
         harga_sumatera_before, harga_sumatera,
         harga_jawa_before, harga_jawa,
@@ -354,7 +395,7 @@ $newId = ($row['max_id'] ?? 0) + 1;
         tv_4k, streaming, gaming, features, is_active,
         status_sumatera, status_jawa, status_timur, 
         status_ntt, status_batam, status_natuna
-    ) VALUES (?,?,?,?, ?,?,?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?,?,?,?, ?,?,?, ?,?,?)";
+    ) VALUES (?,?,?,?,?, ?,?,?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?, ?,?,?,?,?, ?,?,?, ?,?,?)";
     
     $stmt = $conn->prepare($sql);
     
@@ -366,10 +407,10 @@ $newId = ($row['max_id'] ?? 0) + 1;
     // Format: i s s s | i i i | d d d d d d d d d d d d d d d d d d d d d d d d | s s s s | i | i i i i i i
     // Count:  1+1+1+1 + 1+1+1 + 24x d + 1+1+1+1 + 1 + 1+1+1+1+1+1 = 41 parameters ✅
     
-    $stmt->bind_param(
-        "isssiiidddddddddddddddddddddddssssiiiiiiii",
-        $newId,
-        $nama, $imagePath, $kecepatan,
+$stmt->bind_param(
+    "isssiiiidddddddddddddddddddddddssssiiiiiiii",
+    $newId,
+    $nama, $imagePath, $kecepatan, $newOrder,
         $max_perangkat, $max_laptop, $max_smartphone,
         $harga_sumatera_before, $harga_sumatera,
         $harga_jawa_before, $harga_jawa,

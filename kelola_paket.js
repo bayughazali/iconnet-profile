@@ -21,15 +21,18 @@ function loadPaket() {
             }
 
             data.forEach(p => {
-                const formatRupiah = (angka) => {
-                    return 'Rp ' + parseInt(angka).toLocaleString('id-ID');
-                };
-
-                const namaPaket = p.name || p.nama || 'N/A';
-
-                body.innerHTML += `
-                <tr>
-                    <td>
+    const formatRupiah = (angka) => {
+        return 'Rp ' + parseInt(angka).toLocaleString('id-ID');
+    };
+    
+    const namaPaket = p.name || p.nama || 'N/A';
+    
+    body.innerHTML += `
+    <tr data-id="${p.id}">
+        <td class="text-center drag-handle" style="cursor: grab;">
+            <i class="fas fa-grip-vertical"></i>
+        </td>
+        <td>
                         <strong>${namaPaket}</strong><br>
                         <small class="text-muted">${p.kecepatan || '-'}</small><br>
                         <small class="badge bg-info text-dark">${p.max_perangkat || 0} Device</small>
@@ -57,9 +60,14 @@ function loadPaket() {
                     </td>
                 </tr>`;
             });
+               })
+        .then(() => {
+            // ✅ TAMBAHAN BARU: Init drag & drop setelah data dimuat
+            initSortable();
         })
         .catch(err => {
             console.error('Error loading paket:', err);
+            
             const body = document.getElementById('paket-table-body');
             body.innerHTML = `
                 <tr>
@@ -662,4 +670,159 @@ document.addEventListener('DOMContentLoaded', function() {
             // Will be set dynamically when editing
         }
     });
-});
+
+    }); // ✅ INI YANG KURANG
+// ===== DRAG & DROP UNTUK URUTAN PAKET =====
+let sortable = null;
+
+function initSortable() {
+    const tableBody = document.getElementById('paket-table-body');
+    
+    if (!tableBody) {
+        console.error('❌ Tabel paket tidak ditemukan');
+        return;
+    }
+    
+    // Destroy existing sortable jika ada
+    if (sortable) {
+        sortable.destroy();
+    }
+    
+    sortable = new Sortable(tableBody, {
+        animation: 150,
+        handle: '.drag-handle',
+        ghostClass: 'sortable-ghost',
+        dragClass: 'sortable-drag',
+        onEnd: function(evt) {
+            console.log('🔄 Urutan diubah dari', evt.oldIndex, 'ke', evt.newIndex);
+            saveNewOrder();
+        }
+    });
+    
+    console.log('✅ Drag & Drop initialized');
+}
+
+function saveNewOrder() {
+    const rows = document.querySelectorAll('#paket-table-body tr');
+    const orderData = [];
+    
+    rows.forEach((row, index) => {
+        const editBtn = row.querySelector('.btn-warning');
+        if (editBtn) {
+            const onclickAttr = editBtn.getAttribute('onclick');
+            const match = onclickAttr.match(/editPaket\((\d+)\)/);
+            if (match) {
+                const paketId = parseInt(match[1]);
+                orderData.push({
+                    id: paketId,
+                    order: index + 1
+                });
+            }
+        }
+    });
+    
+    console.log('📤 Mengirim urutan baru:', orderData);
+    
+    fetch('api_paket.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            action: 'update_order',
+            order_data: orderData
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            console.log('✅ Urutan berhasil disimpan');
+            // Tidak perlu reload, biarkan posisi tetap seperti yang digeser
+        } else {
+            alert('❌ Gagal menyimpan urutan: ' + data.message);
+            loadPaket(); // Reload jika gagal
+        }
+    })
+    .catch(err => {
+        console.error('❌ Error:', err);
+        alert('❌ Terjadi kesalahan saat menyimpan urutan');
+        loadPaket();
+    });
+}
+
+// ===== LOAD PAKET DARI DATABASE =====
+function loadPaket() {
+    fetch('api_paket.php')
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+        })
+        .then(data => {
+            const body = document.getElementById('paket-table-body');
+            body.innerHTML = '';
+
+            if (!data || data.length === 0) {
+                body.innerHTML = '<tr><td colspan="10" class="text-center text-muted py-4">Tidak ada data paket</td></tr>';
+                return;
+            }
+
+            data.forEach(p => {
+    const formatRupiah = (angka) => {
+        return 'Rp ' + parseInt(angka).toLocaleString('id-ID');
+    };
+    
+    const namaPaket = p.name || p.nama || 'N/A';
+    
+    body.innerHTML += `
+    <tr data-id="${p.id}">
+        <td class="text-center drag-handle" style="cursor: grab;">
+            <i class="fas fa-grip-vertical"></i>
+        </td>
+        <td>
+                        <strong>${namaPaket}</strong><br>
+                        <small class="text-muted">${p.kecepatan || '-'}</small><br>
+                        <small class="badge bg-info text-dark">${p.max_perangkat || 0} Device</small>
+                        <small class="badge bg-secondary">${p.max_laptop || 0} Laptop</small>
+                        <small class="badge bg-secondary">${p.max_smartphone || 0} HP</small>
+                    </td>
+                    <td>${formatRupiah(p.harga_sumatera)}<br><small class="text-muted">Install: ${formatRupiah(p.instalasi_sumatera || 345000)}</small></td>
+                    <td>${formatRupiah(p.harga_jawa)}<br><small class="text-muted">Install: ${formatRupiah(p.instalasi_jawa || 150000)}</small></td>
+                    <td>${formatRupiah(p.harga_timur)}<br><small class="text-muted">Install: ${formatRupiah(p.instalasi_timur || 200000)}</small></td>
+                    <td>${formatRupiah(p.harga_ntt)}<br><small class="text-muted">Install: ${formatRupiah(p.instalasi_ntt || 0)}</small></td>
+                    <td>${formatRupiah(p.harga_batam)}<br><small class="text-muted">Install: ${formatRupiah(p.instalasi_batam || 0)}</small></td>
+                    <td>${formatRupiah(p.harga_natuna)}<br><small class="text-muted">Install: ${formatRupiah(p.instalasi_natuna || 0)}</small></td>
+                    <td>
+                        <span class="badge ${p.is_active == 1 || p.status == 1 ? 'bg-success' : 'bg-secondary'}">
+                            ${p.is_active == 1 || p.status == 1 ? 'Aktif' : 'Nonaktif'}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" onclick="editPaket(${p.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deletePaket(${p.id}, '${namaPaket.replace(/'/g, "\\'")}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>`;
+            });
+               })
+        .then(() => {
+            // ✅ Init drag & drop setelah data dimuat
+            initSortable();
+        })
+        .catch(err => {
+            console.error('Error loading paket:', err);
+            
+            const body = document.getElementById('paket-table-body');
+            body.innerHTML = `
+                <tr>
+                    <td colspan="10" class="text-center text-danger py-4">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Gagal memuat data paket: ${err.message}
+                    </td>
+                </tr>`;
+        });
+}

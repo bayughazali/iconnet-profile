@@ -1955,6 +1955,13 @@ function renderFilteredPaket() {
     let hasHebat = false;
     let hasRegular = false;
 
+    // ✅ URUTKAN BERDASARKAN display_order
+allPaket.sort((a, b) => {
+    const orderA = a.display_order || 999;
+    const orderB = b.display_order || 999;
+    return orderA - orderB;
+});
+
     allPaket.forEach(p => {
         const isHebat = String(p.name).toLowerCase().includes("hebat");
         
