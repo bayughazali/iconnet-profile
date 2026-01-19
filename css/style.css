@@ -1046,7 +1046,7 @@ font-variant-numeric: tabular-nums;
     max-width: 100%;
     height: auto;
     border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    /* box-shadow: 0 5px 20px rgba(0,0,0,0.1); */
 }
 
 .btn-detail {
@@ -1235,74 +1235,224 @@ font-variant-numeric: tabular-nums;
     }
 }
 
+/* ========================================
+   SERVICE ICONS SECTION - MODERN REDESIGN
+   ======================================== */
+
 .service-icons-section {
-    margin-top: 60px;
-    padding: 40px 0;
-    background: transparent;
+    padding: 60px 0;
+    background: white;
+    position: relative;
 }
 
 .icon-group-container {
     width: 100%;
-    max-width: 900px;
+    max-width: 1100px;
     margin: 0 auto;
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    padding: 20px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+    padding: 50px 40px;
     position: relative;
-    filter: drop-shadow(0 0 15px rgba(32, 178, 170, 0.4));
+    border: 1px solid rgba(77, 208, 225, 0.1);
 }
 
 .icon-group-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
-    padding: 30px;
-    background: white;
-    border-radius: 15px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 50px;
+    align-items: stretch;
 }
 
 .service-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
     text-align: center;
-    transition: transform 0.3s;
+    padding: 30px 20px;
+    border-radius: 16px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 2px solid transparent;
 }
 
-.service-item:hover .service-icon-svg {
-    transform: scale(1.1);
+.service-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #4dd0e1 0%, #20b2aa 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
 }
 
-.service-icon-svg {
-    width: 80px;
-    height: 80px;
+/* .service-item:hover {
+    transform: translateY(-12px);
+    border-color: #4dd0e1;
+    box-shadow: 0 20px 50px rgba(77, 208, 225, 0.25);
+}
+
+.service-item:hover::before {
+    opacity: 0.08;
+} */
+
+/* Icon Wrapper with Gradient Circle */
+.service-icon-wrapper {
+    width: 65px;
+    height: 65px;
+    background: linear-gradient(135deg, #4dd0e1 0%, #20b2aa 100%);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+    position: relative;
+    transition: all 0.4s ease;
+    box-shadow: 0 10px 30px rgba(77, 208, 225, 0.3);
+}
+
+.service-icon-wrapper::before {
+    content: '';
+    position: absolute;
+    width: 130%;
+    height: 130%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4dd0e1 0%, #20b2aa 100%);
+    opacity: 0.15;
+    animation: pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.15;
+    }
+    50% {
+        transform: scale(1.15);
+        opacity: 0.25;
+    }
+}
+
+.service-item:hover .service-icon-wrapper {
+    transform: scale(1.15) rotate(8deg);
+    box-shadow: 0 15px 45px rgba(77, 208, 225, 0.5);
+}
+
+.service-icon-svg {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
 }
 
 .service-icon-svg svg {
     width: 100%;
     height: 100%;
-    display: block;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.1));
 }
 
+/* Text Styling */
 .service-text h6 {
-    color: var(--text-dark);
-    font-weight: bold;
-    margin: 0;
-    font-size: 1rem;
+    color: #1e293b;
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin: 0 0 8px 0;
+    transition: color 0.3s ease;
 }
 
+.service-text p {
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 220px;
+}
+
+.service-item:hover .service-text h6 {
+    color: #20b2aa;
+}
+
+/* Remove vertical dividers on modern layout */
 .vertical-divider {
-    width: 2px;
-    height: 60px;
-    background: #e0e0e0;
+    display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .icon-group-wrapper {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 35px;
+    }
+    
+    .icon-group-container {
+        padding: 40px 30px;
+    }
+    
+    .service-icon-wrapper {
+        width: 75px;
+        height: 75px;
+    }
+    
+    .service-icon-svg {
+        width: 38px;
+        height: 38px;
+    }
+}
+
+@media (max-width: 768px) {
+    .service-icons-section {
+        padding: 50px 0;
+    }
+    
+    .icon-group-wrapper {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .icon-group-container {
+        padding: 35px 25px;
+        border-radius: 20px;
+    }
+    
+    .service-item {
+        padding: 25px 20px;
+    }
+    
+    .service-icon-wrapper {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .service-icon-svg {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .service-text h6 {
+        font-size: 1.1rem;
+    }
+    
+    .service-text p {
+        font-size: 0.88rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .service-icons-section {
+        padding: 40px 0;
+    }
+    
+    .icon-group-container {
+        padding: 30px 20px;
+    }
 }
 /* ========================================
    APP SECTION - MODERN HERO

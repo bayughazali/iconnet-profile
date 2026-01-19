@@ -157,7 +157,7 @@ if (!is_array($paket)) {
     <div class="container">
         <div class="row align-items-center">
 
-            <div class="col-lg-6 mb-4">
+            <div class="col-lg-5 mb-3">
                 <div class="subscription-card">
                     <h2 class="mb-4">Berlangganan Sekarang</h2>
                     <p>Dapatkan koneksi internet super cepat dan stabil untuk kebutuhan keluarga Anda. Proses berlangganan mudah, cukup hubungi kami via WhatsApp dan tim kami siap membantu!</p>
@@ -170,7 +170,7 @@ if (!is_array($paket)) {
                 </div>
             </div>
 
-            <div class="col-lg-6 mb-4">
+            <div class="col-lg-7 mb-4">
                 <img src="image/langganan.png" class="img-fluid rounded">
             </div>
 
@@ -206,73 +206,79 @@ if (!is_array($paket)) {
 </section>
 
         <!-- Service Icons Section -->
-        <div class="row mt-5">
-            <section class="service-icons-section py-5">
-                <div class="container">
-                    <div class="icon-group-container">
-                        <div class="icon-group-wrapper">
+<!-- <div class="row mt-5"> -->
+    <section class="service-icons-section py-5">
+        <div class="container">
+            <div class="icon-group-container">
+                <div class="icon-group-wrapper">
 
-                            <div class="service-item">
-                                <div class="service-icon-svg">
-                                    <svg width="80" height="80" viewBox="0 0 100 100" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="20" y="20" width="60" height="60" rx="10" fill="#20b2aa" />
-                                        <path
-                                            d="M40 70L70 40M45 40L40 45M65 65L70 60M40 60C40 63.3137 42.6863 66 46 66C49.3137 66 52 63.3137 52 60C52 56.6863 49.3137 54 46 54C42.6863 54 40 56.6863 40 60Z"
-                                            stroke="white" stroke-width="5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <circle cx="66" cy="40" r="6" fill="white" />
-                                    </svg>
-                                </div>
-                                <div class="service-text">
-                                    <h6>Bayar Cepat</h6>
-                                </div>
+                    <!-- Bayar Cepat - Lightning Icon -->
+                    <div class="service-item">
+                        <div class="service-icon-wrapper">
+                            <div class="service-icon-svg">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" 
+                                          fill="white" 
+                                          stroke="white" 
+                                          stroke-width="1.5" 
+                                          stroke-linecap="round" 
+                                          stroke-linejoin="round"/>
+                                </svg>
                             </div>
-
-                            <div class="vertical-divider"></div>
-
-                            <div class="service-item">
-                                <div class="service-icon-svg">
-                                    <svg width="80" height="80" viewBox="0 0 100 100" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M50 85C50 85 80 55 80 40C80 25.6667 66.5 15 50 15C33.5 15 20 25.6667 20 40C20 55 50 85 50 85Z"
-                                            fill="#20b2aa" stroke="#20b2aa" stroke-width="3" />
-                                        <circle cx="50" cy="40" r="10" fill="white" />
-                                        <path d="M50 78.5L50 85L57 78.5H43L50 78.5Z" fill="#008080" />
-                                    </svg>
-                                </div>
-                                <div class="service-text">
-                                    <h6>Cek Tagihan</h6>
-                                </div>
-                            </div>
-
-                            <div class="vertical-divider"></div>
-
-                            <div class="service-item">
-                                <div class="service-icon-svg">
-                                    <svg width="80" height="80" viewBox="0 0 100 100" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="50" cy="50" r="35" stroke="#20b2aa" stroke-width="5"
-                                            fill="#E0F7FA" />
-                                        <path d="M50 30V50H70" stroke="#20b2aa" stroke-width="5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <circle cx="50" cy="50" r="3" fill="#20b2aa" />
-                                        <path d="M50 15V20M50 80V85M15 50H20M80 50H85" stroke="#20b2aa" stroke-width="3"
-                                            stroke-linecap="round" />
-                                    </svg>
-                                </div>
-                                <div class="service-text">
-                                    <h6>Layanan Lengkap</h6>
-                                </div>
-                            </div>
-
+                        </div>
+                        <div class="service-text">
+                            <h6>Bayar Cepat</h6>
+                            <p>Pembayaran instan dalam hitungan detik</p>
                         </div>
                     </div>
+
+                    <!-- Cek Tagihan - Invoice/Document Icon -->
+                    <div class="service-item">
+                        <div class="service-icon-wrapper">
+                            <div class="service-icon-svg">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="4" y="3" width="16" height="18" rx="2" fill="white" stroke="white" stroke-width="0.5"/>
+                                    <path d="M8 7H16M8 11H16M8 15H13" 
+                                          stroke="#20b2aa" 
+                                          stroke-width="2" 
+                                          stroke-linecap="round"/>
+                                    <circle cx="16" cy="17" r="1.5" fill="#20b2aa"/>
+                                    <path d="M4 3L4 21L20 21L20 3" 
+                                          stroke="white" 
+                                          stroke-width="1.5" 
+                                          stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="service-text">
+                            <h6>Cek Tagihan</h6>
+                            <p>Pantau tagihan Anda kapan saja, dimana saja</p>
+                        </div>
+                    </div>
+
+                    <!-- Layanan Lengkap - Grid/Apps Icon -->
+                    <div class="service-item">
+                        <div class="service-icon-wrapper">
+                            <div class="service-icon-svg">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/>
+                                    <rect x="14" y="3" width="7" height="7" rx="1.5" fill="white"/>
+                                    <rect x="3" y="14" width="7" height="7" rx="1.5" fill="white"/>
+                                    <rect x="14" y="14" width="7" height="7" rx="1.5" fill="white"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="service-text">
+                            <h6>Layanan Lengkap</h6>
+                            <p>Semua kebutuhan internet dalam satu platform</p>
+                        </div>
+                    </div>
+
                 </div>
-            </section>
+            </div>
         </div>
     </section>
+</div>
 
     <!-- App Section -->
     <section class="app-section">
